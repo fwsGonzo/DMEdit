@@ -25,18 +25,6 @@ namespace MapEdit
 
 		}
 
-		private void toolbox_CheckedChanged(object sender, EventArgs e)
-		{
-			if (toolDraw.Checked)
-				editor1.CurrentTool = tools_t.TOOL_DRAW;
-			else if (toolRect.Checked)
-				editor1.CurrentTool = tools_t.TOOL_RECT;
-			else if (toolFill.Checked)
-				editor1.CurrentTool = tools_t.TOOL_FILL;
-			else if (toolReplace.Checked)
-				editor1.CurrentTool = tools_t.TOOL_REPLACE;
-		}
-
 		private void editor1_KeyDown(object sender, KeyEventArgs e)
 		{
 			Editor ed = (sender as Editor);
@@ -73,6 +61,20 @@ namespace MapEdit
 		{
 			bool c = (sender as ToolStripButton).Checked;
 			editor1.setMask(c);
+		}
+
+		private void toolDraw_Click(object sender, EventArgs e)
+		{
+			if (toolDraw.Checked)
+				editor1.CurrentTool = tools_t.TOOL_DRAW;
+			else if (toolRect.Checked)
+				editor1.CurrentTool = tools_t.TOOL_RECT;
+			else if (toolFill.Checked)
+				editor1.CurrentTool = tools_t.TOOL_FILL;
+			else if (toolReplace.Checked)
+				editor1.CurrentTool = tools_t.TOOL_REPLACE;
+
+			editor1.Focus();
 		}
     }
 }

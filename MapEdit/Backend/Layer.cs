@@ -139,5 +139,32 @@ namespace MapEdit.Backend
 			return new Point(x, y);
 		}
 
+		public void fill(int x, int y, byte tx, byte ty)
+		{
+			if (inRange(x, y) == false) return;
+
+			Tile t = getTile(x, y);
+			if (t.getTX() != tx ||
+				t.getTY() != ty)
+			{
+				t.setXY(tx, ty);
+
+				fill(x - 1, y, tx, ty);
+				fill(x + 1, y, tx, ty);
+				fill(x, y - 1, tx, ty);
+				fill(x, y + 1, tx, ty);
+			}
+		}
+		public void replace(byte oldX, byte oldY, byte tx, byte ty)
+		{
+			foreach (Tile t in tiles)
+			{
+				if (t.getTX() == oldX && t.getTY() == oldY)
+				{
+					t.setXY(tx, ty);
+				}
+			}
+		}
+
 	}
 }

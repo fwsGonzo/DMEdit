@@ -46,12 +46,12 @@
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectLayer = new System.Windows.Forms.ToolStripDropDownButton();
+			this.mnuLayer = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuSelectLayer = new System.Windows.Forms.ToolStripDropDownButton();
-			this.mnuLayer = new System.Windows.Forms.ToolStripMenuItem();
 			this.editor1 = new MapEdit.Controls.Editor();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -114,6 +114,7 @@
 			this.toolDraw.Text = "Draw";
 			this.toolDraw.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.toolDraw.UseVisualStyleBackColor = true;
+			this.toolDraw.Click += new System.EventHandler(this.toolDraw_Click);
 			// 
 			// toolRect
 			// 
@@ -126,6 +127,7 @@
 			this.toolRect.Text = "Rectangle";
 			this.toolRect.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.toolRect.UseVisualStyleBackColor = true;
+			this.toolRect.Click += new System.EventHandler(this.toolDraw_Click);
 			// 
 			// toolFill
 			// 
@@ -138,6 +140,7 @@
 			this.toolFill.Text = "Fill";
 			this.toolFill.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.toolFill.UseVisualStyleBackColor = true;
+			this.toolFill.Click += new System.EventHandler(this.toolDraw_Click);
 			// 
 			// toolReplace
 			// 
@@ -150,6 +153,7 @@
 			this.toolReplace.Text = "Replace";
 			this.toolReplace.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.toolReplace.UseVisualStyleBackColor = true;
+			this.toolReplace.Click += new System.EventHandler(this.toolDraw_Click);
 			// 
 			// toolStrip1
 			// 
@@ -236,6 +240,29 @@
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
 			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
 			// 
+			// mnuSelectLayer
+			// 
+			this.mnuSelectLayer.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuLayer});
+			this.mnuSelectLayer.Image = ((System.Drawing.Image)(resources.GetObject("mnuSelectLayer.Image")));
+			this.mnuSelectLayer.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.mnuSelectLayer.Name = "mnuSelectLayer";
+			this.mnuSelectLayer.Size = new System.Drawing.Size(69, 22);
+			this.mnuSelectLayer.Text = "Layers";
+			// 
+			// mnuLayer
+			// 
+			this.mnuLayer.Checked = true;
+			this.mnuLayer.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuLayer.Name = "mnuLayer";
+			this.mnuLayer.Size = new System.Drawing.Size(111, 22);
+			this.mnuLayer.Text = "Layer 1";
+			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+			// 
 			// toolStripButton3
 			// 
 			this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
@@ -267,29 +294,6 @@
 			this.toolStripButton5.Size = new System.Drawing.Size(87, 22);
 			this.toolStripButton5.Text = "Show mask";
 			this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
-			// 
-			// toolStripSeparator4
-			// 
-			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-			// 
-			// mnuSelectLayer
-			// 
-			this.mnuSelectLayer.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuLayer});
-			this.mnuSelectLayer.Image = ((System.Drawing.Image)(resources.GetObject("mnuSelectLayer.Image")));
-			this.mnuSelectLayer.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.mnuSelectLayer.Name = "mnuSelectLayer";
-			this.mnuSelectLayer.Size = new System.Drawing.Size(69, 22);
-			this.mnuSelectLayer.Text = "Layers";
-			// 
-			// mnuLayer
-			// 
-			this.mnuLayer.Checked = true;
-			this.mnuLayer.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mnuLayer.Name = "mnuLayer";
-			this.mnuLayer.Size = new System.Drawing.Size(111, 22);
-			this.mnuLayer.Text = "Layer 1";
 			// 
 			// editor1
 			// 

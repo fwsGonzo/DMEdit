@@ -147,18 +147,29 @@ namespace MapEdit.Controls
 			// outside of area (most likely)
 			if (t == null) return;
 
+			byte sx = (byte)selection.p0.X;
+			byte sy = (byte)selection.p0.Y;
+
 			switch (CurrentTool)
 			{
-				case tools_t.TOOL_DRAW:
-					t.setXY((byte) selection.p0.X, (byte) selection.p0.Y);
-					L.updateTile(tp.X, tp.Y);
-					//L.invalidate();
-					this.Invalidate();
+			case tools_t.TOOL_DRAW:
+				t.setXY(sx, sy);
+				L.updateTile(tp.X, tp.Y);
+				this.Invalidate();
+				break;
+			case tools_t.TOOL_FILL:
+				L.fill(tp.X, tp.Y, sx, sy);
+				L.invalidate();
+				this.Invalidate();
+				break;
+			case tools_t.TOOL_REPLACE:
+				L.replace(t.getTX(), t.getTY(), sx, sy);
+				L.invalidate();
+				this.Invalidate();
+				break;
 
-					break;
-
-				default:
-					break;
+			default:
+				break;
 			}
 
 		}
