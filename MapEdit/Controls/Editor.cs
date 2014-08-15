@@ -20,21 +20,12 @@ namespace MapEdit.Controls
         Bitmap buffer = null;
 		Image checkers = null;
 		Tileset tileset = null;
-		
+		Selection selection = null;
+
 		List<Layer> layers;
 		int selectedLayer;
-		bool tilemode = false;
-		bool showgrid = true;
-		public bool ShowGrid
-		{
-			get { return showgrid; }
-			set { showgrid = value; }
-		}
-		public bool TileMode
-		{
-			get { return tilemode; }
-			set { tilemode = value; }
-		}
+		public bool ShowGrid { get; set; }
+		public bool TileMode { get; set; }
 
         private bool mouseDown;
         private Point mouseLocation;
@@ -51,13 +42,13 @@ namespace MapEdit.Controls
 		float tileZoom;
 		public PointF GraphOffset
 		{
-			get { if (tilemode) return tileOffset; else return graphOffset; }
-			set { if (tilemode) tileOffset = value; else graphOffset = value; }
+			get { if (TileMode) return tileOffset; else return graphOffset; }
+			set { if (TileMode) tileOffset = value; else graphOffset = value; }
 		}
 		public float GraphZoom
 		{
-			get { if (tilemode) return tileZoom; else return graphZoom; }
-			set { if (tilemode) tileZoom = value; else graphZoom = value; }
+			get { if (TileMode) return tileZoom; else return graphZoom; }
+			set { if (TileMode) tileZoom = value; else graphZoom = value; }
 		}
 		public tools_t CurrentTool { get; set; }
 		
@@ -73,10 +64,12 @@ namespace MapEdit.Controls
 			tileZoom = 2.0f;
 			
 			CurrentTool = tools_t.TOOL_DRAW;
+			selection = new Selection(1, 0);
 			// initialize private stuff
 			layers = new List<Layer>();
 			selectedLayer = 0;
-			tilemode = false;
+			TileMode = false;
+			ShowGrid = true;
 
 			// designer auto-generated initialization procedure
 			InitializeComponent();
@@ -157,7 +150,7 @@ namespace MapEdit.Controls
 			switch (CurrentTool)
 			{
 				case tools_t.TOOL_DRAW:
-					t.setXY(1, 0);
+					t.setXY((byte) selection.p0.X, (byte) selection.p0.Y);
 					L.updateTile(tp.X, tp.Y);
 					//L.invalidate();
 					this.Invalidate();
@@ -168,6 +161,27 @@ namespace MapEdit.Controls
 					break;
 			}
 
+		}
+		private void applySelection(int state, Point loc)
+		{
+			PointF p = new PointF(loc.X, loc.Y);
+			// transformed relative mouse position
+			p = transformPoint(p);
+			p.X -= GraphOffset.X;
+			p.Y -= GraphOffset.Y;
+
+			// clamp selection to inside tilesheet
+			int sx = (int) p.X; if (sx < 0) sx = 0;
+			if (sx >= tileset.getBuffer().Width) sx = tileset.getBuffer().Width - 1;
+			sx /= tileset.size;
+
+			int sy = (int)p.Y; if (sy < 0) sy = 0;
+			if (sy >= tileset.getBuffer().Height) sy = tileset.getBuffer().Height - 1;
+			sy /= tileset.size;
+
+			// set new selection
+			selection = new Selection(sx, sy);
+			this.Invalidate();
 		}
 
 		private void Editor_SizeChanged(object sender, EventArgs e)
@@ -220,8 +234,11 @@ namespace MapEdit.Controls
 			this.mouseDown = true;
 			if (e.Button == MouseButtons.Left)
 			{
-				// use current tool drawing
-				applyTool(0, e.Location);
+				if (TileMode)
+					applySelection(0, e.Location);
+				else
+					// use current tool drawing
+					applyTool(0, e.Location);
 			}
 		}
 		private void Editor_MouseMove(object sender, MouseEventArgs e)
@@ -241,8 +258,11 @@ namespace MapEdit.Controls
 				}
 				else
 				{
-					// use current tool drawing
-					applyTool(1, e.Location);
+					if (TileMode)
+						applySelection(1, e.Location);
+					else
+						// use current tool drawing
+						applyTool(1, e.Location);
 				}
 			} // mouseDown
 			this.mouseLocation = e.Location;
@@ -253,7 +273,8 @@ namespace MapEdit.Controls
 			if (e.Button == MouseButtons.Left)
 			{
 				// use current tool drawing
-				applyTool(0, e.Location);
+				if (TileMode == false)
+					applyTool(0, e.Location);
 			}
 		}
 
@@ -301,9 +322,23 @@ namespace MapEdit.Controls
 			// -= render tile layers =- //
 			//////////////////////////////
 
-			if (tilemode)
+			if (TileMode)
 			{
-				g.DrawImageUnscaled(tileset.getBuffer(), 0, 0);
+				// draw tileset
+				Rectangle src = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
+				Rectangle dst = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
+				g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
+
+				// draw selection
+				using (SolidBrush brush = new SolidBrush(Color.FromArgb(80, 255, 255, 255)))
+				{
+					Point p0 = new Point(selection.p0.X * tileset.size, selection.p0.Y * tileset.size);
+					Size  sz = new Size(tileset.size, tileset.size);
+
+					g.CompositingMode = CompositingMode.SourceOver;
+					g.FillRectangle(brush, new Rectangle(p0, sz));
+				}
+				
 			}
 			else
 			{
@@ -314,7 +349,7 @@ namespace MapEdit.Controls
 			///////////////////////
 			// -= render grid =- //
 			///////////////////////
-			if (showgrid)
+			if (ShowGrid)
 			{
 				renderGrid(g);
 			}
