@@ -1,0 +1,387 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using MapEdit.Backend;
+
+namespace MapEdit.Controls
+{
+	public enum tools_t
+	{
+		TOOL_DRAW,
+		TOOL_RECT,
+		TOOL_FILL,
+		TOOL_REPLACE,
+	}
+
+	public partial class Editor : UserControl
+    {
+        Bitmap buffer = null;
+		Image checkers = null;
+		Tileset tileset = null;
+		
+		List<Layer> layers;
+		int selectedLayer;
+		bool tilemode = false;
+		bool showgrid = true;
+		public bool ShowGrid
+		{
+			get { return showgrid; }
+			set { showgrid = value; }
+		}
+		public bool TileMode
+		{
+			get { return tilemode; }
+			set { tilemode = value; }
+		}
+
+        private bool mouseDown;
+        private Point mouseLocation;
+		
+		// graph constants
+		private const float ZOOM_DELTA = 0.15f;
+		
+		public Color GraphGridColor { get; set; }
+		public float GraphGridOpacity { get; set; }
+
+		PointF graphOffset;
+		float graphZoom;
+		PointF tileOffset;
+		float tileZoom;
+		public PointF GraphOffset
+		{
+			get { if (tilemode) return tileOffset; else return graphOffset; }
+			set { if (tilemode) tileOffset = value; else graphOffset = value; }
+		}
+		public float GraphZoom
+		{
+			get { if (tilemode) return tileZoom; else return graphZoom; }
+			set { if (tilemode) tileZoom = value; else graphZoom = value; }
+		}
+		public tools_t CurrentTool { get; set; }
+		
+		public Editor()
+		{
+			// default graph properties
+			GraphGridColor = Color.DarkOliveGreen;
+			GraphGridOpacity = 0.5f;	// default 10% visible
+
+			graphOffset = new PointF(0.0f, 0.0f); // panning offset
+			graphZoom = 4.0f;
+			tileOffset = new PointF(0.0f, 0.0f);
+			tileZoom = 2.0f;
+			
+			CurrentTool = tools_t.TOOL_DRAW;
+			// initialize private stuff
+			layers = new List<Layer>();
+			selectedLayer = 0;
+			tilemode = false;
+
+			// designer auto-generated initialization procedure
+			InitializeComponent();
+			
+			// add mousewheel function to event trigger list
+			SizeChanged += Editor_SizeChanged;
+			Paint += Editor_Paint;
+
+			MouseWheel += Editor_MouseWheel;
+			MouseDown += Editor_MouseDown;
+			MouseMove += Editor_MouseMove;
+			MouseUp += Editor_MouseUp;
+
+			// make sure only we can paint, and double-buffered
+			this.SetStyle(ControlStyles.AllPaintingInWmPaint
+					| ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
+		}
+		public void initialize(string file, int tsize)
+		{
+			// checkerboard background
+			checkers = Image.FromFile("checker.png");
+			// tileset image && tilesize
+			this.tileset = new Tileset(Image.FromFile(file), tsize);
+		}
+		public void createMap(int sizeX, int sizeY, int layerCount)
+		{
+			for (int i = 0; i < layerCount; i++)
+			{
+				Layer L = new Layer();
+				L.create(tileset, sizeX, sizeY);
+				layers.Add(L);
+			}
+
+			for (int x = 0; x < 8; x++)
+			for (int y = 0; y < 8; y++)
+			{
+				if (((x + y) & 1) != 0)
+					layers[0].setTile(new Point(x, y), new Tile(1, 0));
+			}
+			layers[0].invalidate();
+		}
+		public void setMap(List<Layer> layers)
+		{
+			this.layers = layers;
+		}
+
+		public void setMask(bool mask)
+		{
+			foreach (Layer L in layers)
+			{
+				L.ShowMask = mask;
+				L.invalidate();
+			}
+			this.Invalidate();
+		}
+
+		// transforms a point p, in window coordinate system
+		// to graph (0, 0)-based coordinate system
+		public PointF transformPoint(PointF p)
+		{
+			return new PointF(p.X / GraphZoom,
+							  p.Y / GraphZoom);
+		}
+		private void applyTool(int state, Point e)
+		{
+			PointF p = new PointF(e.X, e.Y);
+			// transformed relative mouse position
+			p = transformPoint(p);
+			p.X -= GraphOffset.X;
+			p.Y -= GraphOffset.Y;
+			// get current point & tile
+			Layer L = layers[selectedLayer];
+			Point tp = L.toTileCoord(p.X, p.Y);
+			Tile t = L.getTile(tp);
+			// outside of area (most likely)
+			if (t == null) return;
+
+			switch (CurrentTool)
+			{
+				case tools_t.TOOL_DRAW:
+					t.setXY(1, 0);
+					L.updateTile(tp.X, tp.Y);
+					//L.invalidate();
+					this.Invalidate();
+
+					break;
+
+				default:
+					break;
+			}
+
+		}
+
+		private void Editor_SizeChanged(object sender, EventArgs e)
+		{
+			if (this.ClientSize.Height != 0)
+			{
+				// recreate backbuffer with new size
+				buffer = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
+				// redraw graph
+				this.Invalidate();
+			}
+		}
+		// manipulate zoom factor based on mousewheel event
+		// also move the offset slightly closer to mouse location
+		void Editor_MouseWheel(object sender, MouseEventArgs e)
+		{
+			// get old transformed mouse position
+			PointF p1 = transformPoint(new PointF(e.Location.X, e.Location.Y));
+			// -= zooming =-
+			// increase by mousewheel delta
+			int delta = e.Delta < 0 ? -1 : 1;
+			zoom(delta);
+			// get new transformed mouse position
+			PointF p2 = transformPoint(new PointF(e.Location.X, e.Location.Y));
+			// calculate difference
+			float zofx = (p2.X - p1.X);
+			float zofy = (p2.Y - p1.Y);
+			// set new graph offset
+			GraphOffset = new PointF(GraphOffset.X + zofx, GraphOffset.Y + zofy);
+		}
+		public void zoom(int delta)
+		{
+			GraphZoom += ZOOM_DELTA * delta;
+			// clamp to min value
+			if (GraphZoom < 2 * ZOOM_DELTA) GraphZoom = 2 * ZOOM_DELTA;
+			// redraw
+			this.Invalidate();
+		}
+
+		private void Editor_Paint(object sender, PaintEventArgs e)
+		{
+			renderBuffers();
+
+			// blit backbuffer to usercontrol
+			e.Graphics.DrawImageUnscaled(buffer, 0, 0);
+		}
+
+		private void Editor_MouseDown(object sender, MouseEventArgs e)
+		{
+			this.mouseDown = true;
+			if (e.Button == MouseButtons.Left)
+			{
+				// use current tool drawing
+				applyTool(0, e.Location);
+			}
+		}
+		private void Editor_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (this.mouseDown)
+			{
+				if (e.Button == MouseButtons.Middle)
+				{
+					PointF p = new PointF(e.Location.X - mouseLocation.X,
+										e.Location.Y - mouseLocation.Y);
+					// transformed relative mouse position
+					p = transformPoint(p);
+					// set new offset value
+					GraphOffset = new PointF(GraphOffset.X + p.X, GraphOffset.Y + p.Y);
+					// redraw
+					this.Invalidate();
+				}
+				else
+				{
+					// use current tool drawing
+					applyTool(1, e.Location);
+				}
+			} // mouseDown
+			this.mouseLocation = e.Location;
+		}
+		private void Editor_MouseUp(object sender, MouseEventArgs e)
+		{
+			this.mouseDown = false;
+			if (e.Button == MouseButtons.Left)
+			{
+				// use current tool drawing
+				applyTool(0, e.Location);
+			}
+		}
+
+		void renderBuffers()
+		{
+			// get graphics object from buffer image
+			Graphics g = Graphics.FromImage(buffer);
+			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+			g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+
+			/////////////////////////////
+			// -= coordinate system =- //
+			/////////////////////////////
+
+			g.ResetTransform();
+			// rescale to (-sx, -sy)-(sx, sy)
+			g.ScaleTransform(GraphZoom, GraphZoom);
+			// offset
+			g.TranslateTransform(GraphOffset.X, GraphOffset.Y);
+
+			///////////////////////////////
+			// -= render checkerboard =- //
+			///////////////////////////////
+
+			if (checkers != null)
+			{
+				using (TextureBrush tbrush = new TextureBrush(checkers, WrapMode.Tile))
+				{
+					g.FillRectangle(tbrush, -GraphOffset.X, -GraphOffset.Y,
+						ClientSize.Width / GraphZoom, ClientSize.Height / GraphZoom);
+				}
+			}
+			else
+			{
+				g.Clear(this.BackColor);
+			}
+
+			// nothing to do without at least a tileset
+			if (tileset == null)
+			{
+				return;
+			}
+
+			//////////////////////////////
+			// -= render tile layers =- //
+			//////////////////////////////
+
+			if (tilemode)
+			{
+				g.DrawImageUnscaled(tileset.getBuffer(), 0, 0);
+			}
+			else
+			{
+				foreach (Layer L in this.layers)
+					L.render(g);
+			}
+
+			///////////////////////
+			// -= render grid =- //
+			///////////////////////
+			if (showgrid)
+			{
+				renderGrid(g);
+			}
+			g.Dispose();
+
+		} // renderBuffers()
+		private void renderGrid(Graphics g)
+		{
+			//////////////////////
+			// -= grid setup =- //
+			//////////////////////
+			float gridWidth = 1.0f / GraphZoom;
+			// distance between axis ticks
+			float axisSpacing = tileset.size;
+			// grid opacity color (value)
+			Color gridColor = Color.Black;
+
+			// offset adjusted min/max values for grid
+			float minX = -GraphOffset.X;
+			float maxX = -GraphOffset.X + (float)ClientSize.Width / GraphZoom;
+			float minY = -GraphOffset.Y;
+			float maxY = -GraphOffset.Y + (float)ClientSize.Height / GraphZoom;
+
+			// offset from left to truncated right
+			float ax0 = minX - (float)Math.IEEERemainder(minX, axisSpacing);
+			float ax1 = maxX + (float)Math.IEEERemainder(maxX, axisSpacing);
+			// offset from bottom to truncated top
+			float ay0 = minY - (float)Math.IEEERemainder(minY, axisSpacing);
+			float ay1 = maxY + (float)Math.IEEERemainder(maxY, axisSpacing);
+
+			//////////////////////
+			// -= grid lines =- //
+			//////////////////////
+			Pen pen = new Pen(gridColor, gridWidth);
+
+			// X-axis left
+			PointF axisP0 = new PointF(minX, 0);
+			// X-axis right
+			PointF axisP1 = new PointF(maxX, 0);
+			for (float y = ay0; y < ay1; y += axisSpacing)
+			{
+				// X-axis gridlines
+				axisP0.Y = y; axisP1.Y = y;
+				// draw full-height lines
+				g.DrawLine(pen, axisP0, axisP1);
+			}
+			// Y-axis top
+			axisP0 = new PointF(0, maxY);
+			// Y-axis bottom
+			axisP1 = new PointF(0, minY);
+			for (float x = ax0; x < ax1; x += axisSpacing)
+			{
+				// Y-axis gridlines
+				axisP0.X = x; axisP1.X = x;
+				// draw full-width lines
+				g.DrawLine(pen, axisP0, axisP1);
+			}
+
+			pen.Dispose();
+		}
+
+		private void Editor_KeyDown(object sender, KeyEventArgs e)
+		{
+			//MessageBox.Show(e.KeyCode.ToString());
+
+		}
+
+    } // Editor class
+
+} // namespace
