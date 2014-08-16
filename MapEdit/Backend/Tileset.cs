@@ -7,7 +7,10 @@ namespace MapEdit.Backend
 	{
 		public Tileset(Image image, int size)
 		{
-			this.tileset = image;
+			this.tileset = new Bitmap(image);
+			tileset.MakeTransparent(Color.Magenta);
+			
+			//this.tileset = image;
 			this.size = size;
 		}
 
@@ -16,7 +19,7 @@ namespace MapEdit.Backend
 			return tileset;
 		}
 
-		Image tileset;
+		Bitmap tileset;
 		public int size;
 	};
 }

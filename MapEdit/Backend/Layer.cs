@@ -21,7 +21,7 @@ namespace MapEdit.Backend
 			this.TSET = null;
 			this.tilesX = this.tilesY = 0;
 			this.visible = false;
-			this.ShowMask = false;
+			this.ShowMask = true;
 			this.alpha = 0;
 
 			this.tiles = new List<Tile>();
@@ -33,7 +33,6 @@ namespace MapEdit.Backend
 			this.tilesX = sizeX;
 			this.tilesY = sizeY;
 			this.visible = true;
-			this.ShowMask = false;
 
 			// create buffer for layer
 			buffer = new Bitmap(sizeX * TSET.size, sizeY * TSET.size);
@@ -64,9 +63,12 @@ namespace MapEdit.Backend
 		void renderTile(Graphics g, int x, int y)
 		{
 			Tile tile = tiles[tcoord(x, y)];
-			RectangleF src = new RectangleF(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
-			RectangleF dst = new RectangleF(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
-			g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
+			if (tile.getTX() != 0 || tile.getTY() != 0)
+			{
+				RectangleF src = new RectangleF(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
+				RectangleF dst = new RectangleF(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
+				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
+			}
 		}
 		public void updateTile(int x, int y)
 		{
@@ -83,11 +85,7 @@ namespace MapEdit.Backend
 			using (Graphics g = Graphics.FromImage(buffer))
 			{
 				g.InterpolationMode = InterpolationMode.NearestNeighbor;
-				g.Clear(Color.AliceBlue);
-				if (ShowMask == false)
-				{
-					g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-				}
+				g.Clear(Color.Magenta);
 
 				for (int y = 0; y < tilesY; y++)
 				for (int x = 0; x < tilesX; x++)
@@ -95,11 +93,12 @@ namespace MapEdit.Backend
 					renderTile(g, x, y);
 				}
 			}
+			if (ShowMask == false)
+				buffer.MakeTransparent(Color.Magenta);
 		}
 
 		public void render(Graphics g)
 		{
-			//invalidate();
 			g.DrawImageUnscaled(buffer, 0, 0);
 		}
 

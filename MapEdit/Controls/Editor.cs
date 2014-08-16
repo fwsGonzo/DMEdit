@@ -9,6 +9,8 @@ namespace MapEdit.Controls
 {
 	public enum tools_t
 	{
+		TOOL_NONE,
+		TOOL_READ,
 		TOOL_DRAW,
 		TOOL_RECT,
 		TOOL_FILL,
@@ -23,9 +25,10 @@ namespace MapEdit.Controls
 		Selection selection = null;
 
 		List<Layer> layers;
-		int selectedLayer;
+		public int SelectedLayer { get; set; }
 		public bool ShowGrid { get; set; }
 		public bool TileMode { get; set; }
+		public bool LayersAbove { get; set; }
 
         private bool mouseDown;
         private Point mouseLocation;
@@ -36,10 +39,8 @@ namespace MapEdit.Controls
 		public Color GraphGridColor { get; set; }
 		public float GraphGridOpacity { get; set; }
 
-		PointF graphOffset;
-		float graphZoom;
-		PointF tileOffset;
-		float tileZoom;
+		PointF graphOffset; float graphZoom;
+		PointF tileOffset;  float tileZoom;
 		public PointF GraphOffset
 		{
 			get { if (TileMode) return tileOffset; else return graphOffset; }
@@ -52,6 +53,11 @@ namespace MapEdit.Controls
 		}
 		public tools_t CurrentTool { get; set; }
 		
+		public int getLayerCount()
+		{
+			return layers.Count;
+		}
+
 		public Editor()
 		{
 			// default graph properties
@@ -63,13 +69,14 @@ namespace MapEdit.Controls
 			tileOffset = new PointF(0.0f, 0.0f);
 			tileZoom = 2.0f;
 			
-			CurrentTool = tools_t.TOOL_DRAW;
+			CurrentTool = tools_t.TOOL_NONE;
 			selection = new Selection(1, 0);
 			// initialize private stuff
 			layers = new List<Layer>();
-			selectedLayer = 0;
-			TileMode = false;
+			SelectedLayer = 0;
 			ShowGrid = true;
+			TileMode = false;
+			LayersAbove = false;
 
 			// designer auto-generated initialization procedure
 			InitializeComponent();
@@ -99,31 +106,25 @@ namespace MapEdit.Controls
 			for (int i = 0; i < layerCount; i++)
 			{
 				Layer L = new Layer();
-				L.create(tileset, sizeX, sizeY);
+				L.create(this.tileset, sizeX, sizeY);
+				L.invalidate();
 				layers.Add(L);
 			}
-
-			for (int x = 0; x < 8; x++)
-			for (int y = 0; y < 8; y++)
-			{
-				if (((x + y) & 1) != 0)
-					layers[0].setTile(new Point(x, y), new Tile(1, 0));
-			}
-			layers[0].invalidate();
 		}
 		public void setMap(List<Layer> layers)
 		{
 			this.layers = layers;
 		}
 
-		public void setMask(bool mask)
+		public void setShowMask(bool mask)
 		{
-			foreach (Layer L in layers)
-			{
-				L.ShowMask = mask;
-				L.invalidate();
-			}
+			layers[SelectedLayer].ShowMask = mask;
+			layers[SelectedLayer].invalidate();
 			this.Invalidate();
+		}
+		public bool getShowMask(int layer)
+		{
+			return layers[layer].ShowMask;
 		}
 
 		// transforms a point p, in window coordinate system
@@ -133,15 +134,18 @@ namespace MapEdit.Controls
 			return new PointF(p.X / GraphZoom,
 							  p.Y / GraphZoom);
 		}
-		private void applyTool(int state, Point e)
+		private void applyTool(tools_t tool, int state, Point e)
 		{
+			// ignore empty maps
+			if (layers.Count == 0) return;
+
 			PointF p = new PointF(e.X, e.Y);
 			// transformed relative mouse position
 			p = transformPoint(p);
 			p.X -= GraphOffset.X;
 			p.Y -= GraphOffset.Y;
 			// get current point & tile
-			Layer L = layers[selectedLayer];
+			Layer L = layers[SelectedLayer];
 			Point tp = L.toTileCoord(p.X, p.Y);
 			Tile t = L.getTile(tp);
 			// outside of area (most likely)
@@ -150,8 +154,11 @@ namespace MapEdit.Controls
 			byte sx = (byte)selection.p0.X;
 			byte sy = (byte)selection.p0.Y;
 
-			switch (CurrentTool)
+			switch (tool)
 			{
+			case tools_t.TOOL_READ:
+				selection = new Selection(t.getTX(), t.getTY());
+				break;
 			case tools_t.TOOL_DRAW:
 				t.setXY(sx, sy);
 				L.updateTile(tp.X, tp.Y);
@@ -175,6 +182,9 @@ namespace MapEdit.Controls
 		}
 		private void applySelection(int state, Point loc)
 		{
+			// ignore empty tileset
+			if (tileset == null) return;
+
 			PointF p = new PointF(loc.X, loc.Y);
 			// transformed relative mouse position
 			p = transformPoint(p);
@@ -240,17 +250,35 @@ namespace MapEdit.Controls
 			e.Graphics.DrawImageUnscaled(buffer, 0, 0);
 		}
 
+		tools_t selectedTool = tools_t.TOOL_NONE;
+
 		private void Editor_MouseDown(object sender, MouseEventArgs e)
 		{
-			this.mouseDown = true;
+			// reset selected tool
+			selectedTool = tools_t.TOOL_NONE;
+
 			if (e.Button == MouseButtons.Left)
 			{
 				if (TileMode)
 					applySelection(0, e.Location);
 				else
-					// use current tool drawing
-					applyTool(0, e.Location);
+				{
+					// set selected tool
+					selectedTool = CurrentTool;
+				}
 			}
+			else if (e.Button == MouseButtons.Right)
+			{
+				// set to read tiles from map
+				selectedTool = tools_t.TOOL_READ;
+			}
+
+			if (selectedTool != tools_t.TOOL_NONE)
+			{
+				// use current tool drawing
+				applyTool(selectedTool, 0, e.Location);
+			}
+			this.mouseDown = true;
 		}
 		private void Editor_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -269,24 +297,26 @@ namespace MapEdit.Controls
 				}
 				else
 				{
-					if (TileMode)
-						applySelection(1, e.Location);
-					else
-						// use current tool drawing
-						applyTool(1, e.Location);
+					if (TileMode) applySelection(1, e.Location);
 				}
 			} // mouseDown
 			this.mouseLocation = e.Location;
+
+			if (selectedTool != tools_t.TOOL_NONE)
+			{
+				// use current tool drawing
+				applyTool(selectedTool, 1, e.Location);
+			}
 		}
 		private void Editor_MouseUp(object sender, MouseEventArgs e)
 		{
-			this.mouseDown = false;
-			if (e.Button == MouseButtons.Left)
+			if (selectedTool != tools_t.TOOL_NONE)
 			{
 				// use current tool drawing
-				if (TileMode == false)
-					applyTool(0, e.Location);
+				applyTool(selectedTool, 2, e.Location);
 			}
+			this.selectedTool = tools_t.TOOL_NONE;
+			this.mouseDown = false;
 		}
 
 		void renderBuffers()
@@ -353,8 +383,11 @@ namespace MapEdit.Controls
 			}
 			else
 			{
-				foreach (Layer L in this.layers)
-					L.render(g);
+				for (int i = 0; i < layers.Count; i++)
+				{
+					if (i <= SelectedLayer || LayersAbove)
+						layers[i].render(g);
+				}
 			}
 
 			///////////////////////
@@ -377,13 +410,13 @@ namespace MapEdit.Controls
 			float axisSpacing = tileset.size;
 			// grid opacity color (value)
 			Color gridColor = Color.Black;
-
+			
 			// offset adjusted min/max values for grid
 			float minX = -GraphOffset.X;
 			float maxX = -GraphOffset.X + (float)ClientSize.Width / GraphZoom;
 			float minY = -GraphOffset.Y;
 			float maxY = -GraphOffset.Y + (float)ClientSize.Height / GraphZoom;
-
+			
 			// offset from left to truncated right
 			float ax0 = minX - (float)Math.IEEERemainder(minX, axisSpacing);
 			float ax1 = maxX + (float)Math.IEEERemainder(maxX, axisSpacing);
