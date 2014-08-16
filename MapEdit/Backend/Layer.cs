@@ -12,40 +12,67 @@ namespace MapEdit.Backend
 		
 		int tilesX;
 		int tilesY;
-		bool visible;
-		byte alpha;
+		public bool Visible { set; get; }
 		public bool ShowMask { set; get; }
 
-		public Layer()
+		public Layer(int sizeX, int sizeY)
 		{
 			this.TSET = null;
-			this.tilesX = this.tilesY = 0;
-			this.visible = false;
-			this.ShowMask = true;
-			this.alpha = 0;
-
-			this.tiles = new List<Tile>();
-		}
-
-		public void create(Tileset tset, int sizeX, int sizeY)
-		{
-			this.TSET = tset;
 			this.tilesX = sizeX;
 			this.tilesY = sizeY;
-			this.visible = true;
+			this.Visible = false;
+			this.ShowMask = true;
+			// allocate room for X*Y tiles
+			this.tiles = new List<Tile>(sizeX * sizeY);
+		}
 
-			// create buffer for layer
-			buffer = new Bitmap(sizeX * TSET.size, sizeY * TSET.size);
-			buffer.MakeTransparent(Color.Magenta);
-			
-			tiles.Clear();
+		public void create(Tileset tset)
+		{
+			this.Visible = true;
 			for (int x = 0; x < tilesX; x++)
 			for (int y = 0; y < tilesY; y++)
 			{
 				tiles.Add(new Tile());
 			}
+			// initialize buffer with tileset
+			initializeBuffers(tset);
 		}
-		
+		public int load(List<int> values, int index)
+		{
+			this.Visible = true;
+			for (int y = 0; y < tilesY; y++)
+			for (int x = 0; x < tilesX; x++)
+			{
+				byte tx = (byte) values[index];
+				byte ty = (byte) values[index+1];
+
+				tiles.Add(new Tile(tx, ty));
+			}
+			return index;
+		}
+		public List<int> export()
+		{
+			List<int> values = new List<int>();
+
+			foreach (Tile t in tiles)
+			{
+				values.Add(t.getTX());
+				values.Add(t.getTY());
+			}
+			return values;
+		}
+		public void clear()
+		{
+			tiles.Clear();
+		}
+		public void initializeBuffers(Tileset tset)
+		{
+			this.TSET = tset;
+			// create buffer for layer
+			buffer = new Bitmap(this.tilesX * TSET.size, this.tilesY * TSET.size);
+			buffer.MakeTransparent(Color.Magenta);
+		}
+
 		public int getWidth()
 		{
 			return tilesX * TSET.size;
@@ -80,7 +107,7 @@ namespace MapEdit.Backend
 		}
 		public void invalidate()
 		{
-			if (tiles.Count == 0 || visible == false) return;
+			if (tiles.Count == 0) return;
 			
 			using (Graphics g = Graphics.FromImage(buffer))
 			{
@@ -99,7 +126,7 @@ namespace MapEdit.Backend
 
 		public void render(Graphics g)
 		{
-			g.DrawImageUnscaled(buffer, 0, 0);
+			if (Visible) g.DrawImageUnscaled(buffer, 0, 0);
 		}
 
 		public bool inRange(int x, int y)

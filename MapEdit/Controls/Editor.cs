@@ -19,6 +19,9 @@ namespace MapEdit.Controls
 
 	public partial class Editor : UserControl
     {
+		public delegate void TileChangedEvent(int l, int x, int y, int tx, int ty, int stx, int sty);
+		public event TileChangedEvent onTileChanged;
+		
         Bitmap buffer = null;
 		Image checkers = null;
 		Tileset tileset = null;
@@ -89,7 +92,7 @@ namespace MapEdit.Controls
 			MouseDown += Editor_MouseDown;
 			MouseMove += Editor_MouseMove;
 			MouseUp += Editor_MouseUp;
-
+			
 			// make sure only we can paint, and double-buffered
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint
 					| ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
@@ -105,8 +108,9 @@ namespace MapEdit.Controls
 		{
 			for (int i = 0; i < layerCount; i++)
 			{
-				Layer L = new Layer();
-				L.create(this.tileset, sizeX, sizeY);
+				Layer L = new Layer(sizeX, sizeY);
+				L.create(this.tileset);
+				L.ShowMask = (i == 0);
 				L.invalidate();
 				layers.Add(L);
 			}
@@ -134,6 +138,20 @@ namespace MapEdit.Controls
 			return new PointF(p.X / GraphZoom,
 							  p.Y / GraphZoom);
 		}
+		public Point toTilesheet(PointF p)
+		{
+			// clamp selection to inside tilesheet
+			int sx = (int)p.X; if (sx < 0) sx = 0;
+			if (sx >= tileset.getBuffer().Width) sx = tileset.getBuffer().Width - 1;
+			sx /= tileset.size;
+
+			int sy = (int)p.Y; if (sy < 0) sy = 0;
+			if (sy >= tileset.getBuffer().Height) sy = tileset.getBuffer().Height - 1;
+			sy /= tileset.size;
+
+			return new Point(sx, sy);
+		}
+
 		private void applyTool(tools_t tool, int state, Point e)
 		{
 			// ignore empty maps
@@ -191,17 +209,10 @@ namespace MapEdit.Controls
 			p.X -= GraphOffset.X;
 			p.Y -= GraphOffset.Y;
 
-			// clamp selection to inside tilesheet
-			int sx = (int) p.X; if (sx < 0) sx = 0;
-			if (sx >= tileset.getBuffer().Width) sx = tileset.getBuffer().Width - 1;
-			sx /= tileset.size;
-
-			int sy = (int)p.Y; if (sy < 0) sy = 0;
-			if (sy >= tileset.getBuffer().Height) sy = tileset.getBuffer().Height - 1;
-			sy /= tileset.size;
+			Point sp = toTilesheet(p);
 
 			// set new selection
-			selection = new Selection(sx, sy);
+			selection = new Selection(sp.X, sp.Y);
 			this.Invalidate();
 		}
 
@@ -291,6 +302,47 @@ namespace MapEdit.Controls
 		}
 		private void Editor_MouseMove(object sender, MouseEventArgs e)
 		{
+			// statusbar updates
+			if (onTileChanged != null)
+			{
+				PointF p = new PointF(e.Location.X, e.Location.Y);
+				// transformed relative mouse position
+				p = transformPoint(p);
+				p.X -= GraphOffset.X;
+				p.Y -= GraphOffset.Y;
+
+				if (layers.Count == 0)
+				{
+					onTileChanged.Invoke(0, e.Location.X, e.Location.Y, 0, 0, 0, 0);
+				}
+				else
+				{
+					// get tile position on map
+
+					if (TileMode == false)
+					{
+						// get current point & written tile
+						Layer L = layers[SelectedLayer];
+						Point tp = L.toTileCoord(p.X, p.Y);
+						Tile t = L.getTile(tp);
+						if (t != null)
+						{
+							onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, tp.X, tp.Y, t.getTX(), t.getTY());
+						}
+						else
+						{
+							onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, tp.X, tp.Y, 0, 0);
+						}
+					}
+					else
+					{
+						Point sp = toTilesheet(p);
+						// tilemode
+						onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, sp.X, sp.Y, sp.X, sp.Y);
+					}
+				}
+			}
+			// mouse movement events
 			if (this.mouseDown)
 			{
 				if (e.Button == MouseButtons.Middle)
@@ -445,7 +497,7 @@ namespace MapEdit.Controls
 			// -= grid lines =- //
 			//////////////////////
 			Pen pen = new Pen(gridColor, gridWidth);
-			pen.DashStyle = DashStyle.DashDot;
+			//pen.DashStyle = DashStyle.DashDot;
 
 			// X-axis left
 			PointF axisP0 = new PointF(minX, 0);

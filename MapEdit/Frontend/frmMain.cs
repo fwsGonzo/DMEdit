@@ -13,6 +13,7 @@ namespace MapEdit.Frontend
         {
             InitializeComponent();
 
+			editor1.onTileChanged += editor1_onTileChanged;
 			editor1.initialize("tiles.png", 8);
 			//editor1.createMap(32, 32, 1);
 			toolShowGrid.Checked = editor1.ShowGrid;
@@ -21,6 +22,13 @@ namespace MapEdit.Frontend
 
 			layerList = new List<ToolStripMenuItem>();
         }
+
+		void editor1_onTileChanged(int l, int x, int y, int tx, int ty, int stx, int sty)
+		{
+			sbarXY.Text = "Layer: " + (l + 1) + " XY: " + x + ", " + y;
+			sbarTXY.Text = "Tile: " + tx + ", " + ty;
+			sbarSTXY.Text = "Selected: " + stx + ", " + sty;
+		}
 
         private void mnuExit_Click(object sender, EventArgs e)
         {
@@ -144,6 +152,7 @@ namespace MapEdit.Frontend
 		{
 			layerList[editor1.SelectedLayer].Checked = true;
 			mnuSelectLayer.Text = "Layer: " + (editor1.SelectedLayer + 1);
+			toolShowMask.Checked = editor1.getShowMask(editor1.SelectedLayer);
 		}
 
 		private void toolLayerAbove_Click(object sender, EventArgs e)

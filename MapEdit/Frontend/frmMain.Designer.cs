@@ -58,6 +58,11 @@
 			this.toolShowGrid = new System.Windows.Forms.ToolStripButton();
 			this.toolLayerAbove = new System.Windows.Forms.ToolStripButton();
 			this.toolShowMask = new System.Windows.Forms.ToolStripButton();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+			this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
+			this.sbarTXY = new System.Windows.Forms.ToolStripStatusLabel();
+			this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -65,6 +70,7 @@
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer1
@@ -77,6 +83,7 @@
 			// splitContainer1.Panel1
 			// 
 			this.splitContainer1.Panel1.Controls.Add(this.editor1);
+			this.splitContainer1.Panel1.Controls.Add(this.statusStrip1);
 			// 
 			// splitContainer1.Panel2
 			// 
@@ -98,7 +105,7 @@
 			this.editor1.Name = "editor1";
 			this.editor1.SelectedLayer = 0;
 			this.editor1.ShowGrid = true;
-			this.editor1.Size = new System.Drawing.Size(536, 428);
+			this.editor1.Size = new System.Drawing.Size(536, 406);
 			this.editor1.TabIndex = 0;
 			this.editor1.TileMode = false;
 			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
@@ -315,7 +322,7 @@
 			this.mnuLayer.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuLayer.Enabled = false;
 			this.mnuLayer.Name = "mnuLayer";
-			this.mnuLayer.Size = new System.Drawing.Size(152, 22);
+			this.mnuLayer.Size = new System.Drawing.Size(111, 22);
 			this.mnuLayer.Text = "Layer 1";
 			this.mnuLayer.Click += new System.EventHandler(this.mnuLayer_Click);
 			// 
@@ -369,6 +376,42 @@
 			this.toolShowMask.Text = "Colormask";
 			this.toolShowMask.Click += new System.EventHandler(this.toolShowMask_Click);
 			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar1,
+            this.sbarXY,
+            this.sbarTXY,
+            this.sbarSTXY});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 406);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(536, 22);
+			this.statusStrip1.TabIndex = 1;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// toolStripProgressBar1
+			// 
+			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+			this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+			// 
+			// sbarXY
+			// 
+			this.sbarXY.Name = "sbarXY";
+			this.sbarXY.Size = new System.Drawing.Size(43, 17);
+			this.sbarXY.Text = "sbarXY";
+			// 
+			// sbarTXY
+			// 
+			this.sbarTXY.Name = "sbarTXY";
+			this.sbarTXY.Size = new System.Drawing.Size(50, 17);
+			this.sbarTXY.Text = "sbarTXY";
+			// 
+			// sbarSTXY
+			// 
+			this.sbarSTXY.Name = "sbarSTXY";
+			this.sbarSTXY.Size = new System.Drawing.Size(56, 17);
+			this.sbarSTXY.Text = "sbarSTXY";
+			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -381,6 +424,7 @@
 			this.Text = "DM Map Editor";
 			this.Load += new System.EventHandler(this.frmMain_Load);
 			this.splitContainer1.Panel1.ResumeLayout(false);
+			this.splitContainer1.Panel1.PerformLayout();
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
@@ -388,6 +432,8 @@
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -424,6 +470,11 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveAs;
 		private System.Windows.Forms.ToolStripMenuItem mnuNewWnd;
 		private System.Windows.Forms.ToolStripButton toolShowGrid;
+		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+		private System.Windows.Forms.ToolStripStatusLabel sbarXY;
+		private System.Windows.Forms.ToolStripStatusLabel sbarTXY;
+		private System.Windows.Forms.ToolStripStatusLabel sbarSTXY;
     }
 }
 
