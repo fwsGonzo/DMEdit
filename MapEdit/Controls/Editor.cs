@@ -165,7 +165,7 @@ namespace MapEdit.Controls
 				this.Invalidate();
 				break;
 			case tools_t.TOOL_FILL:
-				L.fill(tp.X, tp.Y, sx, sy);
+				L.fill(tp.X, tp.Y, t.getTX(), t.getTY(), sx, sy);
 				L.invalidate();
 				this.Invalidate();
 				break;
@@ -263,14 +263,23 @@ namespace MapEdit.Controls
 					applySelection(0, e.Location);
 				else
 				{
-					// set selected tool
-					selectedTool = CurrentTool;
+					if (Control.ModifierKeys == Keys.Control)
+					{
+						// Ctrl: set lift/read tool
+						selectedTool = tools_t.TOOL_READ;
+					}
+					else
+					{
+						// Normal: set selected tool
+						selectedTool = CurrentTool;
+					}
 				}
 			}
 			else if (e.Button == MouseButtons.Right)
 			{
 				// set to read tiles from map
-				selectedTool = tools_t.TOOL_READ;
+				TileMode = true;
+				applySelection(0, e.Location);
 			}
 
 			if (selectedTool != tools_t.TOOL_NONE)
@@ -316,6 +325,14 @@ namespace MapEdit.Controls
 				applyTool(selectedTool, 2, e.Location);
 			}
 			this.selectedTool = tools_t.TOOL_NONE;
+			
+			// end tile selection mode
+			if (e.Button == MouseButtons.Right)
+			{
+				// set to read tiles from map
+				TileMode = false;
+				this.Invalidate();
+			}
 			this.mouseDown = false;
 		}
 
@@ -428,6 +445,7 @@ namespace MapEdit.Controls
 			// -= grid lines =- //
 			//////////////////////
 			Pen pen = new Pen(gridColor, gridWidth);
+			pen.DashStyle = DashStyle.DashDot;
 
 			// X-axis left
 			PointF axisP0 = new PointF(minX, 0);

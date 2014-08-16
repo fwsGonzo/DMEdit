@@ -30,6 +30,7 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.editor1 = new MapEdit.Controls.Editor();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.toolDraw = new System.Windows.Forms.RadioButton();
@@ -54,10 +55,9 @@
 			this.mnuLayer = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolReset = new System.Windows.Forms.ToolStripButton();
+			this.toolShowGrid = new System.Windows.Forms.ToolStripButton();
 			this.toolLayerAbove = new System.Windows.Forms.ToolStripButton();
 			this.toolShowMask = new System.Windows.Forms.ToolStripButton();
-			this.editor1 = new MapEdit.Controls.Editor();
-			this.toolShowGrid = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -84,6 +84,24 @@
 			this.splitContainer1.Size = new System.Drawing.Size(698, 430);
 			this.splitContainer1.SplitterDistance = 538;
 			this.splitContainer1.TabIndex = 1;
+			// 
+			// editor1
+			// 
+			this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
+			this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
+			this.editor1.GraphGridOpacity = 0.5F;
+			this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
+			this.editor1.GraphZoom = 4F;
+			this.editor1.LayersAbove = false;
+			this.editor1.Location = new System.Drawing.Point(0, 0);
+			this.editor1.Name = "editor1";
+			this.editor1.SelectedLayer = 0;
+			this.editor1.ShowGrid = true;
+			this.editor1.Size = new System.Drawing.Size(536, 428);
+			this.editor1.TabIndex = 0;
+			this.editor1.TileMode = false;
+			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
 			// 
 			// groupBox1
 			// 
@@ -295,8 +313,9 @@
 			// 
 			this.mnuLayer.Checked = true;
 			this.mnuLayer.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuLayer.Enabled = false;
 			this.mnuLayer.Name = "mnuLayer";
-			this.mnuLayer.Size = new System.Drawing.Size(111, 22);
+			this.mnuLayer.Size = new System.Drawing.Size(152, 22);
 			this.mnuLayer.Text = "Layer 1";
 			this.mnuLayer.Click += new System.EventHandler(this.mnuLayer_Click);
 			// 
@@ -313,6 +332,18 @@
 			this.toolReset.Size = new System.Drawing.Size(55, 22);
 			this.toolReset.Text = "Reset";
 			this.toolReset.Click += new System.EventHandler(this.toolReset_Click);
+			// 
+			// toolShowGrid
+			// 
+			this.toolShowGrid.Checked = true;
+			this.toolShowGrid.CheckOnClick = true;
+			this.toolShowGrid.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toolShowGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolShowGrid.Image")));
+			this.toolShowGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolShowGrid.Name = "toolShowGrid";
+			this.toolShowGrid.Size = new System.Drawing.Size(49, 22);
+			this.toolShowGrid.Text = "Grid";
+			this.toolShowGrid.Click += new System.EventHandler(this.toolShowGrid_Click);
 			// 
 			// toolLayerAbove
 			// 
@@ -337,36 +368,6 @@
 			this.toolShowMask.Size = new System.Drawing.Size(84, 22);
 			this.toolShowMask.Text = "Colormask";
 			this.toolShowMask.Click += new System.EventHandler(this.toolShowMask_Click);
-			// 
-			// editor1
-			// 
-			this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
-			this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
-			this.editor1.GraphGridOpacity = 0.5F;
-			this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
-			this.editor1.GraphZoom = 4F;
-			this.editor1.LayersAbove = false;
-			this.editor1.Location = new System.Drawing.Point(0, 0);
-			this.editor1.Name = "editor1";
-			this.editor1.SelectedLayer = 0;
-			this.editor1.ShowGrid = true;
-			this.editor1.Size = new System.Drawing.Size(536, 428);
-			this.editor1.TabIndex = 0;
-			this.editor1.TileMode = false;
-			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
-			// 
-			// toolShowGrid
-			// 
-			this.toolShowGrid.Checked = true;
-			this.toolShowGrid.CheckOnClick = true;
-			this.toolShowGrid.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.toolShowGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolShowGrid.Image")));
-			this.toolShowGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolShowGrid.Name = "toolShowGrid";
-			this.toolShowGrid.Size = new System.Drawing.Size(49, 22);
-			this.toolShowGrid.Text = "Grid";
-			this.toolShowGrid.Click += new System.EventHandler(this.toolShowGrid_Click);
 			// 
 			// frmMain
 			// 

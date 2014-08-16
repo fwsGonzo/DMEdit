@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using MapEdit.Controls;
-using MapEdit.Frontend;
 using System.Collections.Generic;
 
 namespace MapEdit.Frontend
@@ -9,7 +8,6 @@ namespace MapEdit.Frontend
     public partial class frmMain : Form
     {
 		List<ToolStripMenuItem> layerList;
-		int currentLayer = 0;
 		
 		public frmMain()
         {
@@ -130,6 +128,8 @@ namespace MapEdit.Frontend
 
 		private void mnuLayer_Click(object sender, EventArgs e)
 		{
+			if (layerList.Count == 0) return;
+
 			// unselect old layer
 			layerList[editor1.SelectedLayer].Checked = false;
 			// select new layer
@@ -160,6 +160,7 @@ namespace MapEdit.Frontend
 		private void toolShowGrid_Click(object sender, EventArgs e)
 		{
 			editor1.ShowGrid = toolShowGrid.Checked;
+			editor1.Invalidate();
 		}
     }
 }
