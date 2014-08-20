@@ -47,6 +47,7 @@ namespace MapEdit.Backend
 				byte ty = (byte) values[index+1];
 
 				tiles.Add(new Tile(tx, ty));
+				index += 2;
 			}
 			return index;
 		}

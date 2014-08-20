@@ -119,6 +119,11 @@ namespace MapEdit.Controls
 		{
 			this.layers = layers;
 		}
+		public void loadMap(string filename)
+		{
+			this.layers = LayerFile.loadFile(filename, this.tileset);
+			this.Invalidate();
+		}
 
 		public void setShowMask(bool mask)
 		{

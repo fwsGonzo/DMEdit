@@ -148,7 +148,7 @@ namespace MapEdit.Frontend
 			// redraw
 			editor1.Invalidate();
 		}
-		void layerSetUpdate()
+		private void layerSetUpdate()
 		{
 			layerList[editor1.SelectedLayer].Checked = true;
 			mnuSelectLayer.Text = "Layer: " + (editor1.SelectedLayer + 1);
@@ -170,6 +170,20 @@ namespace MapEdit.Frontend
 		{
 			editor1.ShowGrid = toolShowGrid.Checked;
 			editor1.Invalidate();
+		}
+
+		private void mnuOpen_Click(object sender, EventArgs e)
+		{
+			openFile1.InitialDirectory = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps";
+			openFile1.Filter = "DM Map files|*.dmf|All files|*.*";
+			DialogResult res = openFile1.ShowDialog(this);
+
+			if (res == System.Windows.Forms.DialogResult.OK)
+			{
+				editor1.loadMap(openFile1.FileName);
+				updateGUI();
+			}
+
 		}
     }
 }

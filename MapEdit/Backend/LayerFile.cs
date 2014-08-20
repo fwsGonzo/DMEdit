@@ -10,7 +10,7 @@ namespace MapEdit.Backend
 {
 	class LayerFile
 	{
-		public static List<Layer> loadFile(string file)
+		public static List<Layer> loadFile(string file, Tileset tset)
 		{
 			List<int> values = new List<int>();
 
@@ -22,7 +22,8 @@ namespace MapEdit.Backend
 					string[] words = line.Split();
 					foreach (string word in words)
 					{
-						values.Add(int.Parse(word));
+						if (word.Length > 0)
+							values.Add(int.Parse(word));
 					}
 				}
 			}
@@ -40,8 +41,16 @@ namespace MapEdit.Backend
 				{
 					Layer L = new Layer(sizeX, sizeY);
 					index = L.load(values, index);
+					// default show mask only for layer 1
+					L.ShowMask = (i == 0);
+					// create bitmap
+					L.initializeBuffers(tset);
+					// redraw
+					L.invalidate();
+					// add to list
 					layers.Add(L);
 				}
+				// return list of layers
 				return layers;
 			}
 			return null;

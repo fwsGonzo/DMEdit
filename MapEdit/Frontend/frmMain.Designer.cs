@@ -31,6 +31,11 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.editor1 = new MapEdit.Controls.Editor();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+			this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
+			this.sbarTXY = new System.Windows.Forms.ToolStripStatusLabel();
+			this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.toolDraw = new System.Windows.Forms.RadioButton();
@@ -58,19 +63,15 @@
 			this.toolShowGrid = new System.Windows.Forms.ToolStripButton();
 			this.toolLayerAbove = new System.Windows.Forms.ToolStripButton();
 			this.toolShowMask = new System.Windows.Forms.ToolStripButton();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-			this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
-			this.sbarTXY = new System.Windows.Forms.ToolStripStatusLabel();
-			this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
+			this.openFile1 = new System.Windows.Forms.OpenFileDialog();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
-			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer1
@@ -109,6 +110,42 @@
 			this.editor1.TabIndex = 0;
 			this.editor1.TileMode = false;
 			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
+			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripProgressBar1,
+            this.sbarXY,
+            this.sbarTXY,
+            this.sbarSTXY});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 406);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(536, 22);
+			this.statusStrip1.TabIndex = 1;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// toolStripProgressBar1
+			// 
+			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+			this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+			// 
+			// sbarXY
+			// 
+			this.sbarXY.Name = "sbarXY";
+			this.sbarXY.Size = new System.Drawing.Size(43, 17);
+			this.sbarXY.Text = "sbarXY";
+			// 
+			// sbarTXY
+			// 
+			this.sbarTXY.Name = "sbarTXY";
+			this.sbarTXY.Size = new System.Drawing.Size(50, 17);
+			this.sbarTXY.Text = "sbarTXY";
+			// 
+			// sbarSTXY
+			// 
+			this.sbarSTXY.Name = "sbarSTXY";
+			this.sbarSTXY.Size = new System.Drawing.Size(56, 17);
+			this.sbarSTXY.Text = "sbarSTXY";
 			// 
 			// groupBox1
 			// 
@@ -248,6 +285,7 @@
 			this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.mnuOpen.Size = new System.Drawing.Size(195, 22);
 			this.mnuOpen.Text = "&Open...";
+			this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
 			// 
 			// mnuSave
 			// 
@@ -376,41 +414,9 @@
 			this.toolShowMask.Text = "Colormask";
 			this.toolShowMask.Click += new System.EventHandler(this.toolShowMask_Click);
 			// 
-			// statusStrip1
+			// openFile1
 			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBar1,
-            this.sbarXY,
-            this.sbarTXY,
-            this.sbarSTXY});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 406);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(536, 22);
-			this.statusStrip1.TabIndex = 1;
-			this.statusStrip1.Text = "statusStrip1";
-			// 
-			// toolStripProgressBar1
-			// 
-			this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-			this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
-			// 
-			// sbarXY
-			// 
-			this.sbarXY.Name = "sbarXY";
-			this.sbarXY.Size = new System.Drawing.Size(43, 17);
-			this.sbarXY.Text = "sbarXY";
-			// 
-			// sbarTXY
-			// 
-			this.sbarTXY.Name = "sbarTXY";
-			this.sbarTXY.Size = new System.Drawing.Size(50, 17);
-			this.sbarTXY.Text = "sbarTXY";
-			// 
-			// sbarSTXY
-			// 
-			this.sbarSTXY.Name = "sbarSTXY";
-			this.sbarSTXY.Size = new System.Drawing.Size(56, 17);
-			this.sbarSTXY.Text = "sbarSTXY";
+			this.openFile1.Title = "Open map file";
 			// 
 			// frmMain
 			// 
@@ -428,12 +434,12 @@
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -475,6 +481,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel sbarXY;
 		private System.Windows.Forms.ToolStripStatusLabel sbarTXY;
 		private System.Windows.Forms.ToolStripStatusLabel sbarSTXY;
+		private System.Windows.Forms.OpenFileDialog openFile1;
     }
 }
 
