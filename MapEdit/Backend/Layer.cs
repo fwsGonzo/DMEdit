@@ -97,8 +97,8 @@ namespace MapEdit.Backend
 			Tile tile = tiles[tcoord(x, y)];
 			if (tile.getTX() != 0 || tile.getTY() != 0)
 			{
-				RectangleF src = new RectangleF(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
-				RectangleF dst = new RectangleF(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
+				Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
+				Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
 				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
 			}
 		}
@@ -131,7 +131,10 @@ namespace MapEdit.Backend
 
 		public void render(Graphics g)
 		{
-			if (Visible) g.DrawImageUnscaled(buffer, 0, 0);
+			if (Visible)
+			{
+				g.DrawImageUnscaled(buffer, 0, 0);
+			}
 		}
 
 		public bool inRange(int x, int y)

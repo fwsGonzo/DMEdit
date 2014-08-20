@@ -460,23 +460,25 @@ namespace MapEdit.Controls
 		{
 			// get graphics object from buffer image
 			Graphics g = Graphics.FromImage(buffer);
-			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-			g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-
+			g.SmoothingMode = SmoothingMode.None;
+			g.InterpolationMode = InterpolationMode.NearestNeighbor;
+			g.PixelOffsetMode = PixelOffsetMode.Half;
+			g.CompositingQuality = CompositingQuality.HighSpeed;
+			
 			/////////////////////////////
 			// -= coordinate system =- //
 			/////////////////////////////
-
+			
 			g.ResetTransform();
 			// rescale to (-sx, -sy)-(sx, sy)
 			g.ScaleTransform(GraphZoom, GraphZoom);
 			// offset
 			g.TranslateTransform(GraphOffset.X, GraphOffset.Y);
-
+			
 			///////////////////////////////
 			// -= render checkerboard =- //
 			///////////////////////////////
-
+			
 			if (checkers != null)
 			{
 				using (TextureBrush tbrush = new TextureBrush(checkers, WrapMode.Tile))
@@ -489,7 +491,7 @@ namespace MapEdit.Controls
 			{
 				g.Clear(this.BackColor);
 			}
-
+			
 			// nothing to do without at least a tileset
 			if (tileset == null)
 			{
@@ -520,6 +522,7 @@ namespace MapEdit.Controls
 			}
 			else
 			{
+				g.CompositingMode = CompositingMode.SourceCopy;
 				for (int i = 0; i < layers.Count; i++)
 				{
 					if (i <= SelectedLayer || LayersAbove)
