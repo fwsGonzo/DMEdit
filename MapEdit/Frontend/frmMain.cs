@@ -97,7 +97,12 @@ namespace MapEdit.Frontend
 		private void mnuNew_Click(object sender, EventArgs e)
 		{
 			CreateReturn ret = frmNewMap.start();
-
+			if (ret.layers == 0 || ret.sizeX == 0 || ret.sizeY == 0)
+			{
+				// operation cancelled
+				return;
+			}
+			// create new map
 			editor1.createMap(ret.sizeX, ret.sizeY, ret.layers);
 			editor1.Invalidate();
 
@@ -175,7 +180,6 @@ namespace MapEdit.Frontend
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
 			openFile1.InitialDirectory = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps";
-			openFile1.Filter = "DM Map files|*.dmf|All files|*.*";
 			DialogResult res = openFile1.ShowDialog(this);
 
 			if (res == System.Windows.Forms.DialogResult.OK)
@@ -183,7 +187,50 @@ namespace MapEdit.Frontend
 				editor1.loadMap(openFile1.FileName);
 				updateGUI();
 			}
+		}
 
+		private bool containsMapMessage()
+		{
+			if (editor1.containsMap() == false)
+			{
+				MessageBox.Show(
+					"Editor has no map to save",
+					"Save As...",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+			}
+			return editor1.containsMap();
+		}
+
+		private void mnuSave_Click(object sender, EventArgs e)
+		{
+			if (containsMapMessage() == false) return;
+
+			if (editor1.saveChanges())
+			{
+				// all changes were saved
+				return;
+			}
+			// try save as instead
+			mnuSaveAs_Click(sender, e);
+		}
+
+		private void mnuSaveAs_Click(object sender, EventArgs e)
+		{
+			if (containsMapMessage() == false) return;
+			
+			saveFile1.InitialDirectory = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps";
+			DialogResult res = saveFile1.ShowDialog(this);
+			
+			if (res == System.Windows.Forms.DialogResult.OK)
+			if (editor1.saveMapAs(saveFile1.FileName) == false)
+			{
+				MessageBox.Show(
+					"Could not save map to:\n" + saveFile1.FileName, 
+					"Save As...", 
+					MessageBoxButtons.OK, 
+					MessageBoxIcon.Error);
+			}
 		}
     }
 }

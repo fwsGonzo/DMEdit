@@ -30,7 +30,6 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.editor1 = new MapEdit.Controls.Editor();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
 			this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
@@ -64,6 +63,8 @@
 			this.toolLayerAbove = new System.Windows.Forms.ToolStripButton();
 			this.toolShowMask = new System.Windows.Forms.ToolStripButton();
 			this.openFile1 = new System.Windows.Forms.OpenFileDialog();
+			this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
+			this.editor1 = new MapEdit.Controls.Editor();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -92,24 +93,6 @@
 			this.splitContainer1.Size = new System.Drawing.Size(698, 430);
 			this.splitContainer1.SplitterDistance = 538;
 			this.splitContainer1.TabIndex = 1;
-			// 
-			// editor1
-			// 
-			this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
-			this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
-			this.editor1.GraphGridOpacity = 0.5F;
-			this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
-			this.editor1.GraphZoom = 4F;
-			this.editor1.LayersAbove = false;
-			this.editor1.Location = new System.Drawing.Point(0, 0);
-			this.editor1.Name = "editor1";
-			this.editor1.SelectedLayer = 0;
-			this.editor1.ShowGrid = true;
-			this.editor1.Size = new System.Drawing.Size(536, 406);
-			this.editor1.TabIndex = 0;
-			this.editor1.TileMode = false;
-			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
 			// 
 			// statusStrip1
 			// 
@@ -294,6 +277,7 @@
 			this.mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.mnuSave.Size = new System.Drawing.Size(195, 22);
 			this.mnuSave.Text = "&Save...";
+			this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
 			// 
 			// mnuSaveAs
 			// 
@@ -302,6 +286,7 @@
             | System.Windows.Forms.Keys.S)));
 			this.mnuSaveAs.Size = new System.Drawing.Size(195, 22);
 			this.mnuSaveAs.Text = "Save &As...";
+			this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
 			// 
 			// toolStripSeparator1
 			// 
@@ -416,7 +401,30 @@
 			// 
 			// openFile1
 			// 
+			this.openFile1.Filter = "DM Map files|*.dmf|All files|*.*";
 			this.openFile1.Title = "Open map file";
+			// 
+			// saveFile1
+			// 
+			this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
+			// 
+			// editor1
+			// 
+			this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
+			this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
+			this.editor1.GraphGridOpacity = 0.5F;
+			this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
+			this.editor1.GraphZoom = 4F;
+			this.editor1.LayersAbove = false;
+			this.editor1.Location = new System.Drawing.Point(0, 0);
+			this.editor1.Name = "editor1";
+			this.editor1.SelectedLayer = 0;
+			this.editor1.ShowGrid = true;
+			this.editor1.Size = new System.Drawing.Size(536, 406);
+			this.editor1.TabIndex = 0;
+			this.editor1.TileMode = false;
+			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
 			// 
 			// frmMain
 			// 
@@ -482,6 +490,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel sbarTXY;
 		private System.Windows.Forms.ToolStripStatusLabel sbarSTXY;
 		private System.Windows.Forms.OpenFileDialog openFile1;
+		private System.Windows.Forms.SaveFileDialog saveFile1;
     }
 }
 

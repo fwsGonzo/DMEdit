@@ -37,28 +37,24 @@ namespace MapEdit.Backend
 			// initialize buffer with tileset
 			initializeBuffers(tset);
 		}
-		public int load(List<int> values, int index)
+		public int load(List<uint> values, int index)
 		{
 			this.Visible = true;
 			for (int y = 0; y < tilesY; y++)
 			for (int x = 0; x < tilesX; x++)
 			{
-				byte tx = (byte) values[index];
-				byte ty = (byte) values[index+1];
-
-				tiles.Add(new Tile(tx, ty));
-				index += 2;
+				tiles.Add(new Tile(values[index]));
+				index ++;
 			}
 			return index;
 		}
-		public List<int> export()
+		public List<uint> export()
 		{
-			List<int> values = new List<int>();
+			List<uint> values = new List<uint>();
 
 			foreach (Tile t in tiles)
 			{
-				values.Add(t.getTX());
-				values.Add(t.getTY());
+				values.Add(t.compressed());
 			}
 			return values;
 		}
@@ -81,6 +77,14 @@ namespace MapEdit.Backend
 		public int getHeight()
 		{
 			return tilesY * TSET.size;
+		}
+		public int getTilesX()
+		{
+			return tilesX;
+		}
+		public int getTilesY()
+		{
+			return tilesY;
 		}
 
 		private int tcoord(int x, int y)

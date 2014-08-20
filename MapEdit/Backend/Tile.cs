@@ -44,13 +44,34 @@ namespace MapEdit.Backend
 			form = (int)TileForm.FORM_RECT;
 			data = 0;
 		}
-		
+		public Tile(byte x, byte y, byte form, byte data)
+		{
+			this.tx = x;
+			this.ty = y;
+			this.form = form;
+			this.data = data;
+		}
+		public Tile(uint data)
+		{
+			// Tile from 32bits uint
+			this.tx =   (byte) ((data >> 0) & 255);
+			this.ty =   (byte) ((data >> 8) & 255);
+			this.form = (byte) ((data >> 16) & 255);
+			this.data = (byte) ((data >> 24) & 255);
+		}
+		public uint compressed()
+		{
+			return (uint)tx + ((uint)ty << 8) + ((uint)form << 16) + ((uint)data << 24);
+		}
+
 		public byte getTX() { return tx; }
 		public byte getTY() { return ty; }
 		public void setXY(byte x, byte y) { tx = x; ty = y; }
 
 		public byte getForm() { return form; }
 		public void setForm(byte f) { form = f; }
+
+		public byte getData() { return data; }
 
 		public void setSolid(bool v) { setdata((int)Bits.SOLID_BIT, v); }
 		public bool isSolid() { return getdata((int)Bits.SOLID_BIT); }

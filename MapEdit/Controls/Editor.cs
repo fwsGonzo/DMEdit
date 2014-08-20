@@ -21,7 +21,11 @@ namespace MapEdit.Controls
     {
 		public delegate void TileChangedEvent(int l, int x, int y, int tx, int ty, int stx, int sty);
 		public event TileChangedEvent onTileChanged;
-		
+
+		string filename;
+		bool   has_filename = false;
+		bool   is_saved = false;
+
         Bitmap buffer = null;
 		Image checkers = null;
 		Tileset tileset = null;
@@ -104,6 +108,13 @@ namespace MapEdit.Controls
 			// tileset image && tilesize
 			this.tileset = new Tileset(Image.FromFile(file), tsize);
 		}
+
+		// returns true if there is an existing valid map
+		public bool containsMap()
+		{
+			return layers.Count > 0 && tileset != null;
+		}
+		// creates a new map based on size & layers
 		public void createMap(int sizeX, int sizeY, int layerCount)
 		{
 			for (int i = 0; i < layerCount; i++)
@@ -114,15 +125,60 @@ namespace MapEdit.Controls
 				L.invalidate();
 				layers.Add(L);
 			}
+			// some changes were made to this map
+			changesWereMade();
 		}
 		public void setMap(List<Layer> layers)
 		{
 			this.layers = layers;
+			this.has_filename = false;
+			this.is_saved = false;
 		}
 		public void loadMap(string filename)
 		{
+			// load map
 			this.layers = LayerFile.loadFile(filename, this.tileset);
 			this.Invalidate();
+			// set filename & no changes made
+			this.filename = filename;
+			this.has_filename = true;
+			this.is_saved = true;
+		}
+		public bool saveMapAs(string filename)
+		{
+			if (LayerFile.saveFile(filename, this.layers))
+			{
+				this.filename = filename;
+				this.has_filename = true;
+				this.is_saved = true;
+				return true;
+			}
+			return false;
+		}
+		public bool saveChanges()
+		{
+			if (has_filename)
+			if (LayerFile.saveFile(this.filename, this.layers))
+			{
+				this.is_saved = true;
+				return true;
+			}
+			return false;
+		}
+		public bool isSaved()
+		{
+			return this.is_saved;
+		}
+
+		private void aboutToMakeChanges(int layer)
+		{
+			// TODO: Create undo
+			// Call undo created signal
+		}
+		private void changesWereMade()
+		{
+			// the file is no longer 'current'
+			this.is_saved = false;
 		}
 
 		public void setShowMask(bool mask)
@@ -174,6 +230,10 @@ namespace MapEdit.Controls
 			// outside of area (most likely)
 			if (t == null) return;
 
+			// now that we're here, before doing anything
+			// signal that changes are about to be made to @layer
+			aboutToMakeChanges(SelectedLayer);
+			
 			byte sx = (byte)selection.p0.X;
 			byte sy = (byte)selection.p0.Y;
 
@@ -181,7 +241,8 @@ namespace MapEdit.Controls
 			{
 			case tools_t.TOOL_READ:
 				selection = new Selection(t.getTX(), t.getTY());
-				break;
+				// lifting a tile didn't change map, so just exit
+				return;
 			case tools_t.TOOL_DRAW:
 				t.setXY(sx, sy);
 				L.updateTile(tp.X, tp.Y);
@@ -199,15 +260,17 @@ namespace MapEdit.Controls
 				break;
 
 			default:
-				break;
+				// unimplemented tools can't change the map, just exit
+				return;
 			}
-
+			// changes were potentially made
+			changesWereMade();
 		}
 		private void applySelection(int state, Point loc)
 		{
 			// ignore empty tileset
 			if (tileset == null) return;
-
+			
 			PointF p = new PointF(loc.X, loc.Y);
 			// transformed relative mouse position
 			p = transformPoint(p);
