@@ -222,6 +222,31 @@ namespace MapEdit.Controls
 			return new Point(sx, sy);
 		}
 
+		bool drawDragRect = false;
+		Rectangle dragRect;
+		Point originalTilePoint;
+
+		Rectangle toTileRect(Point a, Point b)
+		{
+			int x1 = (a.X < b.X) ? a.X : b.X;
+			int x2 = ((a.X > b.X) ? a.X : b.X) + 1;
+			int y1 = (a.Y < b.Y) ? a.Y : b.Y;
+			int y2 = ((a.Y > b.Y) ? a.Y : b.Y) + 1;
+
+			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
+		}
+		void drawTile(Layer L, int tx, int ty, byte sx, byte sy)
+		{
+			Tile T = L.getTile(tx, ty);
+
+			if (TileDrawing) T.setXY(sx, sy);
+			T.setSolid(TileSolid);
+			T.setAbyss(TileAbyss);
+			T.setWater(TileWater);
+			T.setForm((byte)TileForm);
+			L.updateTile(tx, ty);
+		}
+
 		private void applyTool(tools_t tool, int state, Point e)
 		{
 			// ignore empty maps
@@ -239,12 +264,25 @@ namespace MapEdit.Controls
 			// outside of area (most likely)
 			if (t == null) return;
 
-			// now that we're here, before doing anything
-			// signal that changes are about to be made to @layer
-			aboutToMakeChanges(SelectedLayer);
-			
-			byte sx = (byte)selection.p0.X;
-			byte sy = (byte)selection.p0.Y;
+			byte sx = (byte) selection.p0.X;
+			byte sy = (byte) selection.p0.Y;
+
+			if (tool == tools_t.TOOL_RECT)
+			{
+				if (state == 0)
+				{
+					// set mousedown tilepoint
+					originalTilePoint = tp;
+				}
+				dragRect = toTileRect(originalTilePoint, tp);
+				dragRect.X *= tileset.size;
+				dragRect.Y *= tileset.size;
+				dragRect.Width  *= tileset.size;
+				dragRect.Height *= tileset.size;
+				// invalidate to draw the rectangle
+				this.drawDragRect = true;
+				this.Invalidate();
+			}
 
 			switch (tool)
 			{
@@ -253,22 +291,41 @@ namespace MapEdit.Controls
 				// lifting a tile didn't change map, so just exit
 				return;
 			case tools_t.TOOL_RECT:
+				if (state == 2)
+				{
+					// now that we're here, before doing anything
+					// signal that changes are about to be made to @layer
+					aboutToMakeChanges(SelectedLayer);
+					Rectangle TR = toTileRect(originalTilePoint, tp);
 
+					for (int y = 0; y < TR.Height; y++)
+					for (int x = 0; x < TR.Width; x++)
+					{
+						int tx = TR.X + x;
+						int ty = TR.Y + y;
+						if (L.inRange(tx, ty))
+							drawTile(L, tx, ty, sx, sy);
+					}
+					// mouse up event, map has changed
+					break;
+				}
+				else return;
 			case tools_t.TOOL_DRAW:
-				if (TileDrawing) t.setXY(sx, sy);
-				t.setSolid(TileSolid);
-				t.setAbyss(TileAbyss);
-				t.setWater(TileWater);
-				t.setForm((byte) TileForm);
-				L.updateTile(tp.X, tp.Y);
+				// signal that changes are about to be made to @layer
+				aboutToMakeChanges(SelectedLayer);
+				drawTile(L, tp.X, tp.Y, sx, sy);
 				this.Invalidate();
 				break;
 			case tools_t.TOOL_FILL:
+				// signal that changes are about to be made to @layer
+				aboutToMakeChanges(SelectedLayer);
 				L.fill(tp.X, tp.Y, t.getTX(), t.getTY(), sx, sy);
 				L.invalidate();
 				this.Invalidate();
 				break;
 			case tools_t.TOOL_REPLACE:
+				// signal that changes are about to be made to @layer
+				aboutToMakeChanges(SelectedLayer);
 				L.replace(t.getTX(), t.getTY(), sx, sy);
 				L.invalidate();
 				this.Invalidate();
@@ -469,6 +526,7 @@ namespace MapEdit.Controls
 				this.Invalidate();
 			}
 			this.mouseDown = false;
+			this.drawDragRect = false;
 		}
 
 		void renderBuffers()
@@ -552,7 +610,14 @@ namespace MapEdit.Controls
 			{
 				renderGrid(g);
 			}
-			g.Dispose();
+
+			if (this.drawDragRect)
+			{
+				using (Pen P = new Pen(Color.Blue))
+				{
+					g.DrawRectangle(P, dragRect);
+				}
+			}
 
 		} // renderBuffers()
 		private void renderGrid(Graphics g)
