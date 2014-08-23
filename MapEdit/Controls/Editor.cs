@@ -34,10 +34,18 @@ namespace MapEdit.Controls
 		List<Layer> layers;
 		public int SelectedLayer { get; set; }
 		public bool ShowGrid { get; set; }
-		public bool TileMode { get; set; }
 		public bool LayersAbove { get; set; }
 
-        private bool mouseDown;
+		public bool TileMode { get; set; }
+		// true if we set tile (X, Y) values
+		public bool TileDrawing { get; set; }
+		// enabled: sets solid-flag to tiles
+		public bool TileSolid { get; set; }
+		public bool TileAbyss { get; set; }
+		public bool TileWater { get; set; }
+		public int TileForm { get; set; }
+	
+		private bool mouseDown;
         private Point mouseLocation;
 		
 		// graph constants
@@ -83,6 +91,7 @@ namespace MapEdit.Controls
 			SelectedLayer = 0;
 			ShowGrid = true;
 			TileMode = false;
+			TileDrawing = true;
 			LayersAbove = false;
 
 			// designer auto-generated initialization procedure
@@ -243,8 +252,14 @@ namespace MapEdit.Controls
 				selection = new Selection(t.getTX(), t.getTY());
 				// lifting a tile didn't change map, so just exit
 				return;
+			case tools_t.TOOL_RECT:
+
 			case tools_t.TOOL_DRAW:
-				t.setXY(sx, sy);
+				if (TileDrawing) t.setXY(sx, sy);
+				t.setSolid(TileSolid);
+				t.setAbyss(TileAbyss);
+				t.setWater(TileWater);
+				t.setForm((byte) TileForm);
 				L.updateTile(tp.X, tp.Y);
 				this.Invalidate();
 				break;
@@ -601,7 +616,7 @@ namespace MapEdit.Controls
 			//MessageBox.Show(e.KeyCode.ToString());
 
 		}
-
-    } // Editor class
+		
+	} // Editor class
 
 } // namespace

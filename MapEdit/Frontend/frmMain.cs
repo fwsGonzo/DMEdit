@@ -40,6 +40,11 @@ namespace MapEdit.Frontend
 			toolDraw.Checked = true;
 			// reset camera to def values
 			toolReset_Click(null, null);
+			// select rectangular
+			listTileForm.SelectedIndex = 0;
+
+			//editor1.loadMap("C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps");
+			updateGUI();
 		}
 
 		private void editor1_KeyDown(object sender, KeyEventArgs e)
@@ -112,11 +117,10 @@ namespace MapEdit.Frontend
 		{
 			// set default selected layer
 			editor1.SelectedLayer = 0;
+			// get showmask value for selected layer
+			toolShowMask.Enabled = editor1.getLayerCount() > 0;
 			// recreate layer menu list
 			resizeMenuLayers();
-			// get showmask value for selected layer
-			toolShowMask.Enabled = true;
-			toolShowMask.Checked = editor1.getShowMask(editor1.SelectedLayer);
 		}
 
 		private void resizeMenuLayers()
@@ -124,6 +128,8 @@ namespace MapEdit.Frontend
 			// remove old layers
 			mnuSelectLayer.DropDownItems.Clear();
 			layerList.Clear();
+			// exit when there are no layers
+			if (editor1.getLayerCount() == 0) return;
 
 			// create new layers
 			for (int i = 0; i < editor1.getLayerCount(); i++)
@@ -231,6 +237,29 @@ namespace MapEdit.Frontend
 					MessageBoxButtons.OK, 
 					MessageBoxIcon.Error);
 			}
+		}
+
+		private void chkTileSolid_CheckedChanged(object sender, EventArgs e)
+		{
+			editor1.TileSolid = chkTileSolid.Checked;
+		}
+		private void chkTileAbyss_CheckedChanged(object sender, EventArgs e)
+		{
+			editor1.TileAbyss = chkTileAbyss.Checked;
+		}
+		private void chkTileWater_CheckedChanged(object sender, EventArgs e)
+		{
+			editor1.TileWater = chkTileWater.Checked;
+		}
+
+		private void listTileForm_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			editor1.TileForm = listTileForm.SelectedIndex;
+		}
+
+		private void chkSetTile_CheckedChanged(object sender, EventArgs e)
+		{
+			editor1.TileDrawing = chkSetTile.Checked;
 		}
     }
 }

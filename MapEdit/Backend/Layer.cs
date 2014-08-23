@@ -9,7 +9,8 @@ namespace MapEdit.Backend
 		Tileset TSET;
 		List<Tile> tiles;
 		Bitmap buffer;
-		
+		Brush solidBrush;
+
 		int tilesX;
 		int tilesY;
 		public bool Visible { set; get; }
@@ -24,6 +25,8 @@ namespace MapEdit.Backend
 			this.ShowMask = true;
 			// allocate room for X*Y tiles
 			this.tiles = new List<Tile>(sizeX * sizeY);
+			// brushes
+			this.solidBrush = new SolidBrush(Color.FromArgb(80, Color.Black));
 		}
 
 		public void create(Tileset tset)
@@ -100,6 +103,48 @@ namespace MapEdit.Backend
 				Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
 				Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
 				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
+
+				if (tile.isSolid())
+				{
+					switch (tile.getForm())
+					{
+						case 0:
+							g.FillRectangle(solidBrush, dst);
+							break;
+						case 1: // Up Left
+							g.FillPolygon(solidBrush,  new Point[]
+							{
+								new Point(dst.X + dst.Width, dst.Y-1),
+								new Point(dst.X-1, dst.Y + dst.Height),
+								new Point(dst.X + dst.Width, dst.Y + dst.Height),
+							});
+							break;
+						case 2: // Up Right
+							g.FillPolygon(solidBrush,  new Point[]
+							{
+								new Point(dst.X, dst.Y-1),
+								new Point(dst.X, dst.Y + dst.Height),
+								new Point(dst.X + dst.Width, dst.Y + dst.Height),
+							});
+							break;
+						case 3:
+							g.FillPolygon(solidBrush,  new Point[]
+							{
+								new Point(dst.X, dst.Y),
+								new Point(dst.X + dst.Width, dst.Y),
+								new Point(dst.X + dst.Width, dst.Y + dst.Height),
+							});
+							break;
+						case 4:
+							g.FillPolygon(solidBrush,  new Point[]
+							{
+								new Point(dst.X, dst.Y),
+								new Point(dst.X + dst.Width, dst.Y),
+								new Point(dst.X, dst.Y + dst.Height),
+							});
+							break;
+					}
+				}
 			}
 		}
 		public void updateTile(int x, int y)

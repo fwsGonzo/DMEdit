@@ -30,6 +30,7 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.editor1 = new MapEdit.Controls.Editor();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
 			this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
@@ -41,6 +42,10 @@
 			this.toolRect = new System.Windows.Forms.RadioButton();
 			this.toolFill = new System.Windows.Forms.RadioButton();
 			this.toolReplace = new System.Windows.Forms.RadioButton();
+			this.chkTileSolid = new System.Windows.Forms.CheckBox();
+			this.chkTileAbyss = new System.Windows.Forms.CheckBox();
+			this.chkTileWater = new System.Windows.Forms.CheckBox();
+			this.listTileForm = new System.Windows.Forms.ListBox();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNewWnd = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +69,7 @@
 			this.toolShowMask = new System.Windows.Forms.ToolStripButton();
 			this.openFile1 = new System.Windows.Forms.OpenFileDialog();
 			this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
-			this.editor1 = new MapEdit.Controls.Editor();
+			this.chkSetTile = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -93,6 +98,28 @@
 			this.splitContainer1.Size = new System.Drawing.Size(698, 430);
 			this.splitContainer1.SplitterDistance = 538;
 			this.splitContainer1.TabIndex = 1;
+			// 
+			// editor1
+			// 
+			this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
+			this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
+			this.editor1.GraphGridOpacity = 0.5F;
+			this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
+			this.editor1.GraphZoom = 4F;
+			this.editor1.LayersAbove = false;
+			this.editor1.Location = new System.Drawing.Point(0, 0);
+			this.editor1.Name = "editor1";
+			this.editor1.SelectedLayer = 0;
+			this.editor1.ShowGrid = true;
+			this.editor1.Size = new System.Drawing.Size(536, 406);
+			this.editor1.TabIndex = 0;
+			this.editor1.TileAbyss = false;
+			this.editor1.TileForm = 0;
+			this.editor1.TileMode = false;
+			this.editor1.TileSolid = false;
+			this.editor1.TileWater = false;
+			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
 			// 
 			// statusStrip1
 			// 
@@ -136,7 +163,7 @@
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(154, 196);
+			this.groupBox1.Size = new System.Drawing.Size(154, 334);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Tools";
@@ -147,10 +174,15 @@
 			this.flowLayoutPanel1.Controls.Add(this.toolRect);
 			this.flowLayoutPanel1.Controls.Add(this.toolFill);
 			this.flowLayoutPanel1.Controls.Add(this.toolReplace);
+			this.flowLayoutPanel1.Controls.Add(this.chkTileSolid);
+			this.flowLayoutPanel1.Controls.Add(this.chkTileAbyss);
+			this.flowLayoutPanel1.Controls.Add(this.chkTileWater);
+			this.flowLayoutPanel1.Controls.Add(this.listTileForm);
+			this.flowLayoutPanel1.Controls.Add(this.chkSetTile);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 16);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(148, 177);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(148, 315);
 			this.flowLayoutPanel1.TabIndex = 1;
 			// 
 			// toolDraw
@@ -158,7 +190,7 @@
 			this.toolDraw.Appearance = System.Windows.Forms.Appearance.Button;
 			this.toolDraw.Location = new System.Drawing.Point(3, 3);
 			this.toolDraw.Name = "toolDraw";
-			this.toolDraw.Size = new System.Drawing.Size(135, 24);
+			this.toolDraw.Size = new System.Drawing.Size(142, 24);
 			this.toolDraw.TabIndex = 0;
 			this.toolDraw.TabStop = true;
 			this.toolDraw.Text = "Draw";
@@ -171,7 +203,7 @@
 			this.toolRect.Appearance = System.Windows.Forms.Appearance.Button;
 			this.toolRect.Location = new System.Drawing.Point(3, 33);
 			this.toolRect.Name = "toolRect";
-			this.toolRect.Size = new System.Drawing.Size(135, 24);
+			this.toolRect.Size = new System.Drawing.Size(142, 24);
 			this.toolRect.TabIndex = 1;
 			this.toolRect.TabStop = true;
 			this.toolRect.Text = "Rectangle";
@@ -184,7 +216,7 @@
 			this.toolFill.Appearance = System.Windows.Forms.Appearance.Button;
 			this.toolFill.Location = new System.Drawing.Point(3, 63);
 			this.toolFill.Name = "toolFill";
-			this.toolFill.Size = new System.Drawing.Size(135, 24);
+			this.toolFill.Size = new System.Drawing.Size(142, 24);
 			this.toolFill.TabIndex = 2;
 			this.toolFill.TabStop = true;
 			this.toolFill.Text = "Fill";
@@ -197,13 +229,61 @@
 			this.toolReplace.Appearance = System.Windows.Forms.Appearance.Button;
 			this.toolReplace.Location = new System.Drawing.Point(3, 93);
 			this.toolReplace.Name = "toolReplace";
-			this.toolReplace.Size = new System.Drawing.Size(135, 24);
+			this.toolReplace.Size = new System.Drawing.Size(142, 24);
 			this.toolReplace.TabIndex = 3;
 			this.toolReplace.TabStop = true;
 			this.toolReplace.Text = "Replace";
 			this.toolReplace.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.toolReplace.UseVisualStyleBackColor = true;
 			this.toolReplace.Click += new System.EventHandler(this.toolDraw_Click);
+			// 
+			// chkTileSolid
+			// 
+			this.chkTileSolid.AutoSize = true;
+			this.chkTileSolid.Location = new System.Drawing.Point(3, 123);
+			this.chkTileSolid.Name = "chkTileSolid";
+			this.chkTileSolid.Size = new System.Drawing.Size(49, 17);
+			this.chkTileSolid.TabIndex = 4;
+			this.chkTileSolid.Text = "Solid";
+			this.chkTileSolid.UseVisualStyleBackColor = true;
+			this.chkTileSolid.CheckedChanged += new System.EventHandler(this.chkTileSolid_CheckedChanged);
+			// 
+			// chkTileAbyss
+			// 
+			this.chkTileAbyss.AutoSize = true;
+			this.chkTileAbyss.Location = new System.Drawing.Point(58, 123);
+			this.chkTileAbyss.Name = "chkTileAbyss";
+			this.chkTileAbyss.Size = new System.Drawing.Size(54, 17);
+			this.chkTileAbyss.TabIndex = 5;
+			this.chkTileAbyss.Text = "Abyss";
+			this.chkTileAbyss.UseVisualStyleBackColor = true;
+			this.chkTileAbyss.CheckedChanged += new System.EventHandler(this.chkTileAbyss_CheckedChanged);
+			// 
+			// chkTileWater
+			// 
+			this.chkTileWater.AutoSize = true;
+			this.chkTileWater.Location = new System.Drawing.Point(3, 146);
+			this.chkTileWater.Name = "chkTileWater";
+			this.chkTileWater.Size = new System.Drawing.Size(55, 17);
+			this.chkTileWater.TabIndex = 6;
+			this.chkTileWater.Text = "Water";
+			this.chkTileWater.UseVisualStyleBackColor = true;
+			this.chkTileWater.CheckedChanged += new System.EventHandler(this.chkTileWater_CheckedChanged);
+			// 
+			// listTileForm
+			// 
+			this.listTileForm.FormattingEnabled = true;
+			this.listTileForm.Items.AddRange(new object[] {
+            "Rectangle",
+            "NW: Up-Left",
+            "NE: Up-Right",
+            "SW: Down-Left",
+            "SE: Down-Right"});
+			this.listTileForm.Location = new System.Drawing.Point(3, 169);
+			this.listTileForm.Name = "listTileForm";
+			this.listTileForm.Size = new System.Drawing.Size(142, 69);
+			this.listTileForm.TabIndex = 7;
+			this.listTileForm.SelectedIndexChanged += new System.EventHandler(this.listTileForm_SelectedIndexChanged);
 			// 
 			// toolStrip1
 			// 
@@ -408,23 +488,18 @@
 			// 
 			this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
 			// 
-			// editor1
+			// chkSetTile
 			// 
-			this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
-			this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
-			this.editor1.GraphGridOpacity = 0.5F;
-			this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
-			this.editor1.GraphZoom = 4F;
-			this.editor1.LayersAbove = false;
-			this.editor1.Location = new System.Drawing.Point(0, 0);
-			this.editor1.Name = "editor1";
-			this.editor1.SelectedLayer = 0;
-			this.editor1.ShowGrid = true;
-			this.editor1.Size = new System.Drawing.Size(536, 406);
-			this.editor1.TabIndex = 0;
-			this.editor1.TileMode = false;
-			this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
+			this.chkSetTile.AutoSize = true;
+			this.chkSetTile.Checked = true;
+			this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSetTile.Location = new System.Drawing.Point(3, 244);
+			this.chkSetTile.Name = "chkSetTile";
+			this.chkSetTile.Size = new System.Drawing.Size(72, 17);
+			this.chkSetTile.TabIndex = 8;
+			this.chkSetTile.Text = "Draw tiles";
+			this.chkSetTile.UseVisualStyleBackColor = true;
+			this.chkSetTile.CheckedChanged += new System.EventHandler(this.chkSetTile_CheckedChanged);
 			// 
 			// frmMain
 			// 
@@ -446,6 +521,7 @@
 			this.statusStrip1.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -491,6 +567,11 @@
 		private System.Windows.Forms.ToolStripStatusLabel sbarSTXY;
 		private System.Windows.Forms.OpenFileDialog openFile1;
 		private System.Windows.Forms.SaveFileDialog saveFile1;
+		private System.Windows.Forms.CheckBox chkTileSolid;
+		private System.Windows.Forms.CheckBox chkTileAbyss;
+		private System.Windows.Forms.CheckBox chkTileWater;
+		private System.Windows.Forms.ListBox listTileForm;
+		private System.Windows.Forms.CheckBox chkSetTile;
     }
 }
 
