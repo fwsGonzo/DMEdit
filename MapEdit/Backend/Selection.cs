@@ -33,11 +33,11 @@ namespace MapEdit.Backend
 		}
 		public byte getX(int dx)
 		{
-			return (byte)(select.X + (select.X + dx) % select.Width);
+			return (byte)(select.X + dx % select.Width);
 		}
 		public byte getY(int dy)
 		{
-			return (byte)(select.Y + (select.Y + dy) % select.Height);
+			return (byte)(select.Y + dy % select.Height);
 		}
 
 		public Rectangle select;
