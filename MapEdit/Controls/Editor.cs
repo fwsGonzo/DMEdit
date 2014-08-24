@@ -110,12 +110,12 @@ namespace MapEdit.Controls
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint
 					| ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 		}
-		public void initialize(string file, int tsize)
+		public void initialize(Image background, Image tileset, int tilesize)
 		{
 			// checkerboard background
-			checkers = Image.FromFile("checker.png");
+			this.checkers = background;
 			// tileset image && tilesize
-			this.tileset = new Tileset(Image.FromFile(file), tsize);
+			this.tileset = new Tileset(tileset, tilesize);
 		}
 
 		// returns true if there is an existing valid map
@@ -276,16 +276,16 @@ namespace MapEdit.Controls
 			// outside of area (most likely)
 			if (t == null) return;
 
-			byte sx = (byte) selection.p0.X;
-			byte sy = (byte) selection.p0.Y;
-
+			if (state == 0)
+			{
+				// set mousedown tilepoint
+				originalTilePoint = tp;
+			}
+			byte sx = selection.deltaX(originalTilePoint.X, tp.X);
+			byte sy = selection.deltaY(originalTilePoint.Y, tp.Y);
+			
 			if (tool == tools_t.TOOL_RECT)
 			{
-				if (state == 0)
-				{
-					// set mousedown tilepoint
-					originalTilePoint = tp;
-				}
 				dragRect = toTileRect(originalTilePoint, tp);
 				dragRect.X *= tileset.size;
 				dragRect.Y *= tileset.size;
@@ -302,6 +302,12 @@ namespace MapEdit.Controls
 				selection = new Selection(t.getTX(), t.getTY());
 				// lifting a tile didn't change map, so just exit
 				return;
+			case tools_t.TOOL_DRAW:
+				// signal that changes are about to be made to @layer
+				aboutToMakeChanges(SelectedLayer);
+				drawTile(L, tp.X, tp.Y, sx, sy);
+				this.Invalidate();
+				break;
 			case tools_t.TOOL_RECT:
 				if (state == 2)
 				{
@@ -316,18 +322,12 @@ namespace MapEdit.Controls
 						int tx = TR.X + x;
 						int ty = TR.Y + y;
 						if (L.inRange(tx, ty))
-							drawTile(L, tx, ty, sx, sy);
+							drawTile(L, tx, ty, selection.getX(x), selection.getY(y));
 					}
 					// mouse up event, map has changed
 					break;
 				}
 				else return;
-			case tools_t.TOOL_DRAW:
-				// signal that changes are about to be made to @layer
-				aboutToMakeChanges(SelectedLayer);
-				drawTile(L, tp.X, tp.Y, sx, sy);
-				this.Invalidate();
-				break;
 			case tools_t.TOOL_FILL:
 				// signal that changes are about to be made to @layer
 				aboutToMakeChanges(SelectedLayer);
@@ -363,8 +363,21 @@ namespace MapEdit.Controls
 
 			Point sp = toTilesheet(p);
 
+			if (state == 0)
+			{
+				// set mousedown tilepoint
+				originalTilePoint = sp;
+			}
+			dragRect = toTileRect(originalTilePoint, sp);
+			dragRect.X *= tileset.size;
+			dragRect.Y *= tileset.size;
+			dragRect.Width *= tileset.size;
+			dragRect.Height *= tileset.size;
+			// invalidate to draw the rectangle
+			this.drawDragRect = true;
+
 			// set new selection
-			selection = new Selection(sp.X, sp.Y);
+			selection = new Selection(originalTilePoint, sp);
 			this.Invalidate();
 		}
 
@@ -595,15 +608,14 @@ namespace MapEdit.Controls
 				g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
 
 				// draw selection
-				using (SolidBrush brush = new SolidBrush(Color.FromArgb(80, 255, 255, 255)))
+				/*using (SolidBrush brush = new SolidBrush(Color.FromArgb(80, 255, 255, 255)))
 				{
 					Point p0 = new Point(selection.p0.X * tileset.size, selection.p0.Y * tileset.size);
 					Size  sz = new Size(tileset.size, tileset.size);
 
 					g.CompositingMode = CompositingMode.SourceOver;
 					g.FillRectangle(brush, new Rectangle(p0, sz));
-				}
-				
+				}*/
 			}
 			else
 			{
@@ -623,7 +635,10 @@ namespace MapEdit.Controls
 				renderGrid(g);
 			}
 
-			if (this.drawDragRect)
+			////////////////////////////
+			// -= render drag rect =- //
+			////////////////////////////
+			if (this.drawDragRect || TileMode)
 			{
 				using (Pen P = new Pen(Color.Blue))
 				{

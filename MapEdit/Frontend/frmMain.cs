@@ -2,20 +2,28 @@
 using System.Windows.Forms;
 using MapEdit.Controls;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace MapEdit.Frontend
 {
     public partial class frmMain : Form
     {
 		List<ToolStripMenuItem> layerList;
+		static string MOD_DIR = "mods\\HylianPhoenix";
+		static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
+		//static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
+		//static string MAP_FOLDER = MOD_DIR + "\\maps";
 		
 		public frmMain()
         {
             InitializeComponent();
 
 			editor1.onTileChanged += editor1_onTileChanged;
-			editor1.initialize("tiles.png", 8);
-			//editor1.createMap(32, 32, 1);
+
+			Image checkers = Resource1.checker;
+			Image tiles = Image.FromFile(MOD_DIR + "\\bitmaps\\tiles.png");
+			editor1.initialize(checkers, tiles, 8);
+			
 			toolShowGrid.Checked = editor1.ShowGrid;
 			toolLayerAbove.Checked = editor1.LayersAbove;
 			toolShowMask.Enabled = false;
@@ -49,7 +57,7 @@ namespace MapEdit.Frontend
 		}
 		private void setTitle(string t)
 		{
-			this.Text = "DM MapEdit - " + t;
+			this.Text = "DMEdit - " + t;
 		}
 		
 		private void editor1_KeyDown(object sender, KeyEventArgs e)
@@ -191,7 +199,7 @@ namespace MapEdit.Frontend
 
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
-			openFile1.InitialDirectory = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps";
+			openFile1.InitialDirectory = MAP_FOLDER;
 			DialogResult res = openFile1.ShowDialog(this);
 
 			if (res == System.Windows.Forms.DialogResult.OK)
@@ -233,8 +241,8 @@ namespace MapEdit.Frontend
 		private void mnuSaveAs_Click(object sender, EventArgs e)
 		{
 			if (containsMapMessage() == false) return;
-			
-			saveFile1.InitialDirectory = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps";
+
+			saveFile1.InitialDirectory = MAP_FOLDER;
 			DialogResult res = saveFile1.ShowDialog(this);
 			
 			if (res == System.Windows.Forms.DialogResult.OK)
