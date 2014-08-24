@@ -37,13 +37,12 @@ namespace MapEdit.Frontend
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
-			toolDraw.Checked = true;
+			toolDraw.Checked = editor1.TileDrawing;
 			// reset camera to def values
 			toolReset_Click(null, null);
 			// select rectangular
 			listTileForm.SelectedIndex = 0;
-
-			//editor1.loadMap("C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps");
+			// set GUI in correct state
 			updateGUI();
 
 			setTitle("(none)");

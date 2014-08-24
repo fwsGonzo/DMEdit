@@ -95,10 +95,10 @@ namespace MapEdit.Backend
 			return y * tilesX + x;
 		}
 		
-		void renderTile(Graphics g, int x, int y)
+		void renderTile(Graphics g, int x, int y, bool overdraw = false)
 		{
 			Tile tile = tiles[tcoord(x, y)];
-			if (tile.getTX() != 0 || tile.getTY() != 0)
+			if (tile.getTX() != 0 || tile.getTY() != 0 || overdraw)
 			{
 				Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
 				Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
@@ -108,41 +108,41 @@ namespace MapEdit.Backend
 				{
 					switch (tile.getForm())
 					{
-						case 0:
-							g.FillRectangle(solidBrush, dst);
-							break;
-						case 1: // Up Left
-							g.FillPolygon(solidBrush,  new Point[]
-							{
-								new Point(dst.X + dst.Width, dst.Y-1),
-								new Point(dst.X-1, dst.Y + dst.Height),
-								new Point(dst.X + dst.Width, dst.Y + dst.Height),
-							});
-							break;
-						case 2: // Up Right
-							g.FillPolygon(solidBrush,  new Point[]
-							{
-								new Point(dst.X, dst.Y-1),
-								new Point(dst.X, dst.Y + dst.Height),
-								new Point(dst.X + dst.Width, dst.Y + dst.Height),
-							});
-							break;
-						case 3:
-							g.FillPolygon(solidBrush,  new Point[]
-							{
-								new Point(dst.X, dst.Y),
-								new Point(dst.X + dst.Width, dst.Y),
-								new Point(dst.X + dst.Width, dst.Y + dst.Height),
-							});
-							break;
-						case 4:
-							g.FillPolygon(solidBrush,  new Point[]
-							{
-								new Point(dst.X, dst.Y),
-								new Point(dst.X + dst.Width, dst.Y),
-								new Point(dst.X, dst.Y + dst.Height),
-							});
-							break;
+					case 0:
+						g.FillRectangle(solidBrush, dst);
+						break;
+					case 1: // Up Left
+						g.FillPolygon(solidBrush,  new Point[]
+						{
+							new Point(dst.X + dst.Width, dst.Y-1),
+							new Point(dst.X-1, dst.Y + dst.Height),
+							new Point(dst.X + dst.Width, dst.Y + dst.Height),
+						});
+						break;
+					case 2: // Up Right
+						g.FillPolygon(solidBrush,  new Point[]
+						{
+							new Point(dst.X, dst.Y-1),
+							new Point(dst.X, dst.Y + dst.Height),
+							new Point(dst.X + dst.Width, dst.Y + dst.Height),
+						});
+						break;
+					case 3:
+						g.FillPolygon(solidBrush,  new Point[]
+						{
+							new Point(dst.X, dst.Y),
+							new Point(dst.X + dst.Width, dst.Y),
+							new Point(dst.X + dst.Width, dst.Y + dst.Height),
+						});
+						break;
+					case 4:
+						g.FillPolygon(solidBrush,  new Point[]
+						{
+							new Point(dst.X, dst.Y),
+							new Point(dst.X + dst.Width, dst.Y),
+							new Point(dst.X, dst.Y + dst.Height),
+						});
+						break;
 					}
 				}
 			}
@@ -152,7 +152,7 @@ namespace MapEdit.Backend
 			using (Graphics g = Graphics.FromImage(buffer))
 			{
 				g.InterpolationMode = InterpolationMode.NearestNeighbor;
-				renderTile(g, x, y);
+				renderTile(g, x, y, true);
 			}
 		}
 		public void invalidate()
