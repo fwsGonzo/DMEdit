@@ -146,15 +146,24 @@ namespace MapEdit.Controls
 			this.has_filename = false;
 			this.is_saved = false;
 		}
-		public void loadMap(string filename)
+		public bool loadMap(string filename)
 		{
 			// load map
 			this.layers = LayerFile.loadFile(filename, this.tileset);
-			this.Invalidate();
-			// set filename & no changes made
-			this.filename = filename;
-			this.has_filename = true;
-			this.is_saved = true;
+			if (layers != null)
+			{
+				this.Invalidate();
+				// set filename & no changes made
+				this.filename = filename;
+				this.has_filename = true;
+				this.is_saved = true;
+				return true;
+			}
+			else
+			{
+				this.layers = new List<Layer>();
+				return false;
+			}
 		}
 		public bool saveMapAs(string filename)
 		{

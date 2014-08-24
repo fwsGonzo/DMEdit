@@ -45,8 +45,14 @@ namespace MapEdit.Frontend
 
 			//editor1.loadMap("C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix\\maps");
 			updateGUI();
-		}
 
+			setTitle("(none)");
+		}
+		private void setTitle(string t)
+		{
+			this.Text = "DM MapEdit - " + t;
+		}
+		
 		private void editor1_KeyDown(object sender, KeyEventArgs e)
 		{
 			Editor ed = (sender as Editor);
@@ -111,6 +117,7 @@ namespace MapEdit.Frontend
 			editor1.createMap(ret.sizeX, ret.sizeY, ret.layers);
 			editor1.Invalidate();
 
+			setTitle("(untitled)");
 			updateGUI();
 		}
 		void updateGUI()
@@ -190,7 +197,10 @@ namespace MapEdit.Frontend
 
 			if (res == System.Windows.Forms.DialogResult.OK)
 			{
-				editor1.loadMap(openFile1.FileName);
+				if (editor1.loadMap(openFile1.FileName))
+				{
+					setTitle(openFile1.FileName);
+				}
 				updateGUI();
 			}
 		}
@@ -229,7 +239,11 @@ namespace MapEdit.Frontend
 			DialogResult res = saveFile1.ShowDialog(this);
 			
 			if (res == System.Windows.Forms.DialogResult.OK)
-			if (editor1.saveMapAs(saveFile1.FileName) == false)
+			if (editor1.saveMapAs(saveFile1.FileName))
+			{
+				setTitle(saveFile1.FileName);
+			}
+			else
 			{
 				MessageBox.Show(
 					"Could not save map to:\n" + saveFile1.FileName, 

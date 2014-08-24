@@ -99,7 +99,7 @@
 			this.numY.Size = new System.Drawing.Size(94, 20);
 			this.numY.TabIndex = 4;
 			this.numY.Value = new decimal(new int[] {
-            32,
+            22,
             0,
             0,
             0});
@@ -165,6 +165,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "frmNewMap";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Create new map";
 			((System.ComponentModel.ISupportInitialize)(this.numX)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numY)).EndInit();
