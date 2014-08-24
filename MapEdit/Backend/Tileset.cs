@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace MapEdit.Backend
 {
@@ -8,7 +7,6 @@ namespace MapEdit.Backend
 		public Tileset(Image image, int size)
 		{
 			this.tileset = new Bitmap(image);
-			//tileset.MakeTransparent(Color.Magenta);
 			this.size = size;
 		}
 
