@@ -126,6 +126,9 @@ namespace MapEdit.Controls
 		// creates a new map based on size & layers
 		public void createMap(int sizeX, int sizeY, int layerCount)
 		{
+			// remove old layers
+			layers.Clear();
+			// create new layers
 			for (int i = 0; i < layerCount; i++)
 			{
 				Layer L = new Layer(sizeX, sizeY);
