@@ -43,6 +43,7 @@ namespace MapEdit.Controls
 		public bool TileSolid { get; set; }
 		public bool TileAbyss { get; set; }
 		public bool TileWater { get; set; }
+		public bool TileSlow { get; set; }
 		public int TileForm { get; set; }
 	
 		private bool mouseDown;
@@ -252,9 +253,7 @@ namespace MapEdit.Controls
 			Tile T = L.getTile(tx, ty);
 
 			if (TileDrawing) T.setXY(sx, sy);
-			T.setSolid(TileSolid);
-			T.setAbyss(TileAbyss);
-			T.setWater(TileWater);
+			T.setData(TileSolid, TileAbyss, TileWater, TileSlow);
 			T.setForm((byte)TileForm);
 			L.updateTile(tx, ty);
 		}
@@ -619,7 +618,7 @@ namespace MapEdit.Controls
 			}
 			else
 			{
-				g.CompositingMode = CompositingMode.SourceCopy;
+				g.CompositingMode = CompositingMode.SourceOver;
 				for (int i = 0; i < layers.Count; i++)
 				{
 					if (i <= SelectedLayer || LayersAbove)

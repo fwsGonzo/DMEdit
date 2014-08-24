@@ -88,6 +88,14 @@ namespace MapEdit.Backend
 		public void setIce(bool v) { setdata((int)Bits.ICE_BIT, v); }
 		public bool isIce() { return getdata((int)Bits.ICE_BIT); }
 
+		public void setData(bool sol, bool aby, bool wat, bool slo)
+		{
+			setdata((int)Bits.SOLID_BIT, sol);
+			setdata((int)Bits.ABYSS_BIT, aby);
+			setdata((int)Bits.WATER_BIT, wat);
+			setdata((int)Bits.SLOW_BIT, slo);
+		}
+
 		//uint getColor() const;
 
 		private static int tileSize;

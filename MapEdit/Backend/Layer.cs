@@ -9,7 +9,11 @@ namespace MapEdit.Backend
 		Tileset TSET;
 		List<Tile> tiles;
 		Bitmap buffer;
-		Brush solidBrush;
+		// brushes
+		static Brush solidBrush = new SolidBrush(Color.FromArgb(80, Color.Red));
+		static Brush abyssBrush = new SolidBrush(Color.FromArgb(80, Color.Magenta));
+		static Brush waterBrush = new SolidBrush(Color.FromArgb(80, Color.Green));
+		static Brush slowBrush = new SolidBrush(Color.FromArgb(80, Color.YellowGreen));
 
 		int tilesX;
 		int tilesY;
@@ -25,8 +29,6 @@ namespace MapEdit.Backend
 			this.ShowMask = true;
 			// allocate room for X*Y tiles
 			this.tiles = new List<Tile>(sizeX * sizeY);
-			// brushes
-			this.solidBrush = new SolidBrush(Color.FromArgb(80, Color.Black));
 		}
 
 		public void create(Tileset tset)
@@ -95,6 +97,47 @@ namespace MapEdit.Backend
 			return y * tilesX + x;
 		}
 		
+		void renderData(Graphics g, Rectangle dst, Brush brush, byte form)
+		{
+			switch (form)
+			{
+			case 0:
+					g.FillRectangle(brush, dst);
+				break;
+			case 1: // Up Left
+				g.FillPolygon(brush, new Point[]
+					{
+						new Point(dst.X + dst.Width, dst.Y-1),
+						new Point(dst.X-1, dst.Y + dst.Height),
+						new Point(dst.X + dst.Width, dst.Y + dst.Height),
+					});
+				break;
+			case 2: // Up Right
+				g.FillPolygon(brush, new Point[]
+					{
+						new Point(dst.X, dst.Y-1),
+						new Point(dst.X, dst.Y + dst.Height),
+						new Point(dst.X + dst.Width, dst.Y + dst.Height),
+					});
+				break;
+			case 3:
+				g.FillPolygon(brush, new Point[]
+					{
+						new Point(dst.X, dst.Y),
+						new Point(dst.X + dst.Width, dst.Y),
+						new Point(dst.X + dst.Width, dst.Y + dst.Height),
+					});
+				break;
+			case 4:
+				g.FillPolygon(brush, new Point[]
+					{
+						new Point(dst.X, dst.Y),
+						new Point(dst.X + dst.Width, dst.Y),
+						new Point(dst.X, dst.Y + dst.Height),
+					});
+				break;
+			}
+		}
 		void renderTile(Graphics g, int x, int y, bool overdraw = false)
 		{
 			Tile tile = tiles[tcoord(x, y)];
@@ -104,47 +147,10 @@ namespace MapEdit.Backend
 				Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
 				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
 
-				if (tile.isSolid())
-				{
-					switch (tile.getForm())
-					{
-					case 0:
-						g.FillRectangle(solidBrush, dst);
-						break;
-					case 1: // Up Left
-						g.FillPolygon(solidBrush,  new Point[]
-						{
-							new Point(dst.X + dst.Width, dst.Y-1),
-							new Point(dst.X-1, dst.Y + dst.Height),
-							new Point(dst.X + dst.Width, dst.Y + dst.Height),
-						});
-						break;
-					case 2: // Up Right
-						g.FillPolygon(solidBrush,  new Point[]
-						{
-							new Point(dst.X, dst.Y-1),
-							new Point(dst.X, dst.Y + dst.Height),
-							new Point(dst.X + dst.Width, dst.Y + dst.Height),
-						});
-						break;
-					case 3:
-						g.FillPolygon(solidBrush,  new Point[]
-						{
-							new Point(dst.X, dst.Y),
-							new Point(dst.X + dst.Width, dst.Y),
-							new Point(dst.X + dst.Width, dst.Y + dst.Height),
-						});
-						break;
-					case 4:
-						g.FillPolygon(solidBrush,  new Point[]
-						{
-							new Point(dst.X, dst.Y),
-							new Point(dst.X + dst.Width, dst.Y),
-							new Point(dst.X, dst.Y + dst.Height),
-						});
-						break;
-					}
-				}
+				if (tile.isSolid()) renderData(g, dst, solidBrush, tile.getForm());
+				if (tile.isAbyss()) renderData(g, dst, abyssBrush, tile.getForm());
+				if (tile.isWater()) renderData(g, dst, waterBrush, tile.getForm());
+				if (tile.isSlow()) renderData(g, dst, slowBrush, tile.getForm());
 			}
 		}
 		public void updateTile(int x, int y)
@@ -154,6 +160,8 @@ namespace MapEdit.Backend
 				g.InterpolationMode = InterpolationMode.NearestNeighbor;
 				renderTile(g, x, y, true);
 			}
+			if (ShowMask == false)
+				buffer.MakeTransparent(Color.Magenta);
 		}
 		public void invalidate()
 		{

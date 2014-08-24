@@ -9,10 +9,10 @@ namespace MapEdit.Frontend
     public partial class frmMain : Form
     {
 		List<ToolStripMenuItem> layerList;
-		static string MOD_DIR = "mods\\HylianPhoenix";
-		static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
-		//static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
-		//static string MAP_FOLDER = MOD_DIR + "\\maps";
+		//static string MOD_DIR = "mods\\HylianPhoenix";
+		//static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
+		static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
+		static string MAP_FOLDER = MOD_DIR + "\\maps";
 		
 		public frmMain()
         {
@@ -272,6 +272,10 @@ namespace MapEdit.Frontend
 		{
 			editor1.TileWater = chkTileWater.Checked;
 		}
+		private void chkTileSlow_CheckedChanged(object sender, EventArgs e)
+		{
+			editor1.TileSlow = chkTileSlow.Checked;
+		}
 
 		private void listTileForm_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -282,5 +286,6 @@ namespace MapEdit.Frontend
 		{
 			editor1.TileDrawing = chkSetTile.Checked;
 		}
+
     }
 }

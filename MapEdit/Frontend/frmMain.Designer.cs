@@ -46,6 +46,7 @@
 			this.chkTileAbyss = new System.Windows.Forms.CheckBox();
 			this.chkTileWater = new System.Windows.Forms.CheckBox();
 			this.listTileForm = new System.Windows.Forms.ListBox();
+			this.chkSetTile = new System.Windows.Forms.CheckBox();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNewWnd = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,7 +70,7 @@
 			this.toolShowMask = new System.Windows.Forms.ToolStripButton();
 			this.openFile1 = new System.Windows.Forms.OpenFileDialog();
 			this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
-			this.chkSetTile = new System.Windows.Forms.CheckBox();
+			this.chkTileSlow = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -115,6 +116,7 @@
 			this.editor1.Size = new System.Drawing.Size(536, 406);
 			this.editor1.TabIndex = 0;
 			this.editor1.TileAbyss = false;
+			this.editor1.TileDrawing = true;
 			this.editor1.TileForm = 0;
 			this.editor1.TileMode = false;
 			this.editor1.TileSolid = false;
@@ -177,6 +179,7 @@
 			this.flowLayoutPanel1.Controls.Add(this.chkTileSolid);
 			this.flowLayoutPanel1.Controls.Add(this.chkTileAbyss);
 			this.flowLayoutPanel1.Controls.Add(this.chkTileWater);
+			this.flowLayoutPanel1.Controls.Add(this.chkTileSlow);
 			this.flowLayoutPanel1.Controls.Add(this.listTileForm);
 			this.flowLayoutPanel1.Controls.Add(this.chkSetTile);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -284,6 +287,19 @@
 			this.listTileForm.Size = new System.Drawing.Size(142, 69);
 			this.listTileForm.TabIndex = 7;
 			this.listTileForm.SelectedIndexChanged += new System.EventHandler(this.listTileForm_SelectedIndexChanged);
+			// 
+			// chkSetTile
+			// 
+			this.chkSetTile.AutoSize = true;
+			this.chkSetTile.Checked = true;
+			this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSetTile.Location = new System.Drawing.Point(3, 244);
+			this.chkSetTile.Name = "chkSetTile";
+			this.chkSetTile.Size = new System.Drawing.Size(72, 17);
+			this.chkSetTile.TabIndex = 8;
+			this.chkSetTile.Text = "Draw tiles";
+			this.chkSetTile.UseVisualStyleBackColor = true;
+			this.chkSetTile.CheckedChanged += new System.EventHandler(this.chkSetTile_CheckedChanged);
 			// 
 			// toolStrip1
 			// 
@@ -488,18 +504,16 @@
 			// 
 			this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
 			// 
-			// chkSetTile
+			// chkTileSlow
 			// 
-			this.chkSetTile.AutoSize = true;
-			this.chkSetTile.Checked = true;
-			this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkSetTile.Location = new System.Drawing.Point(3, 244);
-			this.chkSetTile.Name = "chkSetTile";
-			this.chkSetTile.Size = new System.Drawing.Size(72, 17);
-			this.chkSetTile.TabIndex = 8;
-			this.chkSetTile.Text = "Draw tiles";
-			this.chkSetTile.UseVisualStyleBackColor = true;
-			this.chkSetTile.CheckedChanged += new System.EventHandler(this.chkSetTile_CheckedChanged);
+			this.chkTileSlow.AutoSize = true;
+			this.chkTileSlow.Location = new System.Drawing.Point(64, 146);
+			this.chkTileSlow.Name = "chkTileSlow";
+			this.chkTileSlow.Size = new System.Drawing.Size(63, 17);
+			this.chkTileSlow.TabIndex = 9;
+			this.chkTileSlow.Text = "Slowing";
+			this.chkTileSlow.UseVisualStyleBackColor = true;
+			this.chkTileSlow.CheckedChanged += new System.EventHandler(this.chkTileSlow_CheckedChanged);
 			// 
 			// frmMain
 			// 
@@ -572,6 +586,7 @@
 		private System.Windows.Forms.CheckBox chkTileWater;
 		private System.Windows.Forms.ListBox listTileForm;
 		private System.Windows.Forms.CheckBox chkSetTile;
+		private System.Windows.Forms.CheckBox chkTileSlow;
     }
 }
 
