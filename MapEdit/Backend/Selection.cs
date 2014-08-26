@@ -48,9 +48,15 @@ namespace MapEdit.Backend
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		}
 
+
+		private int mod(int x, int m)
+		{
+			int r = x % m;
+			return r < 0 ? r + m : r;
+		}
 		public Tile get(int x, int y)
 		{
-			return tiles[((y % size.Height) * size.Width) + x % size.Width];
+			return tiles[(mod(y, size.Height) * size.Width) + mod(x, size.Width)];
 		}
 		public Tile delta(Point P0, Point P1)
 		{
