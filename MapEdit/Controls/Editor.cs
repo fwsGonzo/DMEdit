@@ -235,8 +235,14 @@ namespace MapEdit.Controls
 			return new Point(sx, sy);
 		}
 
+		// drawing rectangle
 		bool drawDragRect = false;
 		Rectangle dragRect;
+		// selection rectangle
+		bool drawSelectionRect = false;
+		bool selectionFromTiles = false;
+		Rectangle selectionRect;
+
 		Point originalTilePoint;
 
 		Rectangle toTileRect(Point a, Point b)
@@ -280,8 +286,6 @@ namespace MapEdit.Controls
 				// set mousedown tilepoint
 				originalTilePoint = tp;
 			}
-			byte sx = selection.deltaX(originalTilePoint.X, tp.X);
-			byte sy = selection.deltaY(originalTilePoint.Y, tp.Y);
 			
 			if (tool == tools_t.TOOL_RECT)
 			{
@@ -294,17 +298,37 @@ namespace MapEdit.Controls
 				this.drawDragRect = true;
 				this.Invalidate();
 			}
+			else if (tool == tools_t.TOOL_READ)
+			{
+				selectionRect = toTileRect(originalTilePoint, tp);
+				selectionRect.X *= tileset.size;
+				selectionRect.Y *= tileset.size;
+				selectionRect.Width *= tileset.size;
+				selectionRect.Height *= tileset.size;
+				// invalidate to draw the rectangle
+				this.drawSelectionRect = true;
+				this.selectionFromTiles = false;
+				this.Invalidate();
+			}
 
 			switch (tool)
 			{
 			case tools_t.TOOL_READ:
-				selection = new Selection(t.getTX(), t.getTY());
+				if (state == 2)
+				{
+					selection = new Selection(L, originalTilePoint, tp);
+				}
 				// lifting a tile didn't change map, so just exit
 				return;
 			case tools_t.TOOL_DRAW:
 				// signal that changes are about to be made to @layer
 				aboutToMakeChanges(SelectedLayer);
-				drawTile(L, tp.X, tp.Y, sx, sy);
+				{
+					// get drawing deltas
+					Tile cur = selection.delta(originalTilePoint, tp);
+					// draw at tile position
+					drawTile(L, tp.X, tp.Y, cur.getTX(), cur.getTY());
+				}
 				this.Invalidate();
 				break;
 			case tools_t.TOOL_RECT:
@@ -321,7 +345,10 @@ namespace MapEdit.Controls
 						int tx = TR.X + x;
 						int ty = TR.Y + y;
 						if (L.inRange(tx, ty))
-							drawTile(L, tx, ty, selection.getX(x), selection.getY(y));
+						{
+							Tile cur = selection.get(x, y);
+							drawTile(L, tx, ty, cur.getTX(), cur.getTY());
+						}
 					}
 					// mouse up event, map has changed
 					break;
@@ -330,14 +357,24 @@ namespace MapEdit.Controls
 			case tools_t.TOOL_FILL:
 				// signal that changes are about to be made to @layer
 				aboutToMakeChanges(SelectedLayer);
-				L.fill(tp.X, tp.Y, t.getTX(), t.getTY(), sx, sy);
+				{
+					// get drawing deltas
+					Tile cur = selection.delta(originalTilePoint, tp);
+					// fill at tile position
+					L.fill(tp.X, tp.Y, t.getTX(), t.getTY(), cur.getTX(), cur.getTY());
+				}
 				L.invalidate();
 				this.Invalidate();
 				break;
 			case tools_t.TOOL_REPLACE:
 				// signal that changes are about to be made to @layer
 				aboutToMakeChanges(SelectedLayer);
-				L.replace(t.getTX(), t.getTY(), sx, sy);
+				{
+					// get drawing deltas
+					Tile cur = selection.delta(originalTilePoint, tp);
+					// replace at tile position
+					L.replace(t.getTX(), t.getTY(), cur.getTX(), cur.getTY());
+				}
 				L.invalidate();
 				this.Invalidate();
 				break;
@@ -367,13 +404,15 @@ namespace MapEdit.Controls
 				// set mousedown tilepoint
 				originalTilePoint = sp;
 			}
-			dragRect = toTileRect(originalTilePoint, sp);
-			dragRect.X *= tileset.size;
-			dragRect.Y *= tileset.size;
-			dragRect.Width *= tileset.size;
-			dragRect.Height *= tileset.size;
-			// invalidate to draw the rectangle
-			this.drawDragRect = true;
+			selectionRect = toTileRect(originalTilePoint, sp);
+			selectionRect.X *= tileset.size;
+			selectionRect.Y *= tileset.size;
+			selectionRect.Width *= tileset.size;
+			selectionRect.Height *= tileset.size;
+			// draw the selection rectangle
+			this.drawSelectionRect = true;
+			// set selection from tileset
+			this.selectionFromTiles = TileMode;
 
 			// set new selection
 			selection = new Selection(originalTilePoint, sp);
@@ -605,16 +644,6 @@ namespace MapEdit.Controls
 				Rectangle src = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
 				Rectangle dst = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
 				g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
-
-				// draw selection
-				/*using (SolidBrush brush = new SolidBrush(Color.FromArgb(80, 255, 255, 255)))
-				{
-					Point p0 = new Point(selection.p0.X * tileset.size, selection.p0.Y * tileset.size);
-					Size  sz = new Size(tileset.size, tileset.size);
-
-					g.CompositingMode = CompositingMode.SourceOver;
-					g.FillRectangle(brush, new Rectangle(p0, sz));
-				}*/
 			}
 			else
 			{
@@ -634,14 +663,28 @@ namespace MapEdit.Controls
 				renderGrid(g);
 			}
 
-			////////////////////////////
-			// -= render drag rect =- //
-			////////////////////////////
-			if (this.drawDragRect || TileMode)
+			/////////////////////////////
+			// -= render rectangles =- //
+			/////////////////////////////
+			if (this.drawDragRect)
 			{
 				using (Pen P = new Pen(Color.Blue))
 				{
 					g.DrawRectangle(P, dragRect);
+				}
+			}
+			if (this.drawSelectionRect)
+			if (this.selectionFromTiles == TileMode)
+			{
+				using (Pen P = new Pen(Color.SeaShell))
+				{
+					P.Width = 1.5f;
+					P.DashStyle = DashStyle.Dash;
+					g.DrawRectangle(P, selectionRect);
+						
+					P.Color = Color.RoyalBlue;
+					P.DashStyle = DashStyle.DashDotDot;
+					g.DrawRectangle(P, selectionRect);
 				}
 			}
 

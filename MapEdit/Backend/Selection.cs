@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace MapEdit.Backend
 {
@@ -6,11 +7,35 @@ namespace MapEdit.Backend
 	{
 		public Selection(Point P0, Point P1)
 		{
-			select = toTileRect(P0, P1);
+			Rectangle rect = toTileRect(P0, P1);
+			size = new Size(rect.Width, rect.Height);
+			tiles = new List<Tile>();
+
+			for (int y = 0; y < size.Height; y++)
+			for (int x = 0; x < size.Width;  x++)
+			{
+				byte tx = (byte) (rect.X + x);
+				byte ty = (byte) (rect.Y + y);
+				tiles.Add(new Tile(tx, ty));
+			}
 		}
-		public Selection (int x, int y)
+		public Selection(int x, int y)
+			: this(new Point(x, y), new Point(x, y))
 		{
-			select = new Rectangle(x, y, 1, 1);
+		}
+		public Selection(Layer L, Point P0, Point P1)
+		{
+			Rectangle rect = toTileRect(P0, P1);
+			size = new Size(rect.Width, rect.Height);
+			tiles = new List<Tile>();
+
+			for (int y = 0; y < size.Height; y++)
+			for (int x = 0; x < size.Width; x++)
+			{
+				byte tx = (byte)(rect.X + x);
+				byte ty = (byte)(rect.Y + y);
+				tiles.Add(L.getTile(tx, ty));
+			}
 		}
 
 		Rectangle toTileRect(Point a, Point b)
@@ -23,23 +48,19 @@ namespace MapEdit.Backend
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		}
 
-		public byte deltaX(int x, int nx)
+		public Tile get(int x, int y)
 		{
-			return (byte)(select.X + (nx - x) % select.Width);
+			return tiles[((y % size.Height) * size.Width) + x % size.Width];
 		}
-		public byte deltaY(int y, int ny)
+		public Tile delta(Point P0, Point P1)
 		{
-			return (byte)(select.Y + (ny - y) % select.Height);
-		}
-		public byte getX(int dx)
-		{
-			return (byte)(select.X + dx % select.Width);
-		}
-		public byte getY(int dy)
-		{
-			return (byte)(select.Y + dy % select.Height);
+			int x = P1.X - P0.X;
+			int y = P1.Y - P0.Y;
+			
+			return get(x, y);
 		}
 
-		public Rectangle select;
+		public Size size;
+		public List<Tile> tiles;
 	}
 }
