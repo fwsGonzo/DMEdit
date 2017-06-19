@@ -491,9 +491,12 @@ namespace MapEdit.Controls
 			}
 			else if (e.Button == MouseButtons.Right)
 			{
-				// set to read tiles from map
-				TileMode = true;
-				applySelection(0, e.Location);
+                // set to read tiles from map
+                if (TileMode == false)
+                {
+                    TileMode = true;
+                    applySelection(0, e.Location);
+                }
 			}
 
 			if (selectedTool != tools_t.TOOL_NONE)
@@ -539,9 +542,9 @@ namespace MapEdit.Controls
 					}
 					else
 					{
-						Point sp = toTilesheet(p);
-						// tilemode
-						onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, sp.X, sp.Y, sp.X, sp.Y);
+                        Point sp = toTilesheet(p);
+                        // tilemode
+                        onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, sp.X, sp.Y, sp.X, sp.Y);
 					}
 				}
 			}
@@ -559,9 +562,13 @@ namespace MapEdit.Controls
 					// redraw
 					this.Invalidate();
 				}
-				else
+				else if (TileMode)
 				{
-					if (TileMode) applySelection(1, e.Location);
+                    // only process mouse when Left button is used in TileMode
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        applySelection(1, e.Location);
+                    }
 				}
 			} // mouseDown
 			this.mouseLocation = e.Location;
@@ -581,8 +588,8 @@ namespace MapEdit.Controls
 			}
 			this.selectedTool = tools_t.TOOL_NONE;
 			
-			// end tile selection mode
-			if (e.Button == MouseButtons.Right)
+			// end tile selection mode when "finished" left-clicking
+			if (e.Button == MouseButtons.Left && TileMode == true)
 			{
 				// set to read tiles from map
 				TileMode = false;
