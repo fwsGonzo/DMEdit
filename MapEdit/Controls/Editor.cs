@@ -495,7 +495,7 @@ namespace MapEdit.Controls
                 if (TileMode == false)
                 {
                     TileMode = true;
-                    applySelection(0, e.Location);
+                    this.Invalidate();
                 }
 			}
 
@@ -705,7 +705,7 @@ namespace MapEdit.Controls
 			// distance between axis ticks
 			float axisSpacing = tileset.size;
 			// grid opacity color (value)
-			Color gridColor = Color.Black;
+			Color gridColor = Color.DarkGray;
 			
 			// offset adjusted min/max values for grid
 			float minX = -GraphOffset.X;

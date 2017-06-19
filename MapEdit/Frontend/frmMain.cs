@@ -9,10 +9,10 @@ namespace MapEdit.Frontend
     public partial class frmMain : Form
     {
 		List<ToolStripMenuItem> layerList;
-		static string MOD_DIR = "mods\\HylianPhoenix";
-		static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
-		//static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
-		//static string MAP_FOLDER = MOD_DIR + "\\maps";
+		//static string MOD_DIR = "mods\\HylianPhoenix";
+		//static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
+		static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
+		static string MAP_FOLDER = MOD_DIR + "\\maps";
 		
 		public frmMain()
         {
@@ -22,7 +22,7 @@ namespace MapEdit.Frontend
 
 			Image checkers = Resource1.checker;
 			Image tiles = Image.FromFile(MOD_DIR + "\\bitmaps\\tiles.png");
-			editor1.initialize(checkers, tiles, 8);
+			editor1.initialize(null, tiles, 8);
 			
 			toolShowGrid.Checked = editor1.ShowGrid;
 			toolLayerAbove.Checked = editor1.LayersAbove;
