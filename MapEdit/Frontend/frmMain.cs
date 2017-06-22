@@ -9,10 +9,10 @@ namespace MapEdit.Frontend
     public partial class frmMain : Form
     {
 		List<ToolStripMenuItem> layerList;
-		//static string MOD_DIR = "mods\\HylianPhoenix";
-		//static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
-		static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
-		static string MAP_FOLDER = MOD_DIR + "\\maps";
+		static string MOD_DIR = "mods\\HylianPhoenix";
+		static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
+		//static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
+		//static string MAP_FOLDER = MOD_DIR + "\\maps";
 		
 		public frmMain()
         {
@@ -77,9 +77,18 @@ namespace MapEdit.Frontend
 				e.SuppressKeyPress = true;
 				toggleGrid();
 			}
-		}
+            if (e.KeyCode == Keys.Z && e.Control && e.Shift)
+            {
+                toolRedo_Click(this, e);
+            }
+            else if (e.KeyCode == Keys.Z && e.Control)
+            {
+                toolUndo_Click(this, e);
+            }
 
-		private void toggleGrid()
+        }
+
+        private void toggleGrid()
 		{
 			editor1.ShowGrid = !editor1.ShowGrid;
 			editor1.Invalidate();
@@ -287,5 +296,14 @@ namespace MapEdit.Frontend
 			editor1.TileDrawing = chkSetTile.Checked;
 		}
 
+        private void toolUndo_Click(object sender, EventArgs e)
+        {
+            editor1.undo();
+        }
+
+        private void toolRedo_Click(object sender, EventArgs e)
+        {
+            editor1.redo();
+        }
     }
 }

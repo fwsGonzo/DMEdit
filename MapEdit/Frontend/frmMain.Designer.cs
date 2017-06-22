@@ -421,7 +421,8 @@
             this.toolUndo.ImageTransparentColor = System.Drawing.Color.White;
             this.toolUndo.Name = "toolUndo";
             this.toolUndo.Size = new System.Drawing.Size(23, 22);
-            this.toolUndo.Text = "toolStripButton1";
+            this.toolUndo.Text = "Undo";
+            this.toolUndo.Click += new System.EventHandler(this.toolUndo_Click);
             // 
             // toolRedo
             // 
@@ -430,7 +431,8 @@
             this.toolRedo.ImageTransparentColor = System.Drawing.Color.White;
             this.toolRedo.Name = "toolRedo";
             this.toolRedo.Size = new System.Drawing.Size(23, 22);
-            this.toolRedo.Text = "toolStripButton2";
+            this.toolRedo.Text = "Redo";
+            this.toolRedo.Click += new System.EventHandler(this.toolRedo_Click);
             // 
             // toolStripSeparator3
             // 

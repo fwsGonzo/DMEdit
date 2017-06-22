@@ -70,6 +70,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backend\LayerBuffer.cs" />
     <Compile Include="Backend\Layer.cs" />
     <Compile Include="Backend\LayerFile.cs" />
     <Compile Include="Backend\Selection.cs" />

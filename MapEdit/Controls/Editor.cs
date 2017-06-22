@@ -32,6 +32,9 @@ namespace MapEdit.Controls
 		Selection selection = null;
 
 		List<Layer> layers;
+        List<LayerBuffer> undoBuffer = new List<LayerBuffer>();
+        List<LayerBuffer> redoBuffer = new List<LayerBuffer>();
+
 		public int SelectedLayer { get; set; }
 		public bool ShowGrid { get; set; }
 		public bool LayersAbove { get; set; }
@@ -138,8 +141,9 @@ namespace MapEdit.Controls
 				L.invalidate();
 				layers.Add(L);
 			}
-			// some changes were made to this map
-			changesWereMade();
+            // some changes were made to this map
+            undoBuffer.Clear();
+            redoBuffer.Clear();
 		}
 		public void setMap(List<Layer> layers)
 		{
@@ -192,10 +196,14 @@ namespace MapEdit.Controls
 			return this.is_saved;
 		}
 
-		private void aboutToMakeChanges(int layer)
-		{
-			// TODO: Create undo
-			// Call undo created signal
+        private void aboutToMakeChanges(int layer)
+        {
+            // Clone layer tiles
+            var t = this.layers[layer].cloneTiles();
+            // Create new undo buffer
+            undoBuffer.Add(new LayerBuffer(t, layer));
+            // Destroy any redo buffers
+            redoBuffer.Clear();
 		}
 		private void changesWereMade()
 		{
@@ -311,8 +319,7 @@ namespace MapEdit.Controls
 				this.Invalidate();
 			}
 
-			switch (tool)
-			{
+			switch (tool) {
 			case tools_t.TOOL_READ:
 				if (state == 2)
 				{
@@ -322,7 +329,8 @@ namespace MapEdit.Controls
 				return;
 			case tools_t.TOOL_DRAW:
 				// signal that changes are about to be made to @layer
-				aboutToMakeChanges(SelectedLayer);
+				if (state == 0) aboutToMakeChanges(SelectedLayer);
+                if (state != 2) // not mouse up
 				{
 					// get drawing deltas
 					Tile cur = selection.delta(originalTilePoint, tp);
@@ -355,8 +363,8 @@ namespace MapEdit.Controls
 				}
 				else return;
 			case tools_t.TOOL_FILL:
-				// signal that changes are about to be made to @layer
-				aboutToMakeChanges(SelectedLayer);
+                // signal that changes are about to be made to @layer
+                if (state == 0) aboutToMakeChanges(SelectedLayer);
 				{
 					// get drawing deltas
 					Tile cur = selection.delta(originalTilePoint, tp);
@@ -367,8 +375,8 @@ namespace MapEdit.Controls
 				this.Invalidate();
 				break;
 			case tools_t.TOOL_REPLACE:
-				// signal that changes are about to be made to @layer
-				aboutToMakeChanges(SelectedLayer);
+                // signal that changes are about to be made to @layer
+                if (state == 0) aboutToMakeChanges(SelectedLayer);
 				{
 					// get drawing deltas
 					Tile cur = selection.delta(originalTilePoint, tp);
@@ -758,6 +766,42 @@ namespace MapEdit.Controls
 
 		}
 		
-	} // Editor class
+        public void undo()
+        {
+            if (undoBuffer.Count > 0)
+            {
+                var index = undoBuffer.Count - 1;
+                var buf = undoBuffer[index];
+                // Create redo
+                redoBuffer.Add(new LayerBuffer(layers[buf.getIndex()].getTiles(), buf.getIndex()));
+
+                // overwrite tiles of the old layer
+                layers[buf.getIndex()].setTiles(buf.getTiles());
+                // remove undobuffer
+                undoBuffer.RemoveAt(index);
+                // redraw screen
+                this.Invalidate();
+            }
+        }
+        public void redo()
+        {
+            if (redoBuffer.Count > 0)
+            {
+                var index = redoBuffer.Count - 1;
+                var buf = redoBuffer[index];
+                // Create undo
+                undoBuffer.Add(new LayerBuffer(layers[buf.getIndex()].getTiles(), buf.getIndex()));
+
+                // overwrite tiles of the old layer
+                layers[buf.getIndex()].setTiles(buf.getTiles());
+                // remove redobuffer
+                redoBuffer.RemoveAt(index);
+                // redraw screen
+                this.Invalidate();
+            }
+        }
+
+
+    } // Editor class
 
 } // namespace

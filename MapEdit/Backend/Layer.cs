@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Diagnostics;
 
 namespace MapEdit.Backend
 {
@@ -91,6 +92,23 @@ namespace MapEdit.Backend
 		{
 			return tilesY;
 		}
+
+        public List<Tile> getTiles()
+        {
+            return tiles;
+        }
+        public List<Tile> cloneTiles()
+        {
+            var newlist = new List<Tile>();
+            tiles.ForEach((tile) => { newlist.Add(new Tile(tile.compressed())); });
+            return newlist;
+        }
+        public void setTiles(List<Tile> tlist)
+        {
+            Debug.Assert(tlist.Count != 0);
+            tiles = tlist;
+            this.invalidate();
+        }
 
 		private int tcoord(int x, int y)
 		{
