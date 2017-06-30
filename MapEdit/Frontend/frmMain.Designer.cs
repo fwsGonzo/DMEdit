@@ -36,18 +36,22 @@
             this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarTXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
+            this.groupFlags = new System.Windows.Forms.GroupBox();
+            this.radioIce = new System.Windows.Forms.RadioButton();
+            this.radioSlow = new System.Windows.Forms.RadioButton();
+            this.radioWater = new System.Windows.Forms.RadioButton();
+            this.radioAbyss = new System.Windows.Forms.RadioButton();
+            this.radioSolid = new System.Windows.Forms.RadioButton();
+            this.radioNone = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.toolDraw = new System.Windows.Forms.RadioButton();
             this.toolRect = new System.Windows.Forms.RadioButton();
             this.toolFill = new System.Windows.Forms.RadioButton();
             this.toolReplace = new System.Windows.Forms.RadioButton();
-            this.chkTileSolid = new System.Windows.Forms.CheckBox();
-            this.chkTileAbyss = new System.Windows.Forms.CheckBox();
-            this.chkTileWater = new System.Windows.Forms.CheckBox();
-            this.chkTileSlow = new System.Windows.Forms.CheckBox();
             this.listTileForm = new System.Windows.Forms.ListBox();
             this.chkSetTile = new System.Windows.Forms.CheckBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNewWnd = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,10 +75,12 @@
             this.toolShowMask = new System.Windows.Forms.ToolStripButton();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
+            this.toolReloadTex = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.groupFlags.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -84,6 +90,7 @@
             // 
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer1.Location = new System.Drawing.Point(0, 25);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -94,9 +101,10 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.groupFlags);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(698, 430);
-            this.splitContainer1.SplitterDistance = 538;
+            this.splitContainer1.Size = new System.Drawing.Size(1031, 702);
+            this.splitContainer1.SplitterDistance = 872;
             this.splitContainer1.TabIndex = 1;
             // 
             // editor1
@@ -113,15 +121,12 @@
             this.editor1.Name = "editor1";
             this.editor1.SelectedLayer = 0;
             this.editor1.ShowGrid = true;
-            this.editor1.Size = new System.Drawing.Size(536, 406);
+            this.editor1.Size = new System.Drawing.Size(870, 678);
             this.editor1.TabIndex = 0;
-            this.editor1.TileAbyss = false;
             this.editor1.TileDrawing = true;
+            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
             this.editor1.TileForm = 0;
             this.editor1.TileMode = false;
-            this.editor1.TileSlow = false;
-            this.editor1.TileSolid = false;
-            this.editor1.TileWater = false;
             this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
             // 
             // statusStrip1
@@ -131,9 +136,9 @@
             this.sbarXY,
             this.sbarTXY,
             this.sbarSTXY});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 406);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 678);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(536, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(870, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -160,13 +165,96 @@
             this.sbarSTXY.Size = new System.Drawing.Size(56, 17);
             this.sbarSTXY.Text = "sbarSTXY";
             // 
+            // groupFlags
+            // 
+            this.groupFlags.Controls.Add(this.radioIce);
+            this.groupFlags.Controls.Add(this.radioSlow);
+            this.groupFlags.Controls.Add(this.radioWater);
+            this.groupFlags.Controls.Add(this.radioAbyss);
+            this.groupFlags.Controls.Add(this.radioSolid);
+            this.groupFlags.Controls.Add(this.radioNone);
+            this.groupFlags.Location = new System.Drawing.Point(0, 296);
+            this.groupFlags.Name = "groupFlags";
+            this.groupFlags.Size = new System.Drawing.Size(154, 121);
+            this.groupFlags.TabIndex = 2;
+            this.groupFlags.TabStop = false;
+            this.groupFlags.Text = "Flags";
+            // 
+            // radioIce
+            // 
+            this.radioIce.AutoSize = true;
+            this.radioIce.Location = new System.Drawing.Point(74, 65);
+            this.radioIce.Name = "radioIce";
+            this.radioIce.Size = new System.Drawing.Size(40, 17);
+            this.radioIce.TabIndex = 5;
+            this.radioIce.Text = "Ice";
+            this.radioIce.UseVisualStyleBackColor = true;
+            this.radioIce.CheckedChanged += new System.EventHandler(this.radioIce_CheckedChanged);
+            // 
+            // radioSlow
+            // 
+            this.radioSlow.AutoSize = true;
+            this.radioSlow.Location = new System.Drawing.Point(6, 65);
+            this.radioSlow.Name = "radioSlow";
+            this.radioSlow.Size = new System.Drawing.Size(48, 17);
+            this.radioSlow.TabIndex = 4;
+            this.radioSlow.Text = "Slow";
+            this.radioSlow.UseVisualStyleBackColor = true;
+            this.radioSlow.CheckedChanged += new System.EventHandler(this.radioSlow_CheckedChanged);
+            // 
+            // radioWater
+            // 
+            this.radioWater.AutoSize = true;
+            this.radioWater.Location = new System.Drawing.Point(74, 42);
+            this.radioWater.Name = "radioWater";
+            this.radioWater.Size = new System.Drawing.Size(54, 17);
+            this.radioWater.TabIndex = 3;
+            this.radioWater.Text = "Water";
+            this.radioWater.UseVisualStyleBackColor = true;
+            this.radioWater.CheckedChanged += new System.EventHandler(this.radioWater_CheckedChanged);
+            // 
+            // radioAbyss
+            // 
+            this.radioAbyss.AutoSize = true;
+            this.radioAbyss.Location = new System.Drawing.Point(74, 19);
+            this.radioAbyss.Name = "radioAbyss";
+            this.radioAbyss.Size = new System.Drawing.Size(53, 17);
+            this.radioAbyss.TabIndex = 2;
+            this.radioAbyss.Text = "Abyss";
+            this.radioAbyss.UseVisualStyleBackColor = true;
+            this.radioAbyss.CheckedChanged += new System.EventHandler(this.radioAbyss_CheckedChanged);
+            // 
+            // radioSolid
+            // 
+            this.radioSolid.AutoSize = true;
+            this.radioSolid.Location = new System.Drawing.Point(6, 42);
+            this.radioSolid.Name = "radioSolid";
+            this.radioSolid.Size = new System.Drawing.Size(48, 17);
+            this.radioSolid.TabIndex = 1;
+            this.radioSolid.Text = "Solid";
+            this.radioSolid.UseVisualStyleBackColor = true;
+            this.radioSolid.CheckedChanged += new System.EventHandler(this.radioSolid_CheckedChanged);
+            // 
+            // radioNone
+            // 
+            this.radioNone.AutoSize = true;
+            this.radioNone.Checked = true;
+            this.radioNone.Location = new System.Drawing.Point(6, 19);
+            this.radioNone.Name = "radioNone";
+            this.radioNone.Size = new System.Drawing.Size(51, 17);
+            this.radioNone.TabIndex = 0;
+            this.radioNone.TabStop = true;
+            this.radioNone.Text = "None";
+            this.radioNone.UseVisualStyleBackColor = true;
+            this.radioNone.CheckedChanged += new System.EventHandler(this.radioNone_CheckedChanged);
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.flowLayoutPanel1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(154, 334);
+            this.groupBox1.Size = new System.Drawing.Size(153, 293);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tools";
@@ -177,16 +265,13 @@
             this.flowLayoutPanel1.Controls.Add(this.toolRect);
             this.flowLayoutPanel1.Controls.Add(this.toolFill);
             this.flowLayoutPanel1.Controls.Add(this.toolReplace);
-            this.flowLayoutPanel1.Controls.Add(this.chkTileSolid);
-            this.flowLayoutPanel1.Controls.Add(this.chkTileAbyss);
-            this.flowLayoutPanel1.Controls.Add(this.chkTileWater);
-            this.flowLayoutPanel1.Controls.Add(this.chkTileSlow);
             this.flowLayoutPanel1.Controls.Add(this.listTileForm);
             this.flowLayoutPanel1.Controls.Add(this.chkSetTile);
+            this.flowLayoutPanel1.Controls.Add(this.checkBox1);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(148, 315);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 274);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // toolDraw
@@ -241,50 +326,6 @@
             this.toolReplace.UseVisualStyleBackColor = true;
             this.toolReplace.Click += new System.EventHandler(this.toolDraw_Click);
             // 
-            // chkTileSolid
-            // 
-            this.chkTileSolid.AutoSize = true;
-            this.chkTileSolid.Location = new System.Drawing.Point(3, 123);
-            this.chkTileSolid.Name = "chkTileSolid";
-            this.chkTileSolid.Size = new System.Drawing.Size(49, 17);
-            this.chkTileSolid.TabIndex = 4;
-            this.chkTileSolid.Text = "Solid";
-            this.chkTileSolid.UseVisualStyleBackColor = true;
-            this.chkTileSolid.CheckedChanged += new System.EventHandler(this.chkTileSolid_CheckedChanged);
-            // 
-            // chkTileAbyss
-            // 
-            this.chkTileAbyss.AutoSize = true;
-            this.chkTileAbyss.Location = new System.Drawing.Point(58, 123);
-            this.chkTileAbyss.Name = "chkTileAbyss";
-            this.chkTileAbyss.Size = new System.Drawing.Size(54, 17);
-            this.chkTileAbyss.TabIndex = 5;
-            this.chkTileAbyss.Text = "Abyss";
-            this.chkTileAbyss.UseVisualStyleBackColor = true;
-            this.chkTileAbyss.CheckedChanged += new System.EventHandler(this.chkTileAbyss_CheckedChanged);
-            // 
-            // chkTileWater
-            // 
-            this.chkTileWater.AutoSize = true;
-            this.chkTileWater.Location = new System.Drawing.Point(3, 146);
-            this.chkTileWater.Name = "chkTileWater";
-            this.chkTileWater.Size = new System.Drawing.Size(55, 17);
-            this.chkTileWater.TabIndex = 6;
-            this.chkTileWater.Text = "Water";
-            this.chkTileWater.UseVisualStyleBackColor = true;
-            this.chkTileWater.CheckedChanged += new System.EventHandler(this.chkTileWater_CheckedChanged);
-            // 
-            // chkTileSlow
-            // 
-            this.chkTileSlow.AutoSize = true;
-            this.chkTileSlow.Location = new System.Drawing.Point(64, 146);
-            this.chkTileSlow.Name = "chkTileSlow";
-            this.chkTileSlow.Size = new System.Drawing.Size(63, 17);
-            this.chkTileSlow.TabIndex = 9;
-            this.chkTileSlow.Text = "Slowing";
-            this.chkTileSlow.UseVisualStyleBackColor = true;
-            this.chkTileSlow.CheckedChanged += new System.EventHandler(this.chkTileSlow_CheckedChanged);
-            // 
             // listTileForm
             // 
             this.listTileForm.FormattingEnabled = true;
@@ -294,7 +335,7 @@
             "NE: Up-Right",
             "SW: Down-Left",
             "SE: Down-Right"});
-            this.listTileForm.Location = new System.Drawing.Point(3, 169);
+            this.listTileForm.Location = new System.Drawing.Point(3, 123);
             this.listTileForm.Name = "listTileForm";
             this.listTileForm.Size = new System.Drawing.Size(142, 69);
             this.listTileForm.TabIndex = 7;
@@ -305,13 +346,25 @@
             this.chkSetTile.AutoSize = true;
             this.chkSetTile.Checked = true;
             this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSetTile.Location = new System.Drawing.Point(3, 244);
+            this.chkSetTile.Location = new System.Drawing.Point(3, 198);
             this.chkSetTile.Name = "chkSetTile";
             this.chkSetTile.Size = new System.Drawing.Size(72, 17);
             this.chkSetTile.TabIndex = 8;
             this.chkSetTile.Text = "Draw tiles";
             this.chkSetTile.UseVisualStyleBackColor = true;
             this.chkSetTile.CheckedChanged += new System.EventHandler(this.chkSetTile_CheckedChanged);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(3, 221);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(65, 17);
+            this.checkBox1.TabIndex = 13;
+            this.checkBox1.Text = "Lift flags";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // toolStrip1
             // 
@@ -323,13 +376,14 @@
             this.toolStripSeparator3,
             this.mnuSelectLayer,
             this.toolStripSeparator4,
+            this.toolReloadTex,
             this.toolReset,
             this.toolShowGrid,
             this.toolLayerAbove,
             this.toolShowMask});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(698, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1031, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -469,8 +523,8 @@
             this.toolReset.Image = ((System.Drawing.Image)(resources.GetObject("toolReset.Image")));
             this.toolReset.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolReset.Name = "toolReset";
-            this.toolReset.Size = new System.Drawing.Size(55, 22);
-            this.toolReset.Text = "Reset";
+            this.toolReset.Size = new System.Drawing.Size(68, 22);
+            this.toolReset.Text = "Camera";
             this.toolReset.Click += new System.EventHandler(this.toolReset_Click);
             // 
             // toolShowGrid
@@ -518,11 +572,20 @@
             // 
             this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
             // 
+            // toolReloadTex
+            // 
+            this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
+            this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolReloadTex.Name = "toolReloadTex";
+            this.toolReloadTex.Size = new System.Drawing.Size(70, 22);
+            this.toolReloadTex.Text = "Textures";
+            this.toolReloadTex.Click += new System.EventHandler(this.toolReloadTex_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(698, 455);
+            this.ClientSize = new System.Drawing.Size(1031, 727);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -535,6 +598,8 @@
             this.splitContainer1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.groupFlags.ResumeLayout(false);
+            this.groupFlags.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
@@ -583,12 +648,17 @@
 		private System.Windows.Forms.ToolStripStatusLabel sbarSTXY;
 		private System.Windows.Forms.OpenFileDialog openFile1;
 		private System.Windows.Forms.SaveFileDialog saveFile1;
-		private System.Windows.Forms.CheckBox chkTileSolid;
-		private System.Windows.Forms.CheckBox chkTileAbyss;
-		private System.Windows.Forms.CheckBox chkTileWater;
 		private System.Windows.Forms.ListBox listTileForm;
 		private System.Windows.Forms.CheckBox chkSetTile;
-		private System.Windows.Forms.CheckBox chkTileSlow;
+        private System.Windows.Forms.GroupBox groupFlags;
+        private System.Windows.Forms.RadioButton radioIce;
+        private System.Windows.Forms.RadioButton radioSlow;
+        private System.Windows.Forms.RadioButton radioWater;
+        private System.Windows.Forms.RadioButton radioAbyss;
+        private System.Windows.Forms.RadioButton radioSolid;
+        private System.Windows.Forms.RadioButton radioNone;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.ToolStripButton toolReloadTex;
     }
 }
 

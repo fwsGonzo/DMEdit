@@ -42,12 +42,9 @@ namespace MapEdit.Controls
 		public bool TileMode { get; set; }
 		// true if we set tile (X, Y) values
 		public bool TileDrawing { get; set; }
-		// enabled: sets solid-flag to tiles
-		public bool TileSolid { get; set; }
-		public bool TileAbyss { get; set; }
-		public bool TileWater { get; set; }
-		public bool TileSlow { get; set; }
-		public int TileForm { get; set; }
+        // enabled: sets solid-flag to tiles
+        public Backend.Tile.Flags TileFlags { get; set; }
+        public int TileForm { get; set; }
 	
 		private bool mouseDown;
         private Point mouseLocation;
@@ -121,6 +118,11 @@ namespace MapEdit.Controls
 			// tileset image && tilesize
 			this.tileset = new Tileset(tileset, tilesize);
 		}
+        public void reload_textures(Image tiles)
+        {
+            this.tileset.setTexture(tiles);
+            this.Invalidate();
+        }
 
 		// returns true if there is an existing valid map
 		public bool containsMap()
@@ -267,7 +269,7 @@ namespace MapEdit.Controls
 			Tile T = L.getTile(tx, ty);
 
 			if (TileDrawing) T.setXY(sx, sy);
-			T.setData(TileSolid, TileAbyss, TileWater, TileSlow);
+			T.setFlags(TileFlags);
 			T.setForm((byte)TileForm);
 			L.updateTile(tx, ty);
 		}

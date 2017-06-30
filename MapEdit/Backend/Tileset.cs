@@ -14,6 +14,10 @@ namespace MapEdit.Backend
 		{
 			return tileset;
 		}
+        public void setTexture(Image img)
+        {
+            tileset = new Bitmap(img);
+        }
 
 		private Bitmap tileset;
 		public  int size;

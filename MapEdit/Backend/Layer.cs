@@ -15,8 +15,9 @@ namespace MapEdit.Backend
 		static Brush abyssBrush = new SolidBrush(Color.FromArgb(80, Color.Magenta));
 		static Brush waterBrush = new SolidBrush(Color.FromArgb(80, Color.Green));
 		static Brush slowBrush = new SolidBrush(Color.FromArgb(80, Color.YellowGreen));
+        static Brush iceBrush = new SolidBrush(Color.FromArgb(80, Color.LightBlue));
 
-		int tilesX;
+        int tilesX;
 		int tilesY;
 		public bool Visible { set; get; }
 		public bool ShowMask { set; get; }
@@ -159,19 +160,34 @@ namespace MapEdit.Backend
 		void renderTile(Graphics g, int x, int y, bool overdraw = false)
 		{
 			Tile tile = tiles[tcoord(x, y)];
-			if (tile.getTX() != 0 || tile.getTY() != 0 || overdraw)
+            Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
+            // only draw tile if not (0, 0)
+            if (tile.getTX() != 0 || tile.getTY() != 0 || overdraw)
 			{
 				Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
-				Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
 				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
-
-				if (tile.isSolid()) renderData(g, dst, solidBrush, tile.getForm());
-				if (tile.isAbyss()) renderData(g, dst, abyssBrush, tile.getForm());
-				if (tile.isWater()) renderData(g, dst, waterBrush, tile.getForm());
-				if (tile.isSlow()) renderData(g, dst, slowBrush, tile.getForm());
-			}
-		}
-		public void updateTile(int x, int y)
+            }
+            // always draw flags, if any
+            switch (tile.getFlags())
+            {
+                case Tile.Flags.SOLID:
+                    renderData(g, dst, solidBrush, tile.getForm());
+                    break;
+                case Tile.Flags.ABYSS:
+                    renderData(g, dst, abyssBrush, tile.getForm());
+                    break;
+                case Tile.Flags.WATER:
+                    renderData(g, dst, waterBrush, tile.getForm());
+                    break;
+                case Tile.Flags.SLOW:
+                    renderData(g, dst, slowBrush, tile.getForm());
+                    break;
+                case Tile.Flags.ICE:
+                    renderData(g, dst, iceBrush, tile.getForm());
+                    break;
+            }
+        }
+        public void updateTile(int x, int y)
 		{
 			using (Graphics g = Graphics.FromImage(buffer))
 			{

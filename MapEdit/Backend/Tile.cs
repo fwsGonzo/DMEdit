@@ -19,17 +19,22 @@ namespace MapEdit.Backend
 
 	public class Tile
 	{
-		enum Bits
+		public enum Flags
 		{
-			SOLID_BIT = 0,
-			ABYSS_BIT,
-			WATER_BIT,
-			SLOW_BIT,
-			ICE_BIT,
+            NONE = 0,
+            SOLID = 1,
+            ABYSS = 2,
 
-			FLOOR_UP_BIT,
-			FLOOR_DN_BIT
-		};
+            WATER = 3,
+            SHALW = 4,
+            SNOW = 5,
+            ICE = 6,
+
+            SLOW = 12,
+            CLIMB = 13,
+            STAIR = 14,
+            JUMP = 15,
+        };
 
 		public Tile()
 		{
@@ -73,30 +78,14 @@ namespace MapEdit.Backend
 
 		public byte getData() { return data; }
 
-		public void setSolid(bool v) { setdata((int)Bits.SOLID_BIT, v); }
-		public bool isSolid() { return getdata((int)Bits.SOLID_BIT); }
-
-		public void setAbyss(bool v) { setdata((int)Bits.ABYSS_BIT, v); }
-		public bool isAbyss() { return getdata((int)Bits.ABYSS_BIT); }
-
-		public void setWater(bool v) { setdata((int)Bits.WATER_BIT, v); }
-		public bool isWater() { return getdata((int)Bits.WATER_BIT); }
-
-		public void setSlow(bool v) { setdata((int)Bits.SLOW_BIT, v); }
-		public bool isSlow() { return getdata((int)Bits.SLOW_BIT); }
-
-		public void setIce(bool v) { setdata((int)Bits.ICE_BIT, v); }
-		public bool isIce() { return getdata((int)Bits.ICE_BIT); }
-
-		public void setData(bool sol, bool aby, bool wat, bool slo)
-		{
-			setdata((int)Bits.SOLID_BIT, sol);
-			setdata((int)Bits.ABYSS_BIT, aby);
-			setdata((int)Bits.WATER_BIT, wat);
-			setdata((int)Bits.SLOW_BIT, slo);
-		}
-
-		//uint getColor() const;
+        public Flags getFlags()
+        {
+            return (Flags)data;
+        }
+        public void setFlags(Flags flag)
+        {
+            data = (byte)flag;
+        }
 
 		private static int tileSize;
 		public static int getSize()
@@ -106,18 +95,6 @@ namespace MapEdit.Backend
 		public static void setSize(int size)
 		{
 			tileSize = size;
-		}
-
-		private bool getdata(int bit)
-		{
-			return ((data >> bit) & 1) != 0;
-		}
-		private void setdata(int bit, bool v)
-		{
-			if (v)
-				data |= (byte)(1 << bit);
-			else
-				data &= (byte)~(1 << bit);
 		}
 
 		private byte tx;

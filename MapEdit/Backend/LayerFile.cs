@@ -85,7 +85,6 @@ namespace MapEdit.Backend
 				}
 				return true;
 			}
-			return false;
 		}
 	}
 }

@@ -77,13 +77,17 @@ namespace MapEdit.Frontend
 				e.SuppressKeyPress = true;
 				toggleGrid();
 			}
-            if (e.KeyCode == Keys.Z && e.Control && e.Shift)
+            if (e.KeyCode == Keys.Z && e.Control && e.Shift) // Ctrl+Shift+Z
             {
                 toolRedo_Click(this, e);
             }
-            else if (e.KeyCode == Keys.Z && e.Control)
+            else if (e.KeyCode == Keys.Z && e.Control) // Ctrl+Z
             {
                 toolUndo_Click(this, e);
+            }
+            else if (e.KeyCode == Keys.R && e.Control) // Ctrl+R
+            {
+                toolReloadTex_Click(this, e);
             }
 
         }
@@ -269,23 +273,6 @@ namespace MapEdit.Frontend
 			}
 		}
 
-		private void chkTileSolid_CheckedChanged(object sender, EventArgs e)
-		{
-			editor1.TileSolid = chkTileSolid.Checked;
-		}
-		private void chkTileAbyss_CheckedChanged(object sender, EventArgs e)
-		{
-			editor1.TileAbyss = chkTileAbyss.Checked;
-		}
-		private void chkTileWater_CheckedChanged(object sender, EventArgs e)
-		{
-			editor1.TileWater = chkTileWater.Checked;
-		}
-		private void chkTileSlow_CheckedChanged(object sender, EventArgs e)
-		{
-			editor1.TileSlow = chkTileSlow.Checked;
-		}
-
 		private void listTileForm_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			editor1.TileForm = listTileForm.SelectedIndex;
@@ -304,6 +291,38 @@ namespace MapEdit.Frontend
         private void toolRedo_Click(object sender, EventArgs e)
         {
             editor1.redo();
+        }
+
+        private void radioNone_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.NONE;
+        }
+        private void radioSolid_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.SOLID;
+        }
+
+        private void radioAbyss_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.ABYSS;
+        }
+        private void radioWater_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.WATER;
+        }
+        private void radioSlow_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.SLOW;
+        }
+        private void radioIce_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.ICE;
+        }
+
+        private void toolReloadTex_Click(object sender, EventArgs e)
+        {
+            var tiles = Image.FromFile(MOD_DIR + "\\bitmaps\\tiles.png");
+            editor1.reload_textures(tiles);
         }
     }
 }
