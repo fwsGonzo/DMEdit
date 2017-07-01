@@ -37,6 +37,10 @@ namespace MapEdit.Frontend
 			sbarTXY.Text = "Tile: " + tx + ", " + ty;
 			sbarSTXY.Text = "Selected: " + stx + ", " + sty;
 		}
+        private void editor1_OnZoomChanged(float v)
+        {
+            sbarZoomLevel.Text = "Zoom: " + v;
+        }
 
         private void mnuExit_Click(object sender, EventArgs e)
         {
@@ -54,7 +58,7 @@ namespace MapEdit.Frontend
 			updateGUI();
 
 			setTitle("(none)");
-		}
+        }
 		private void setTitle(string t)
 		{
 			this.Text = "DMEdit - " + t;
@@ -115,7 +119,7 @@ namespace MapEdit.Frontend
 		private void toolReset_Click(object sender, EventArgs e)
 		{
 			editor1.GraphOffset = new System.Drawing.PointF(0.0f, 0.0f);
-			editor1.GraphZoom = 2.0f;
+			editor1.GraphZoom = 1.5f;
 			editor1.Invalidate();
 		}
 

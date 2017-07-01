@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.editor1 = new MapEdit.Controls.Editor();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarTXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
+            this.sbarZoomLevel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupFlags = new System.Windows.Forms.GroupBox();
             this.radioIce = new System.Windows.Forms.RadioButton();
             this.radioSlow = new System.Windows.Forms.RadioButton();
@@ -69,13 +69,14 @@
             this.mnuSelectLayer = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnuLayer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolReloadTex = new System.Windows.Forms.ToolStripButton();
             this.toolReset = new System.Windows.Forms.ToolStripButton();
             this.toolShowGrid = new System.Windows.Forms.ToolStripButton();
             this.toolLayerAbove = new System.Windows.Forms.ToolStripButton();
             this.toolShowMask = new System.Windows.Forms.ToolStripButton();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
-            this.toolReloadTex = new System.Windows.Forms.ToolStripButton();
+            this.editor1 = new MapEdit.Controls.Editor();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -107,35 +108,14 @@
             this.splitContainer1.SplitterDistance = 872;
             this.splitContainer1.TabIndex = 1;
             // 
-            // editor1
-            // 
-            this.editor1.BackColor = System.Drawing.Color.Black;
-            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
-            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
-            this.editor1.GraphGridOpacity = 0.5F;
-            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
-            this.editor1.GraphZoom = 4F;
-            this.editor1.LayersAbove = false;
-            this.editor1.Location = new System.Drawing.Point(0, 0);
-            this.editor1.Name = "editor1";
-            this.editor1.SelectedLayer = 0;
-            this.editor1.ShowGrid = true;
-            this.editor1.Size = new System.Drawing.Size(870, 678);
-            this.editor1.TabIndex = 0;
-            this.editor1.TileDrawing = true;
-            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
-            this.editor1.TileForm = 0;
-            this.editor1.TileMode = false;
-            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
-            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.sbarXY,
             this.sbarTXY,
-            this.sbarSTXY});
+            this.sbarSTXY,
+            this.sbarZoomLevel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 678);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(870, 22);
@@ -164,6 +144,12 @@
             this.sbarSTXY.Name = "sbarSTXY";
             this.sbarSTXY.Size = new System.Drawing.Size(56, 17);
             this.sbarSTXY.Text = "sbarSTXY";
+            // 
+            // sbarZoomLevel
+            // 
+            this.sbarZoomLevel.Name = "sbarZoomLevel";
+            this.sbarZoomLevel.Size = new System.Drawing.Size(88, 17);
+            this.sbarZoomLevel.Text = "sbarZoomLevel";
             // 
             // groupFlags
             // 
@@ -518,6 +504,15 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
+            // toolReloadTex
+            // 
+            this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
+            this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolReloadTex.Name = "toolReloadTex";
+            this.toolReloadTex.Size = new System.Drawing.Size(70, 22);
+            this.toolReloadTex.Text = "Textures";
+            this.toolReloadTex.Click += new System.EventHandler(this.toolReloadTex_Click);
+            // 
             // toolReset
             // 
             this.toolReset.Image = ((System.Drawing.Image)(resources.GetObject("toolReset.Image")));
@@ -572,14 +567,28 @@
             // 
             this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
             // 
-            // toolReloadTex
+            // editor1
             // 
-            this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
-            this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolReloadTex.Name = "toolReloadTex";
-            this.toolReloadTex.Size = new System.Drawing.Size(70, 22);
-            this.toolReloadTex.Text = "Textures";
-            this.toolReloadTex.Click += new System.EventHandler(this.toolReloadTex_Click);
+            this.editor1.BackColor = System.Drawing.Color.Black;
+            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
+            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
+            this.editor1.GraphGridOpacity = 0.5F;
+            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
+            this.editor1.GraphZoom = 1.5F;
+            this.editor1.LayersAbove = false;
+            this.editor1.Location = new System.Drawing.Point(0, 0);
+            this.editor1.Name = "editor1";
+            this.editor1.SelectedLayer = 0;
+            this.editor1.ShowGrid = true;
+            this.editor1.Size = new System.Drawing.Size(870, 678);
+            this.editor1.TabIndex = 0;
+            this.editor1.TileDrawing = true;
+            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
+            this.editor1.TileForm = 0;
+            this.editor1.TileMode = false;
+            this.editor1.OnZoomChanged += new MapEdit.Controls.Editor.zoom_event_t(this.editor1_OnZoomChanged);
+            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
             // 
             // frmMain
             // 
@@ -659,6 +668,7 @@
         private System.Windows.Forms.RadioButton radioNone;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ToolStripButton toolReloadTex;
+        private System.Windows.Forms.ToolStripStatusLabel sbarZoomLevel;
     }
 }
 

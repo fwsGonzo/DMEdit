@@ -55,6 +55,9 @@ namespace MapEdit.Controls
 		public Color GraphGridColor { get; set; }
 		public float GraphGridOpacity { get; set; }
 
+        public delegate void zoom_event_t(float v);
+        public event zoom_event_t OnZoomChanged = null;
+
 		PointF graphOffset; float graphZoom;
 		PointF tileOffset;  float tileZoom;
 		public PointF GraphOffset
@@ -64,9 +67,22 @@ namespace MapEdit.Controls
 		}
 		public float GraphZoom
 		{
-			get { if (TileMode) return tileZoom; else return graphZoom; }
-			set { if (TileMode) tileZoom = value; else graphZoom = value; }
+			get {
+                if (TileMode) return tileZoom; else return graphZoom;
+            }
+			set {
+                if (TileMode) tileZoom = value;
+                else graphZoom = value;
+                // call handler for when zoom changes
+                if (OnZoomChanged != null) OnZoomChanged(getZoomFactor());
+            }
 		}
+        public float getZoomFactor() {
+            if (GraphZoom < 1.0)
+                return GraphZoom;
+            else
+                return (float) Math.Pow(GraphZoom, 2.5);
+        }
 		public tools_t CurrentTool { get; set; }
 		
 		public int getLayerCount()
@@ -81,9 +97,9 @@ namespace MapEdit.Controls
 			GraphGridOpacity = 0.5f;	// default 10% visible
 
 			graphOffset = new PointF(0.0f, 0.0f); // panning offset
-			graphZoom = 4.0f;
+			graphZoom = 1.2f;
 			tileOffset = new PointF(0.0f, 0.0f);
-			tileZoom = 2.0f;
+			tileZoom = 1.2f;
 			
 			CurrentTool = tools_t.TOOL_NONE;
 			selection = new Selection(1, 0);
@@ -228,8 +244,8 @@ namespace MapEdit.Controls
 		// to graph (0, 0)-based coordinate system
 		public PointF transformPoint(PointF p)
 		{
-			return new PointF(p.X / GraphZoom,
-							  p.Y / GraphZoom);
+			return new PointF(p.X / getZoomFactor(),
+							  p.Y / getZoomFactor());
 		}
 		public Point toTilesheet(PointF p)
 		{
@@ -460,8 +476,8 @@ namespace MapEdit.Controls
 		public void zoom(int delta)
 		{
 			GraphZoom += ZOOM_DELTA * delta;
-			// clamp to min value
-			if (GraphZoom < 2 * ZOOM_DELTA) GraphZoom = 2 * ZOOM_DELTA;
+            // clamp to min value
+            if (GraphZoom < 2 * ZOOM_DELTA) GraphZoom = 2 * ZOOM_DELTA;
 			// redraw
 			this.Invalidate();
 		}
@@ -611,8 +627,9 @@ namespace MapEdit.Controls
 
 		void renderBuffers()
 		{
-			// get graphics object from buffer image
-			Graphics g = Graphics.FromImage(buffer);
+            float zfactor = getZoomFactor();
+            // get graphics object from buffer image
+            Graphics g = Graphics.FromImage(buffer);
 			g.SmoothingMode = SmoothingMode.None;
 			g.InterpolationMode = InterpolationMode.NearestNeighbor;
 			g.PixelOffsetMode = PixelOffsetMode.Half;
@@ -624,7 +641,7 @@ namespace MapEdit.Controls
 			
 			g.ResetTransform();
 			// rescale to (-sx, -sy)-(sx, sy)
-			g.ScaleTransform(GraphZoom, GraphZoom);
+			g.ScaleTransform(zfactor, zfactor);
 			// offset
 			g.TranslateTransform(GraphOffset.X, GraphOffset.Y);
 			
@@ -637,7 +654,7 @@ namespace MapEdit.Controls
 				using (TextureBrush tbrush = new TextureBrush(checkers, WrapMode.Tile))
 				{
 					g.FillRectangle(tbrush, -GraphOffset.X, -GraphOffset.Y,
-						ClientSize.Width / GraphZoom, ClientSize.Height / GraphZoom);
+						ClientSize.Width / zfactor, ClientSize.Height / zfactor);
 				}
 			}
 			else
@@ -708,23 +725,24 @@ namespace MapEdit.Controls
 		} // renderBuffers()
 		private void renderGrid(Graphics g)
 		{
-			//////////////////////
-			// -= grid setup =- //
-			//////////////////////
-			float gridWidth = 1.0f / GraphZoom;
-			// distance between axis ticks
-			float axisSpacing = tileset.size;
+            //////////////////////
+            // -= grid setup =- //
+            //////////////////////
+            float zfactor = getZoomFactor();
+			float gridWidth = 1.0f / zfactor;
+            // distance between axis ticks
+            float axisSpacing = tileset.size;
 			// grid opacity color (value)
 			Color gridColor = Color.DarkGray;
 			
 			// offset adjusted min/max values for grid
 			float minX = -GraphOffset.X;
-			float maxX = -GraphOffset.X + (float)ClientSize.Width / GraphZoom;
-			float minY = -GraphOffset.Y;
-			float maxY = -GraphOffset.Y + (float)ClientSize.Height / GraphZoom;
-			
-			// offset from left to truncated right
-			float ax0 = minX - (float)Math.IEEERemainder(minX, axisSpacing);
+			float maxX = -GraphOffset.X + (float)ClientSize.Width / zfactor;
+            float minY = -GraphOffset.Y;
+			float maxY = -GraphOffset.Y + (float)ClientSize.Height / zfactor;
+
+            // offset from left to truncated right
+            float ax0 = minX - (float)Math.IEEERemainder(minX, axisSpacing);
 			float ax1 = maxX + (float)Math.IEEERemainder(maxX, axisSpacing);
 			// offset from bottom to truncated top
 			float ay0 = minY - (float)Math.IEEERemainder(minY, axisSpacing);
