@@ -7,81 +7,56 @@ namespace MapEdit.Backend
 	{
 		public static List<Layer> loadFile(string file, Tileset tset)
 		{
-			List<uint> values = new List<uint>();
 
-			using (StreamReader sr = new StreamReader(file))
-			{
-				while (sr.Peek() >= 0)
-				{
-					string line = sr.ReadLine();
-					string[] words = line.Split();
-					foreach (string word in words)
-					{
-						if (word.Length > 0)
-							values.Add(uint.Parse(word));
-					}
-				}
-			}
-			if (values.Count > 3)
-			{
-				List<Layer> layers = new List<Layer>();
+            using (var sr = new BinaryReader(File.Open(file, FileMode.Open, FileAccess.Read)))
+            {
+                List<Layer> layers = new List<Layer>();
 
-				int sizeX = (int) values[0];
-				int sizeY = (int) values[1];
-				int layerCount = (int) values[2];
+                int sizeX = sr.ReadInt32();
+                int sizeY = sr.ReadInt32();
+                int layerCount = sr.ReadInt32();
 
-				int index = 3;
+                for (int i = 0; i < layerCount; i++)
+                {
+                    Layer L = new Layer(sizeX, sizeY);
 
-				for (int i = 0; i < layerCount; i++)
-				{
-					Layer L = new Layer(sizeX, sizeY);
-					index = L.load(values, index);
-					// default show mask only for layer 1
-					L.ShowMask = (i == 0);
-					// create bitmap
-					L.initializeBuffers(tset);
-					// redraw
-					L.invalidate();
-					// add to list
-					layers.Add(L);
-				}
-				// return list of layers
-				return layers;
-			}
-			return null;
+                    List<uint> values = new List<uint>();
+                    for (int t = 0; t < sizeX*sizeY; t++)
+                    {
+                        values.Add(sr.ReadUInt32());
+                    }
+                    L.load(values);
+
+                    // default show mask only for layer 1
+                    L.ShowMask = (i == 0);
+                    // create bitmap
+                    L.initializeBuffers(tset);
+                    // redraw
+                    L.invalidate();
+                    // add to list
+                    layers.Add(L);
+                }
+                // return list of layers
+                return layers;
+            }
 		}
 		
 		public static bool saveFile(string file, List<Layer> layers)
 		{
-			using (StreamWriter sr = new StreamWriter(file))
+			using (var sr = new BinaryWriter(File.Open(file, FileMode.Create, FileAccess.Write)))
 			{
-				const string CRLF = "\r\n";
-				string w = layers[0].getTilesX() + " " +
-						   layers[1].getTilesY() + " " +
-						   layers.Count + CRLF + CRLF;
-				sr.Write(w);
+                sr.Write((int) layers[0].getTilesX());
+                sr.Write((int) layers[0].getTilesY());
+                sr.Write((int) layers.Count);
 
-				for (int l = 0; l < layers.Count; l++)
+                for (int l = 0; l < layers.Count; l++)
 				{
 					Layer L = layers[l];
 					List<uint> tiledata = L.export();
-					int index = 0;
-
-					for (int y = 0; y < L.getTilesY(); y++)
-					{
-						w = "";
-						// build row of tiles
-						for (int x = 0; x < L.getTilesX(); x++)
-						{
-							w += tiledata[index] + " ";
-							index++;
-						}
-						w += CRLF;
-						// write row of tiles
-						sr.Write(w);
-					}
-					// write opening between layers
-					sr.Write(CRLF);
+                    foreach (uint t in tiledata)
+                    {
+                        sr.Write(t);
+                    }
 				}
 				return true;
 			}

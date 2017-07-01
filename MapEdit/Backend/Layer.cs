@@ -44,16 +44,13 @@ namespace MapEdit.Backend
 			// initialize buffer with tileset
 			initializeBuffers(tset);
 		}
-		public int load(List<uint> values, int index)
+		public void load(List<uint> values)
 		{
 			this.Visible = true;
-			for (int y = 0; y < tilesY; y++)
-			for (int x = 0; x < tilesX; x++)
+			foreach (var v in values)
 			{
-				tiles.Add(new Tile(values[index]));
-				index ++;
+				tiles.Add(new Tile(v));
 			}
-			return index;
 		}
 		public List<uint> export()
 		{
