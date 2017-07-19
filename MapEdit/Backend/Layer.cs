@@ -16,6 +16,7 @@ namespace MapEdit.Backend
 		static Brush waterBrush = new SolidBrush(Color.FromArgb(80, Color.Green));
 		static Brush slowBrush = new SolidBrush(Color.FromArgb(80, Color.YellowGreen));
         static Brush iceBrush = new SolidBrush(Color.FromArgb(80, Color.LightBlue));
+        static Brush jumpBrush = new SolidBrush(Color.FromArgb(80, Color.MediumPurple));
 
         int tilesX;
 		int tilesY;
@@ -167,21 +168,27 @@ namespace MapEdit.Backend
             // always draw flags, if any
             switch (tile.getFlags())
             {
-                case Tile.Flags.SOLID:
-                    renderData(g, dst, solidBrush, tile.getForm());
-                    break;
-                case Tile.Flags.ABYSS:
-                    renderData(g, dst, abyssBrush, tile.getForm());
-                    break;
-                case Tile.Flags.WATER:
-                    renderData(g, dst, waterBrush, tile.getForm());
-                    break;
-                case Tile.Flags.SLOW:
-                    renderData(g, dst, slowBrush, tile.getForm());
-                    break;
-                case Tile.Flags.ICE:
-                    renderData(g, dst, iceBrush, tile.getForm());
-                    break;
+            case Tile.Flags.SOLID:
+                renderData(g, dst, solidBrush, tile.getForm());
+                break;
+            case Tile.Flags.ABYSS:
+                renderData(g, dst, abyssBrush, tile.getForm());
+                break;
+            case Tile.Flags.WATER:
+                renderData(g, dst, waterBrush, tile.getForm());
+                break;
+            case Tile.Flags.SLOW:
+                renderData(g, dst, slowBrush, tile.getForm());
+                break;
+            case Tile.Flags.ICE:
+                renderData(g, dst, iceBrush, tile.getForm());
+                break;
+            case Tile.Flags.JUMP_UP:
+            case Tile.Flags.JUMP_DOWN:
+            case Tile.Flags.JUMP_RGT:
+            case Tile.Flags.JUMP_LEFT:
+                renderData(g, dst, jumpBrush, tile.getForm());
+                break;
             }
         }
         public void updateTile(int x, int y)

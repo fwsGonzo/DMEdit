@@ -11,17 +11,35 @@ namespace MapEdit.Frontend
 		List<ToolStripMenuItem> layerList;
 		static string MOD_DIR = "mods\\HylianPhoenix";
 		static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
-		//static string MOD_DIR = "C:\\Projects\\dm2\\Debug\\mods\\HylianPhoenix";
-		//static string MAP_FOLDER = MOD_DIR + "\\maps";
-		
-		public frmMain()
+
+        static string MOD_DIR_FB = "C:\\github\\dm2\\Debug\\mods\\HylianPhoenix";
+		static string MAP_FOLDER_FB = MOD_DIR + "\\maps";
+
+        private string current_mod_dir;
+        private string getModDir()
+        {
+            return current_mod_dir;
+        }
+
+
+        public frmMain()
         {
             InitializeComponent();
 
 			editor1.onTileChanged += editor1_onTileChanged;
 
 			Image checkers = Resource1.checker;
-			Image tiles = Image.FromFile(MOD_DIR + "\\bitmaps\\tiles.png");
+            Image tiles = null;
+            try
+            {
+                tiles = Image.FromFile(MOD_DIR + "\\bitmaps\\tiles.png");
+                current_mod_dir = MOD_DIR;
+            }
+            catch (Exception e)
+            {
+                tiles = Image.FromFile(MOD_DIR_FB + "\\bitmaps\\tiles.png");
+                current_mod_dir = MOD_DIR_FB;
+            }
 			editor1.initialize(null, tiles, 8);
 			
 			toolShowGrid.Checked = editor1.ShowGrid;
@@ -322,11 +340,28 @@ namespace MapEdit.Frontend
         {
             editor1.TileFlags = Backend.Tile.Flags.ICE;
         }
+        private void radioJup_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.JUMP_UP;
+        }
+        private void radioJdown_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.JUMP_DOWN;
+        }
+        private void radioJright_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.JUMP_RGT;
+        }
+        private void radioJleft_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.JUMP_LEFT;
+        }
 
         private void toolReloadTex_Click(object sender, EventArgs e)
         {
-            var tiles = Image.FromFile(MOD_DIR + "\\bitmaps\\tiles.png");
+            var tiles = Image.FromFile(getModDir() + "\\bitmaps\\tiles.png");
             editor1.reload_textures(tiles);
         }
+
     }
 }

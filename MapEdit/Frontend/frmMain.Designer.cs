@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.editor1 = new MapEdit.Controls.Editor();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
@@ -76,7 +77,10 @@
             this.toolShowMask = new System.Windows.Forms.ToolStripButton();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
-            this.editor1 = new MapEdit.Controls.Editor();
+            this.radioJup = new System.Windows.Forms.RadioButton();
+            this.radioJdown = new System.Windows.Forms.RadioButton();
+            this.radioJright = new System.Windows.Forms.RadioButton();
+            this.radioJleft = new System.Windows.Forms.RadioButton();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -92,7 +96,8 @@
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 27);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -104,64 +109,97 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupFlags);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(1031, 702);
-            this.splitContainer1.SplitterDistance = 872;
+            this.splitContainer1.Size = new System.Drawing.Size(1375, 868);
+            this.splitContainer1.SplitterDistance = 1215;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // editor1
+            // 
+            this.editor1.BackColor = System.Drawing.Color.Black;
+            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
+            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
+            this.editor1.GraphGridOpacity = 0.5F;
+            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
+            this.editor1.GraphZoom = 1.5F;
+            this.editor1.LayersAbove = false;
+            this.editor1.Location = new System.Drawing.Point(0, 0);
+            this.editor1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.editor1.Name = "editor1";
+            this.editor1.SelectedLayer = 0;
+            this.editor1.ShowGrid = true;
+            this.editor1.Size = new System.Drawing.Size(1213, 837);
+            this.editor1.TabIndex = 0;
+            this.editor1.TileDrawing = true;
+            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
+            this.editor1.TileForm = 0;
+            this.editor1.TileMode = false;
+            this.editor1.OnZoomChanged += new MapEdit.Controls.Editor.zoom_event_t(this.editor1_OnZoomChanged);
+            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.sbarXY,
             this.sbarTXY,
             this.sbarSTXY,
             this.sbarZoomLevel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 678);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 837);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(870, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(1213, 29);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripProgressBar1
             // 
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(133, 23);
             // 
             // sbarXY
             // 
             this.sbarXY.Name = "sbarXY";
-            this.sbarXY.Size = new System.Drawing.Size(43, 17);
+            this.sbarXY.Size = new System.Drawing.Size(54, 24);
             this.sbarXY.Text = "sbarXY";
             // 
             // sbarTXY
             // 
             this.sbarTXY.Name = "sbarTXY";
-            this.sbarTXY.Size = new System.Drawing.Size(50, 17);
+            this.sbarTXY.Size = new System.Drawing.Size(62, 24);
             this.sbarTXY.Text = "sbarTXY";
             // 
             // sbarSTXY
             // 
             this.sbarSTXY.Name = "sbarSTXY";
-            this.sbarSTXY.Size = new System.Drawing.Size(56, 17);
+            this.sbarSTXY.Size = new System.Drawing.Size(70, 24);
             this.sbarSTXY.Text = "sbarSTXY";
             // 
             // sbarZoomLevel
             // 
             this.sbarZoomLevel.Name = "sbarZoomLevel";
-            this.sbarZoomLevel.Size = new System.Drawing.Size(88, 17);
+            this.sbarZoomLevel.Size = new System.Drawing.Size(111, 24);
             this.sbarZoomLevel.Text = "sbarZoomLevel";
             // 
             // groupFlags
             // 
+            this.groupFlags.Controls.Add(this.radioJleft);
+            this.groupFlags.Controls.Add(this.radioJright);
+            this.groupFlags.Controls.Add(this.radioJdown);
+            this.groupFlags.Controls.Add(this.radioJup);
             this.groupFlags.Controls.Add(this.radioIce);
             this.groupFlags.Controls.Add(this.radioSlow);
             this.groupFlags.Controls.Add(this.radioWater);
             this.groupFlags.Controls.Add(this.radioAbyss);
             this.groupFlags.Controls.Add(this.radioSolid);
             this.groupFlags.Controls.Add(this.radioNone);
-            this.groupFlags.Location = new System.Drawing.Point(0, 296);
+            this.groupFlags.Location = new System.Drawing.Point(0, 364);
+            this.groupFlags.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupFlags.Name = "groupFlags";
-            this.groupFlags.Size = new System.Drawing.Size(154, 121);
+            this.groupFlags.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupFlags.Size = new System.Drawing.Size(205, 279);
             this.groupFlags.TabIndex = 2;
             this.groupFlags.TabStop = false;
             this.groupFlags.Text = "Flags";
@@ -169,9 +207,10 @@
             // radioIce
             // 
             this.radioIce.AutoSize = true;
-            this.radioIce.Location = new System.Drawing.Point(74, 65);
+            this.radioIce.Location = new System.Drawing.Point(99, 80);
+            this.radioIce.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioIce.Name = "radioIce";
-            this.radioIce.Size = new System.Drawing.Size(40, 17);
+            this.radioIce.Size = new System.Drawing.Size(47, 21);
             this.radioIce.TabIndex = 5;
             this.radioIce.Text = "Ice";
             this.radioIce.UseVisualStyleBackColor = true;
@@ -180,9 +219,10 @@
             // radioSlow
             // 
             this.radioSlow.AutoSize = true;
-            this.radioSlow.Location = new System.Drawing.Point(6, 65);
+            this.radioSlow.Location = new System.Drawing.Point(8, 80);
+            this.radioSlow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioSlow.Name = "radioSlow";
-            this.radioSlow.Size = new System.Drawing.Size(48, 17);
+            this.radioSlow.Size = new System.Drawing.Size(58, 21);
             this.radioSlow.TabIndex = 4;
             this.radioSlow.Text = "Slow";
             this.radioSlow.UseVisualStyleBackColor = true;
@@ -191,9 +231,10 @@
             // radioWater
             // 
             this.radioWater.AutoSize = true;
-            this.radioWater.Location = new System.Drawing.Point(74, 42);
+            this.radioWater.Location = new System.Drawing.Point(99, 52);
+            this.radioWater.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioWater.Name = "radioWater";
-            this.radioWater.Size = new System.Drawing.Size(54, 17);
+            this.radioWater.Size = new System.Drawing.Size(67, 21);
             this.radioWater.TabIndex = 3;
             this.radioWater.Text = "Water";
             this.radioWater.UseVisualStyleBackColor = true;
@@ -202,9 +243,10 @@
             // radioAbyss
             // 
             this.radioAbyss.AutoSize = true;
-            this.radioAbyss.Location = new System.Drawing.Point(74, 19);
+            this.radioAbyss.Location = new System.Drawing.Point(99, 23);
+            this.radioAbyss.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioAbyss.Name = "radioAbyss";
-            this.radioAbyss.Size = new System.Drawing.Size(53, 17);
+            this.radioAbyss.Size = new System.Drawing.Size(67, 21);
             this.radioAbyss.TabIndex = 2;
             this.radioAbyss.Text = "Abyss";
             this.radioAbyss.UseVisualStyleBackColor = true;
@@ -213,9 +255,10 @@
             // radioSolid
             // 
             this.radioSolid.AutoSize = true;
-            this.radioSolid.Location = new System.Drawing.Point(6, 42);
+            this.radioSolid.Location = new System.Drawing.Point(8, 52);
+            this.radioSolid.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioSolid.Name = "radioSolid";
-            this.radioSolid.Size = new System.Drawing.Size(48, 17);
+            this.radioSolid.Size = new System.Drawing.Size(60, 21);
             this.radioSolid.TabIndex = 1;
             this.radioSolid.Text = "Solid";
             this.radioSolid.UseVisualStyleBackColor = true;
@@ -225,9 +268,10 @@
             // 
             this.radioNone.AutoSize = true;
             this.radioNone.Checked = true;
-            this.radioNone.Location = new System.Drawing.Point(6, 19);
+            this.radioNone.Location = new System.Drawing.Point(8, 23);
+            this.radioNone.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radioNone.Name = "radioNone";
-            this.radioNone.Size = new System.Drawing.Size(51, 17);
+            this.radioNone.Size = new System.Drawing.Size(63, 21);
             this.radioNone.TabIndex = 0;
             this.radioNone.TabStop = true;
             this.radioNone.Text = "None";
@@ -239,8 +283,10 @@
             this.groupBox1.Controls.Add(this.flowLayoutPanel1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(153, 293);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(153, 361);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tools";
@@ -255,17 +301,19 @@
             this.flowLayoutPanel1.Controls.Add(this.chkSetTile);
             this.flowLayoutPanel1.Controls.Add(this.checkBox1);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(4, 19);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 274);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(145, 338);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // toolDraw
             // 
             this.toolDraw.Appearance = System.Windows.Forms.Appearance.Button;
-            this.toolDraw.Location = new System.Drawing.Point(3, 3);
+            this.toolDraw.Location = new System.Drawing.Point(4, 4);
+            this.toolDraw.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.toolDraw.Name = "toolDraw";
-            this.toolDraw.Size = new System.Drawing.Size(142, 24);
+            this.toolDraw.Size = new System.Drawing.Size(189, 30);
             this.toolDraw.TabIndex = 0;
             this.toolDraw.TabStop = true;
             this.toolDraw.Text = "Draw";
@@ -276,9 +324,10 @@
             // toolRect
             // 
             this.toolRect.Appearance = System.Windows.Forms.Appearance.Button;
-            this.toolRect.Location = new System.Drawing.Point(3, 33);
+            this.toolRect.Location = new System.Drawing.Point(4, 42);
+            this.toolRect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.toolRect.Name = "toolRect";
-            this.toolRect.Size = new System.Drawing.Size(142, 24);
+            this.toolRect.Size = new System.Drawing.Size(189, 30);
             this.toolRect.TabIndex = 1;
             this.toolRect.TabStop = true;
             this.toolRect.Text = "Rectangle";
@@ -289,9 +338,10 @@
             // toolFill
             // 
             this.toolFill.Appearance = System.Windows.Forms.Appearance.Button;
-            this.toolFill.Location = new System.Drawing.Point(3, 63);
+            this.toolFill.Location = new System.Drawing.Point(4, 80);
+            this.toolFill.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.toolFill.Name = "toolFill";
-            this.toolFill.Size = new System.Drawing.Size(142, 24);
+            this.toolFill.Size = new System.Drawing.Size(189, 30);
             this.toolFill.TabIndex = 2;
             this.toolFill.TabStop = true;
             this.toolFill.Text = "Fill";
@@ -302,9 +352,10 @@
             // toolReplace
             // 
             this.toolReplace.Appearance = System.Windows.Forms.Appearance.Button;
-            this.toolReplace.Location = new System.Drawing.Point(3, 93);
+            this.toolReplace.Location = new System.Drawing.Point(4, 118);
+            this.toolReplace.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.toolReplace.Name = "toolReplace";
-            this.toolReplace.Size = new System.Drawing.Size(142, 24);
+            this.toolReplace.Size = new System.Drawing.Size(189, 30);
             this.toolReplace.TabIndex = 3;
             this.toolReplace.TabStop = true;
             this.toolReplace.Text = "Replace";
@@ -315,15 +366,17 @@
             // listTileForm
             // 
             this.listTileForm.FormattingEnabled = true;
+            this.listTileForm.ItemHeight = 16;
             this.listTileForm.Items.AddRange(new object[] {
             "Rectangle",
             "NW: Up-Left",
             "NE: Up-Right",
             "SW: Down-Left",
             "SE: Down-Right"});
-            this.listTileForm.Location = new System.Drawing.Point(3, 123);
+            this.listTileForm.Location = new System.Drawing.Point(4, 156);
+            this.listTileForm.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listTileForm.Name = "listTileForm";
-            this.listTileForm.Size = new System.Drawing.Size(142, 69);
+            this.listTileForm.Size = new System.Drawing.Size(188, 84);
             this.listTileForm.TabIndex = 7;
             this.listTileForm.SelectedIndexChanged += new System.EventHandler(this.listTileForm_SelectedIndexChanged);
             // 
@@ -332,9 +385,10 @@
             this.chkSetTile.AutoSize = true;
             this.chkSetTile.Checked = true;
             this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSetTile.Location = new System.Drawing.Point(3, 198);
+            this.chkSetTile.Location = new System.Drawing.Point(4, 248);
+            this.chkSetTile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkSetTile.Name = "chkSetTile";
-            this.chkSetTile.Size = new System.Drawing.Size(72, 17);
+            this.chkSetTile.Size = new System.Drawing.Size(91, 21);
             this.chkSetTile.TabIndex = 8;
             this.chkSetTile.Text = "Draw tiles";
             this.chkSetTile.UseVisualStyleBackColor = true;
@@ -345,15 +399,17 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(3, 221);
+            this.checkBox1.Location = new System.Drawing.Point(4, 277);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(65, 17);
+            this.checkBox1.Size = new System.Drawing.Size(83, 21);
             this.checkBox1.TabIndex = 13;
             this.checkBox1.Text = "Lift flags";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // toolStrip1
             // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
             this.toolStripSeparator2,
@@ -369,7 +425,7 @@
             this.toolShowMask});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1031, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1375, 27);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -385,13 +441,13 @@
             this.toolStripSeparator1,
             this.mnuExit});
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(37, 25);
+            this.mnuFile.Size = new System.Drawing.Size(44, 27);
             this.mnuFile.Text = "&File";
             // 
             // mnuNewWnd
             // 
             this.mnuNewWnd.Name = "mnuNewWnd";
-            this.mnuNewWnd.Size = new System.Drawing.Size(195, 22);
+            this.mnuNewWnd.Size = new System.Drawing.Size(234, 26);
             this.mnuNewWnd.Text = "New &Window";
             this.mnuNewWnd.Click += new System.EventHandler(this.mnuNewWnd_Click);
             // 
@@ -400,21 +456,21 @@
             this.mnuNew.Image = ((System.Drawing.Image)(resources.GetObject("mnuNew.Image")));
             this.mnuNew.Name = "mnuNew";
             this.mnuNew.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.mnuNew.Size = new System.Drawing.Size(195, 22);
+            this.mnuNew.Size = new System.Drawing.Size(234, 26);
             this.mnuNew.Text = "&New...";
             this.mnuNew.Click += new System.EventHandler(this.mnuNew_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(192, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(231, 6);
             // 
             // mnuOpen
             // 
             this.mnuOpen.Image = ((System.Drawing.Image)(resources.GetObject("mnuOpen.Image")));
             this.mnuOpen.Name = "mnuOpen";
             this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.mnuOpen.Size = new System.Drawing.Size(195, 22);
+            this.mnuOpen.Size = new System.Drawing.Size(234, 26);
             this.mnuOpen.Text = "&Open...";
             this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
@@ -423,7 +479,7 @@
             this.mnuSave.Image = ((System.Drawing.Image)(resources.GetObject("mnuSave.Image")));
             this.mnuSave.Name = "mnuSave";
             this.mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.mnuSave.Size = new System.Drawing.Size(195, 22);
+            this.mnuSave.Size = new System.Drawing.Size(234, 26);
             this.mnuSave.Text = "&Save...";
             this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
             // 
@@ -432,27 +488,27 @@
             this.mnuSaveAs.Name = "mnuSaveAs";
             this.mnuSaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-            this.mnuSaveAs.Size = new System.Drawing.Size(195, 22);
+            this.mnuSaveAs.Size = new System.Drawing.Size(234, 26);
             this.mnuSaveAs.Text = "Save &As...";
             this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(192, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(231, 6);
             // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
             this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.mnuExit.Size = new System.Drawing.Size(195, 22);
+            this.mnuExit.Size = new System.Drawing.Size(234, 26);
             this.mnuExit.Text = "&Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
             // toolUndo
             // 
@@ -460,7 +516,7 @@
             this.toolUndo.Image = ((System.Drawing.Image)(resources.GetObject("toolUndo.Image")));
             this.toolUndo.ImageTransparentColor = System.Drawing.Color.White;
             this.toolUndo.Name = "toolUndo";
-            this.toolUndo.Size = new System.Drawing.Size(23, 22);
+            this.toolUndo.Size = new System.Drawing.Size(24, 24);
             this.toolUndo.Text = "Undo";
             this.toolUndo.Click += new System.EventHandler(this.toolUndo_Click);
             // 
@@ -470,14 +526,14 @@
             this.toolRedo.Image = ((System.Drawing.Image)(resources.GetObject("toolRedo.Image")));
             this.toolRedo.ImageTransparentColor = System.Drawing.Color.White;
             this.toolRedo.Name = "toolRedo";
-            this.toolRedo.Size = new System.Drawing.Size(23, 22);
+            this.toolRedo.Size = new System.Drawing.Size(24, 24);
             this.toolRedo.Text = "Redo";
             this.toolRedo.Click += new System.EventHandler(this.toolRedo_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
             // 
             // mnuSelectLayer
             // 
@@ -486,7 +542,7 @@
             this.mnuSelectLayer.Image = ((System.Drawing.Image)(resources.GetObject("mnuSelectLayer.Image")));
             this.mnuSelectLayer.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.mnuSelectLayer.Name = "mnuSelectLayer";
-            this.mnuSelectLayer.Size = new System.Drawing.Size(69, 22);
+            this.mnuSelectLayer.Size = new System.Drawing.Size(84, 24);
             this.mnuSelectLayer.Text = "Layers";
             // 
             // mnuLayer
@@ -495,21 +551,21 @@
             this.mnuLayer.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mnuLayer.Enabled = false;
             this.mnuLayer.Name = "mnuLayer";
-            this.mnuLayer.Size = new System.Drawing.Size(111, 22);
+            this.mnuLayer.Size = new System.Drawing.Size(131, 26);
             this.mnuLayer.Text = "Layer 1";
             this.mnuLayer.Click += new System.EventHandler(this.mnuLayer_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
             // 
             // toolReloadTex
             // 
             this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
             this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolReloadTex.Name = "toolReloadTex";
-            this.toolReloadTex.Size = new System.Drawing.Size(70, 22);
+            this.toolReloadTex.Size = new System.Drawing.Size(87, 24);
             this.toolReloadTex.Text = "Textures";
             this.toolReloadTex.Click += new System.EventHandler(this.toolReloadTex_Click);
             // 
@@ -518,7 +574,7 @@
             this.toolReset.Image = ((System.Drawing.Image)(resources.GetObject("toolReset.Image")));
             this.toolReset.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolReset.Name = "toolReset";
-            this.toolReset.Size = new System.Drawing.Size(68, 22);
+            this.toolReset.Size = new System.Drawing.Size(84, 24);
             this.toolReset.Text = "Camera";
             this.toolReset.Click += new System.EventHandler(this.toolReset_Click);
             // 
@@ -530,7 +586,7 @@
             this.toolShowGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolShowGrid.Image")));
             this.toolShowGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolShowGrid.Name = "toolShowGrid";
-            this.toolShowGrid.Size = new System.Drawing.Size(49, 22);
+            this.toolShowGrid.Size = new System.Drawing.Size(61, 24);
             this.toolShowGrid.Text = "Grid";
             this.toolShowGrid.Click += new System.EventHandler(this.toolShowGrid_Click);
             // 
@@ -542,7 +598,7 @@
             this.toolLayerAbove.Image = ((System.Drawing.Image)(resources.GetObject("toolLayerAbove.Image")));
             this.toolLayerAbove.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolLayerAbove.Name = "toolLayerAbove";
-            this.toolLayerAbove.Size = new System.Drawing.Size(95, 22);
+            this.toolLayerAbove.Size = new System.Drawing.Size(119, 24);
             this.toolLayerAbove.Text = "Layers above";
             this.toolLayerAbove.Click += new System.EventHandler(this.toolLayerAbove_Click);
             // 
@@ -554,7 +610,7 @@
             this.toolShowMask.Image = ((System.Drawing.Image)(resources.GetObject("toolShowMask.Image")));
             this.toolShowMask.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolShowMask.Name = "toolShowMask";
-            this.toolShowMask.Size = new System.Drawing.Size(84, 22);
+            this.toolShowMask.Size = new System.Drawing.Size(103, 24);
             this.toolShowMask.Text = "Colormask";
             this.toolShowMask.Click += new System.EventHandler(this.toolShowMask_Click);
             // 
@@ -567,37 +623,63 @@
             // 
             this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
             // 
-            // editor1
+            // radioJup
             // 
-            this.editor1.BackColor = System.Drawing.Color.Black;
-            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
-            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
-            this.editor1.GraphGridOpacity = 0.5F;
-            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
-            this.editor1.GraphZoom = 1.5F;
-            this.editor1.LayersAbove = false;
-            this.editor1.Location = new System.Drawing.Point(0, 0);
-            this.editor1.Name = "editor1";
-            this.editor1.SelectedLayer = 0;
-            this.editor1.ShowGrid = true;
-            this.editor1.Size = new System.Drawing.Size(870, 678);
-            this.editor1.TabIndex = 0;
-            this.editor1.TileDrawing = true;
-            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
-            this.editor1.TileForm = 0;
-            this.editor1.TileMode = false;
-            this.editor1.OnZoomChanged += new MapEdit.Controls.Editor.zoom_event_t(this.editor1_OnZoomChanged);
-            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
+            this.radioJup.AutoSize = true;
+            this.radioJup.Location = new System.Drawing.Point(8, 109);
+            this.radioJup.Margin = new System.Windows.Forms.Padding(4);
+            this.radioJup.Name = "radioJup";
+            this.radioJup.Size = new System.Drawing.Size(85, 21);
+            this.radioJup.TabIndex = 6;
+            this.radioJup.Text = "Jump Up";
+            this.radioJup.UseVisualStyleBackColor = true;
+            this.radioJup.CheckedChanged += new System.EventHandler(this.radioJup_CheckedChanged);
+            // 
+            // radioJdown
+            // 
+            this.radioJdown.AutoSize = true;
+            this.radioJdown.Location = new System.Drawing.Point(8, 138);
+            this.radioJdown.Margin = new System.Windows.Forms.Padding(4);
+            this.radioJdown.Name = "radioJdown";
+            this.radioJdown.Size = new System.Drawing.Size(102, 21);
+            this.radioJdown.TabIndex = 7;
+            this.radioJdown.Text = "Jump Down";
+            this.radioJdown.UseVisualStyleBackColor = true;
+            this.radioJdown.CheckedChanged += new System.EventHandler(this.radioJdown_CheckedChanged);
+            // 
+            // radioJright
+            // 
+            this.radioJright.AutoSize = true;
+            this.radioJright.Location = new System.Drawing.Point(8, 167);
+            this.radioJright.Margin = new System.Windows.Forms.Padding(4);
+            this.radioJright.Name = "radioJright";
+            this.radioJright.Size = new System.Drawing.Size(100, 21);
+            this.radioJright.TabIndex = 8;
+            this.radioJright.Text = "Jump Right";
+            this.radioJright.UseVisualStyleBackColor = true;
+            this.radioJright.CheckedChanged += new System.EventHandler(this.radioJright_CheckedChanged);
+            // 
+            // radioJleft
+            // 
+            this.radioJleft.AutoSize = true;
+            this.radioJleft.Location = new System.Drawing.Point(8, 196);
+            this.radioJleft.Margin = new System.Windows.Forms.Padding(4);
+            this.radioJleft.Name = "radioJleft";
+            this.radioJleft.Size = new System.Drawing.Size(91, 21);
+            this.radioJleft.TabIndex = 9;
+            this.radioJleft.Text = "Jump Left";
+            this.radioJleft.UseVisualStyleBackColor = true;
+            this.radioJleft.CheckedChanged += new System.EventHandler(this.radioJleft_CheckedChanged);
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1031, 727);
+            this.ClientSize = new System.Drawing.Size(1375, 895);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frmMain";
             this.Text = "DM Map Editor";
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -669,6 +751,10 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ToolStripButton toolReloadTex;
         private System.Windows.Forms.ToolStripStatusLabel sbarZoomLevel;
+        private System.Windows.Forms.RadioButton radioJleft;
+        private System.Windows.Forms.RadioButton radioJright;
+        private System.Windows.Forms.RadioButton radioJdown;
+        private System.Windows.Forms.RadioButton radioJup;
     }
 }
 

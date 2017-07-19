@@ -33,7 +33,11 @@ namespace MapEdit.Backend
             SLOW = 12,
             CLIMB = 13,
             STAIR = 14,
-            JUMP = 15,
+
+            JUMP_UP   = 24,
+            JUMP_DOWN = 25,
+            JUMP_RGT  = 26,
+            JUMP_LEFT = 27,
         };
 
 		public Tile()
