@@ -9,11 +9,8 @@ namespace MapEdit.Frontend
     public partial class frmMain : Form
     {
 		List<ToolStripMenuItem> layerList;
-		static string MOD_DIR = "mods\\HylianPhoenix";
-		static string MAP_FOLDER = System.IO.Directory.GetCurrentDirectory() + "\\" + MOD_DIR + "\\maps";
-
-        static string MOD_DIR_FB = "C:\\github\\dm2\\Debug\\mods\\HylianPhoenix";
-		static string MAP_FOLDER_FB = MOD_DIR + "\\maps";
+		static string MOD_DIR = "mods/HylianPhoenix";
+		static string MOD_DIR_FB = "/home/gonzo/github/dm2/Debug/mods/HylianPhoenix";
 
         private string current_mod_dir;
         private string getModDir()
@@ -32,12 +29,12 @@ namespace MapEdit.Frontend
             Image tiles = null;
             try
             {
-                tiles = Image.FromFile(MOD_DIR + "\\bitmaps\\tiles.png");
+                tiles = Image.FromFile(MOD_DIR + "/bitmaps/tiles.png");
                 current_mod_dir = MOD_DIR;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                tiles = Image.FromFile(MOD_DIR_FB + "\\bitmaps\\tiles.png");
+                tiles = Image.FromFile(MOD_DIR_FB + "/bitmaps/tiles.png");
                 current_mod_dir = MOD_DIR_FB;
             }
 			editor1.initialize(null, tiles, 8);
@@ -234,7 +231,7 @@ namespace MapEdit.Frontend
 
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
-			openFile1.InitialDirectory = MAP_FOLDER;
+			openFile1.InitialDirectory = current_mod_dir + "/maps";
 			DialogResult res = openFile1.ShowDialog(this);
 
 			if (res == System.Windows.Forms.DialogResult.OK)
@@ -277,7 +274,7 @@ namespace MapEdit.Frontend
 		{
 			if (containsMapMessage() == false) return;
 
-			saveFile1.InitialDirectory = MAP_FOLDER;
+			saveFile1.InitialDirectory = current_mod_dir + "/maps";
 			DialogResult res = saveFile1.ShowDialog(this);
 			
 			if (res == System.Windows.Forms.DialogResult.OK)
@@ -359,7 +356,7 @@ namespace MapEdit.Frontend
 
         private void toolReloadTex_Click(object sender, EventArgs e)
         {
-            var tiles = Image.FromFile(getModDir() + "\\bitmaps\\tiles.png");
+            var tiles = Image.FromFile(getModDir() + "/bitmaps/tiles.png");
             editor1.reload_textures(tiles);
         }
 
