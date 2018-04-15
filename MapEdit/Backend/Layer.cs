@@ -22,7 +22,7 @@ namespace MapEdit.Backend
 		int tilesY;
 		public bool Visible { set; get; }
 		public bool ShowMask { set; get; }
-		public bool ShowFlags { set; get; }
+		public int  ShowFlags { set; get; }
 
 		public Layer(int sizeX, int sizeY)
 		{
@@ -31,7 +31,7 @@ namespace MapEdit.Backend
 			this.tilesY = sizeY;
 			this.Visible = false;
 			this.ShowMask = true;
-			this.ShowFlags = true;
+			this.ShowFlags = 1;
 			// allocate room for X*Y tiles
 			this.tiles = new List<Tile>(sizeX * sizeY);
 		}
@@ -166,32 +166,41 @@ namespace MapEdit.Backend
 				Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
 				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
             }
-			if (ShowFlags == false)
+			if (ShowFlags <= 0)
 				return;
             // always draw flags, if any
+            Brush brush = null;
             switch (tile.getFlags())
             {
-            case Tile.Flags.SOLID:
-                renderData(g, dst, solidBrush, tile.getForm());
-                break;
-            case Tile.Flags.ABYSS:
-                renderData(g, dst, abyssBrush, tile.getForm());
-                break;
-            case Tile.Flags.WATER:
-                renderData(g, dst, waterBrush, tile.getForm());
-                break;
-            case Tile.Flags.SLOW:
-                renderData(g, dst, slowBrush, tile.getForm());
-                break;
-            case Tile.Flags.ICE:
-                renderData(g, dst, iceBrush, tile.getForm());
-                break;
-            case Tile.Flags.JUMP_UP:
-            case Tile.Flags.JUMP_DOWN:
-            case Tile.Flags.JUMP_RGT:
-            case Tile.Flags.JUMP_LEFT:
-                renderData(g, dst, jumpBrush, tile.getForm());
-                break;
+                case Tile.Flags.SOLID:
+                    brush = solidBrush;
+                    break;
+                case Tile.Flags.ABYSS:
+                    brush = abyssBrush;
+                    break;
+                case Tile.Flags.WATER:
+                    brush = waterBrush;
+                    break;
+                case Tile.Flags.SLOW:
+                    brush = slowBrush;
+                    break;
+                case Tile.Flags.ICE:
+                    brush = iceBrush;
+                    break;
+                case Tile.Flags.JUMP_UP:
+                case Tile.Flags.JUMP_DOWN:
+                case Tile.Flags.JUMP_RGT:
+                case Tile.Flags.JUMP_LEFT:
+                    brush = jumpBrush;
+                    break;
+                default:
+                    return;
+            }
+            if (brush != null)
+            {
+                Color c = ((SolidBrush)brush).Color;
+                SolidBrush final = new SolidBrush(Color.FromArgb((ShowFlags > 1) ? 255 : 80, c.R, c.G, c.B));
+                renderData(g, dst, final, tile.getForm());
             }
         }
         public void updateTile(int x, int y)

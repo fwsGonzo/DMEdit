@@ -10,7 +10,7 @@ namespace MapEdit.Frontend
     {
 		List<ToolStripMenuItem> layerList;
 		static string MOD_DIR = "mods/HylianPhoenix";
-		static string MOD_DIR_FB = "/home/gonzo/github/dm2/Debug/mods/HylianPhoenix";
+		static string MOD_DIR_FB = "//vmware-host/Shared Folders/dm2/Debug/mods/HylianPhoenix";
 
         private string current_mod_dir;
         private string getModDir()
@@ -42,6 +42,7 @@ namespace MapEdit.Frontend
 			toolShowGrid.Checked = editor1.ShowGrid;
 			toolLayerAbove.Checked = editor1.LayersAbove;
 			toolShowMask.Enabled = false;
+            toolShowFlags.SelectedIndex = 1;
 
 			layerList = new List<ToolStripMenuItem>();
         }
@@ -89,9 +90,6 @@ namespace MapEdit.Frontend
 				ed.Invalidate();
 				e.Handled = true;
 				e.SuppressKeyPress = true;
-			}
-			if (e.KeyCode == Keys.F2 || e.KeyCode == Keys.F) {
-				ed.toggleShowFlags ();
 			}
 			if (e.KeyCode == Keys.G)
 			{
@@ -167,8 +165,9 @@ namespace MapEdit.Frontend
 			editor1.SelectedLayer = 0;
 			// get showmask value for selected layer
 			toolShowMask.Enabled = editor1.getLayerCount() > 0;
-			// recreate layer menu list
-			resizeMenuLayers();
+            toolShowFlags.Enabled = editor1.getLayerCount() > 0;
+            // recreate layer menu list
+            resizeMenuLayers();
 		}
 
 		private void resizeMenuLayers()
@@ -362,5 +361,9 @@ namespace MapEdit.Frontend
             editor1.reload_textures(tiles);
         }
 
+        private void toolShowFlags_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            editor1.setShowFlags(toolShowFlags.SelectedIndex);
+        }
     }
 }

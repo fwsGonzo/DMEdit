@@ -232,7 +232,8 @@ namespace MapEdit.Controls
 
 		public void setShowMask(bool mask)
 		{
-			layers[SelectedLayer].ShowMask = mask;
+            if (getLayerCount() == 0) return;
+            layers[SelectedLayer].ShowMask = mask;
 			layers[SelectedLayer].invalidate();
 			this.Invalidate();
 		}
@@ -240,16 +241,17 @@ namespace MapEdit.Controls
 		{
 			return layers[layer].ShowMask;
 		}
-		public void toggleShowFlags()
-		{
-			layers[SelectedLayer].ShowFlags = !layers[SelectedLayer].ShowFlags;
-			layers[SelectedLayer].invalidate();
-			this.Invalidate();
-		}
+        internal void setShowFlags(int level)
+        {
+            if (getLayerCount() == 0) return;
+            layers[SelectedLayer].ShowFlags = level;
+            layers[SelectedLayer].invalidate();
+            this.Invalidate();
+        }
 
-		// transforms a point p, in window coordinate system
-		// to graph (0, 0)-based coordinate system
-		public PointF transformPoint(PointF p)
+        // transforms a point p, in window coordinate system
+        // to graph (0, 0)-based coordinate system
+        public PointF transformPoint(PointF p)
 		{
 			return new PointF(p.X / getZoomFactor(),
 							  p.Y / getZoomFactor());
@@ -419,7 +421,8 @@ namespace MapEdit.Controls
 			// changes were potentially made
 			changesWereMade();
 		}
-		private void applySelection(int state, Point loc)
+
+        private void applySelection(int state, Point loc)
 		{
 			// ignore empty tileset
 			if (tileset == null) return;
