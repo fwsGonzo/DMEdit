@@ -140,8 +140,7 @@ namespace MapEdit.Frontend
 
 		private void mnuNewWnd_Click(object sender, EventArgs e)
 		{
-			frmMain main = new frmMain();
-			main.Show();
+			System.Diagnostics.Process.Start(Application.ExecutablePath);
 		}
 
 		private void mnuNew_Click(object sender, EventArgs e)
