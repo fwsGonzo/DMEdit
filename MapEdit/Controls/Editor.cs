@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using MapEdit.Backend;
+using System.Diagnostics;
 
 namespace MapEdit.Controls
 {
@@ -238,6 +239,12 @@ namespace MapEdit.Controls
 		public bool getShowMask(int layer)
 		{
 			return layers[layer].ShowMask;
+		}
+		public void toggleShowFlags()
+		{
+			layers[SelectedLayer].ShowFlags = !layers[SelectedLayer].ShowFlags;
+			layers[SelectedLayer].invalidate();
+			this.Invalidate();
 		}
 
 		// transforms a point p, in window coordinate system
@@ -783,7 +790,6 @@ namespace MapEdit.Controls
 		private void Editor_KeyDown(object sender, KeyEventArgs e)
 		{
 			//MessageBox.Show(e.KeyCode.ToString());
-
 		}
 		
         public void undo()

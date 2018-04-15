@@ -22,6 +22,7 @@ namespace MapEdit.Backend
 		int tilesY;
 		public bool Visible { set; get; }
 		public bool ShowMask { set; get; }
+		public bool ShowFlags { set; get; }
 
 		public Layer(int sizeX, int sizeY)
 		{
@@ -30,6 +31,7 @@ namespace MapEdit.Backend
 			this.tilesY = sizeY;
 			this.Visible = false;
 			this.ShowMask = true;
+			this.ShowFlags = true;
 			// allocate room for X*Y tiles
 			this.tiles = new List<Tile>(sizeX * sizeY);
 		}
@@ -104,7 +106,6 @@ namespace MapEdit.Backend
         }
         public void setTiles(List<Tile> tlist)
         {
-            Debug.Assert(tlist.Count != 0);
             tiles = tlist;
             this.invalidate();
         }
@@ -160,11 +161,13 @@ namespace MapEdit.Backend
 			Tile tile = tiles[tcoord(x, y)];
             Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
             // only draw tile if not (0, 0)
-            if (tile.getTX() != 0 || tile.getTY() != 0 || overdraw)
+			if (!(tile.getTX() == 0 && tile.getTY() == 0) || overdraw)
 			{
 				Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
 				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
             }
+			if (ShowFlags == false)
+				return;
             // always draw flags, if any
             switch (tile.getFlags())
             {

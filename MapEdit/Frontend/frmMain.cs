@@ -37,7 +37,7 @@ namespace MapEdit.Frontend
                 tiles = Image.FromFile(MOD_DIR_FB + "/bitmaps/tiles.png");
                 current_mod_dir = MOD_DIR_FB;
             }
-			editor1.initialize(null, tiles, 8);
+			editor1.initialize(checkers, tiles, 8);
 			
 			toolShowGrid.Checked = editor1.ShowGrid;
 			toolLayerAbove.Checked = editor1.LayersAbove;
@@ -89,6 +89,9 @@ namespace MapEdit.Frontend
 				ed.Invalidate();
 				e.Handled = true;
 				e.SuppressKeyPress = true;
+			}
+			if (e.KeyCode == Keys.F2 || e.KeyCode == Keys.F) {
+				ed.toggleShowFlags ();
 			}
 			if (e.KeyCode == Keys.G)
 			{
