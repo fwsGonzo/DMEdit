@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.editor1 = new MapEdit.Controls.Editor();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
@@ -82,6 +81,10 @@
             this.toolShowFlags = new System.Windows.Forms.ToolStripComboBox();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnuGrid8x8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuGrid16x16 = new System.Windows.Forms.ToolStripMenuItem();
+            this.editor1 = new MapEdit.Controls.Editor();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -113,30 +116,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(1031, 700);
             this.splitContainer1.SplitterDistance = 871;
             this.splitContainer1.TabIndex = 1;
-            // 
-            // editor1
-            // 
-            this.editor1.BackColor = System.Drawing.Color.Black;
-            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
-            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
-            this.editor1.GraphGridOpacity = 0.5F;
-            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
-            this.editor1.GraphZoom = 1.5F;
-            this.editor1.LayersAbove = false;
-            this.editor1.Location = new System.Drawing.Point(0, 0);
-            this.editor1.Margin = new System.Windows.Forms.Padding(4);
-            this.editor1.Name = "editor1";
-            this.editor1.SelectedLayer = 0;
-            this.editor1.ShowGrid = true;
-            this.editor1.Size = new System.Drawing.Size(869, 673);
-            this.editor1.TabIndex = 0;
-            this.editor1.TileDrawing = true;
-            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
-            this.editor1.TileForm = 0;
-            this.editor1.TileMode = false;
-            this.editor1.OnZoomChanged += new MapEdit.Controls.Editor.zoom_event_t(this.editor1_OnZoomChanged);
-            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
             // 
             // statusStrip1
             // 
@@ -436,6 +415,7 @@
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
+            this.toolStripDropDownButton1,
             this.toolStripSeparator2,
             this.toolUndo,
             this.toolRedo,
@@ -660,6 +640,57 @@
             // 
             this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
             // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuGrid8x8,
+            this.mnuGrid16x16});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(45, 24);
+            this.toolStripDropDownButton1.Text = "View";
+            // 
+            // mnuGrid8x8
+            // 
+            this.mnuGrid8x8.Name = "mnuGrid8x8";
+            this.mnuGrid8x8.Size = new System.Drawing.Size(180, 22);
+            this.mnuGrid8x8.Text = "Grid 8x8";
+            this.mnuGrid8x8.Click += new System.EventHandler(this.mnuGrid8x8_Click);
+            // 
+            // mnuGrid16x16
+            // 
+            this.mnuGrid16x16.Name = "mnuGrid16x16";
+            this.mnuGrid16x16.Size = new System.Drawing.Size(180, 22);
+            this.mnuGrid16x16.Text = "Grid 16x16";
+            this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
+            // 
+            // editor1
+            // 
+            this.editor1.BackColor = System.Drawing.Color.Black;
+            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
+            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
+            this.editor1.GraphGridOpacity = 0.5F;
+            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
+            this.editor1.GraphZoom = 1.5F;
+            this.editor1.GridSize = 16;
+            this.editor1.LayersAbove = false;
+            this.editor1.Location = new System.Drawing.Point(0, 0);
+            this.editor1.Margin = new System.Windows.Forms.Padding(4);
+            this.editor1.Name = "editor1";
+            this.editor1.SelectedLayer = 0;
+            this.editor1.ShowGrid = true;
+            this.editor1.Size = new System.Drawing.Size(869, 673);
+            this.editor1.TabIndex = 0;
+            this.editor1.TileDrawing = true;
+            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
+            this.editor1.TileForm = 0;
+            this.editor1.TileMode = false;
+            this.editor1.OnZoomChanged += new MapEdit.Controls.Editor.zoom_event_t(this.editor1_OnZoomChanged);
+            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -745,6 +776,9 @@
         private System.Windows.Forms.RadioButton radioJdown;
         private System.Windows.Forms.RadioButton radioJup;
         private System.Windows.Forms.ToolStripComboBox toolShowFlags;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem mnuGrid8x8;
+        private System.Windows.Forms.ToolStripMenuItem mnuGrid16x16;
     }
 }
 

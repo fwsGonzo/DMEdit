@@ -36,9 +36,10 @@ namespace MapEdit.Controls
         List<LayerBuffer> undoBuffer = new List<LayerBuffer>();
         List<LayerBuffer> redoBuffer = new List<LayerBuffer>();
 
-		public int SelectedLayer { get; set; }
+		public int  SelectedLayer { get; set; }
 		public bool ShowGrid { get; set; }
-		public bool LayersAbove { get; set; }
+        public int  GridSize { get; set; }
+        public bool LayersAbove { get; set; }
 
 		public bool TileMode { get; set; }
 		// true if we set tile (X, Y) values
@@ -101,6 +102,7 @@ namespace MapEdit.Controls
 			graphZoom = 1.2f;
 			tileOffset = new PointF(0.0f, 0.0f);
 			tileZoom = 1.2f;
+            GridSize = 16;
 			
 			CurrentTool = tools_t.TOOL_NONE;
 			selection = new Selection(1, 0);
@@ -134,6 +136,7 @@ namespace MapEdit.Controls
 			this.checkers = background;
 			// tileset image && tilesize
 			this.tileset = new Tileset(tileset, tilesize);
+            GridSize = tilesize;
 		}
         public void reload_textures(Image tiles)
         {
@@ -687,7 +690,8 @@ namespace MapEdit.Controls
 				// draw tileset
 				Rectangle src = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
 				Rectangle dst = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
-				g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
 			}
 			else
 			{
@@ -741,7 +745,7 @@ namespace MapEdit.Controls
             float zfactor = getZoomFactor();
 			float gridWidth = 1.0f / zfactor;
             // distance between axis ticks
-            float axisSpacing = tileset.size;
+            float axisSpacing = GridSize;
 			// grid opacity color (value)
 			Color gridColor = Color.DarkGray;
 			

@@ -38,6 +38,7 @@ namespace MapEdit.Frontend
                 current_mod_dir = MOD_DIR_FB;
             }
 			editor1.initialize(checkers, tiles, 8);
+            mnuGrid8x8.Checked = true;
 			
 			toolShowGrid.Checked = editor1.ShowGrid;
 			toolLayerAbove.Checked = editor1.LayersAbove;
@@ -364,6 +365,21 @@ namespace MapEdit.Frontend
         private void toolShowFlags_SelectedIndexChanged(object sender, EventArgs e)
         {
             editor1.setShowFlags(toolShowFlags.SelectedIndex);
+        }
+
+        private void mnuGrid8x8_Click(object sender, EventArgs e)
+        {
+            mnuGrid16x16.Checked = false;
+            mnuGrid8x8.Checked = true;
+            editor1.GridSize = 8;
+            editor1.Invalidate();
+        }
+        private void mnuGrid16x16_Click(object sender, EventArgs e)
+        {
+            mnuGrid16x16.Checked = true;
+            mnuGrid8x8.Checked = false;
+            editor1.GridSize = 16;
+            editor1.Invalidate();
         }
     }
 }
