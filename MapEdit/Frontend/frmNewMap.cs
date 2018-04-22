@@ -20,7 +20,7 @@ namespace MapEdit.Frontend
 				return new CreateReturn(
 					(int) F.numX.Value, 
 					(int) F.numY.Value, 
-					(int) F.numLayers.Value);
+					(int) F.numFloors.Value);
 			}
 			return new CreateReturn(0, 0, 0);
 		}
@@ -39,13 +39,13 @@ namespace MapEdit.Frontend
 	}
 	public class CreateReturn
 	{
-		public CreateReturn(int sx, int sy, int l)
+		public CreateReturn(int sx, int sy, int f)
 		{
-			sizeX = sx; sizeY = sy; layers = l;
+			sizeX = sx; sizeY = sy; floors = f;
 		}
 
 		public int sizeX;
 		public int sizeY;
-		public int layers;
+		public int floors;
 	}
 }

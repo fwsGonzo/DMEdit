@@ -150,11 +150,14 @@ namespace MapEdit.Controls
 			return layers.Count > 0 && tileset != null;
 		}
 		// creates a new map based on size & layers
-		public void createMap(int sizeX, int sizeY, int layerCount)
+		public void createMap(int sizeX, int sizeY, int floors)
 		{
 			// remove old layers
 			layers.Clear();
-			// create new layers
+
+            // create new layers
+            int layerCount = floors * Layer.LAYERS_PER_FLOOR;
+
 			for (int i = 0; i < layerCount; i++)
 			{
 				Layer L = new Layer(sizeX, sizeY);
@@ -231,6 +234,8 @@ namespace MapEdit.Controls
 		{
 			// the file is no longer 'current'
 			this.is_saved = false;
+            // enable the layer if modified
+            this.layers[SelectedLayer].Enabled = true;
 		}
 
 		public void setShowMask(bool mask)

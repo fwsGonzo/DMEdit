@@ -148,13 +148,13 @@ namespace MapEdit.Frontend
 		private void mnuNew_Click(object sender, EventArgs e)
 		{
 			CreateReturn ret = frmNewMap.start();
-			if (ret.layers == 0 || ret.sizeX == 0 || ret.sizeY == 0)
+			if (ret.floors == 0 || ret.sizeX == 0 || ret.sizeY == 0)
 			{
 				// operation cancelled
 				return;
 			}
 			// create new map
-			editor1.createMap(ret.sizeX, ret.sizeY, ret.layers);
+			editor1.createMap(ret.sizeX, ret.sizeY, ret.floors);
 			editor1.Invalidate();
 
 			setTitle("(untitled)");

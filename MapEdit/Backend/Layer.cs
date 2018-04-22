@@ -7,7 +7,9 @@ namespace MapEdit.Backend
 {
 	public class Layer
 	{
-		Tileset TSET;
+        public const int LAYERS_PER_FLOOR = 8;
+
+        Tileset TSET;
 		List<Tile> tiles;
 		Bitmap buffer;
 		// brushes
@@ -24,6 +26,9 @@ namespace MapEdit.Backend
 		public bool ShowMask { set; get; }
 		public int  ShowFlags { set; get; }
 
+        public bool Enabled { get; set; }
+        public byte Alpha { get; set; }
+
 		public Layer(int sizeX, int sizeY)
 		{
 			this.TSET = null;
@@ -34,26 +39,31 @@ namespace MapEdit.Backend
 			this.ShowFlags = 1;
 			// allocate room for X*Y tiles
 			this.tiles = new List<Tile>(sizeX * sizeY);
+            // defaults
+            Enabled = false;
+            Alpha = 0xFF;
 		}
 
 		public void create(Tileset tset)
 		{
-			this.Visible = true;
-			for (int x = 0; x < tilesX; x++)
-			for (int y = 0; y < tilesY; y++)
-			{
-				tiles.Add(new Tile());
-			}
-			// initialize buffer with tileset
-			initializeBuffers(tset);
-		}
-		public void load(List<uint> values)
+            this.Visible = true;
+            for (int x = 0; x < tilesX; x++)
+            for (int y = 0; y < tilesY; y++)
+            {
+                tiles.Add(new Tile());
+            }
+            // initialize buffer with tileset
+            initializeBuffers(tset);
+        }
+        public void load(List<uint> values, Tileset tset)
 		{
 			this.Visible = true;
 			foreach (var v in values)
 			{
 				tiles.Add(new Tile(v));
 			}
+            // initialize buffer with tileset
+            initializeBuffers(tset);
 		}
 		public List<uint> export()
 		{
