@@ -55,7 +55,7 @@ namespace MapEdit.Backend
             // initialize buffer with tileset
             initializeBuffers(tset);
         }
-        public void load(List<uint> values, Tileset tset)
+        public void load(List<ulong> values, Tileset tset)
 		{
 			this.Visible = true;
 			foreach (var v in values)
@@ -65,9 +65,9 @@ namespace MapEdit.Backend
             // initialize buffer with tileset
             initializeBuffers(tset);
 		}
-		public List<uint> export()
+		public List<ulong> export()
 		{
-			List<uint> values = new List<uint>();
+			List<ulong> values = new List<ulong>();
 
 			foreach (Tile t in tiles)
 			{

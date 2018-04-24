@@ -25,7 +25,7 @@ namespace MapEdit.Frontend
 
 			editor1.onTileChanged += editor1_onTileChanged;
 
-			Image checkers = Resource1.checker;
+            Image checkers = null; // Resource1.checker;
             Image tiles = null;
             try
             {
@@ -380,6 +380,13 @@ namespace MapEdit.Frontend
             mnuGrid8x8.Checked = false;
             editor1.GridSize = 16;
             editor1.Invalidate();
+        }
+
+        private void mapPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var p = new frmMapProperties(editor1.getMapFile());
+            p.ShowDialog();
+
         }
     }
 }

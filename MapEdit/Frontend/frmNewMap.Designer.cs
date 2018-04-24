@@ -43,7 +43,7 @@
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(266, 102);
+            this.cmdOK.Location = new System.Drawing.Point(266, 207);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(81, 29);
             this.cmdOK.TabIndex = 0;
@@ -138,7 +138,7 @@
             // cmdClose
             // 
             this.cmdClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cmdClose.Location = new System.Drawing.Point(179, 102);
+            this.cmdClose.Location = new System.Drawing.Point(179, 207);
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Size = new System.Drawing.Size(81, 29);
             this.cmdClose.TabIndex = 7;
@@ -152,7 +152,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cmdClose;
-            this.ClientSize = new System.Drawing.Size(359, 143);
+            this.ClientSize = new System.Drawing.Size(359, 248);
             this.Controls.Add(this.cmdClose);
             this.Controls.Add(this.numFloors);
             this.Controls.Add(this.label2);
@@ -184,5 +184,5 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.NumericUpDown numFloors;
 		private System.Windows.Forms.Button cmdClose;
-	}
+    }
 }

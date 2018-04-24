@@ -22,7 +22,7 @@ namespace MapEdit.Frontend
 					(int) F.numY.Value, 
 					(int) F.numFloors.Value);
 			}
-			return new CreateReturn(0, 0, 0);
+			return new CreateReturn();
 		}
 
 		private void cmdOK_Click(object sender, EventArgs e)
@@ -39,7 +39,7 @@ namespace MapEdit.Frontend
 	}
 	public class CreateReturn
 	{
-		public CreateReturn(int sx, int sy, int f)
+		public CreateReturn(int sx = 0, int sy = 0, int f = 0)
 		{
 			sizeX = sx; sizeY = sy; floors = f;
 		}
@@ -47,5 +47,5 @@ namespace MapEdit.Frontend
 		public int sizeX;
 		public int sizeY;
 		public int floors;
-	}
+    }
 }

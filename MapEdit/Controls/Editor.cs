@@ -32,7 +32,7 @@ namespace MapEdit.Controls
 		Tileset tileset = null;
 		Selection selection = null;
 
-		List<Layer> layers;
+        MapFile mapfile;
         List<LayerBuffer> undoBuffer = new List<LayerBuffer>();
         List<LayerBuffer> redoBuffer = new List<LayerBuffer>();
 
@@ -89,7 +89,7 @@ namespace MapEdit.Controls
 		
 		public int getLayerCount()
 		{
-			return layers.Count;
+			return mapfile.layers.Count;
 		}
 
 		public Editor()
@@ -107,7 +107,7 @@ namespace MapEdit.Controls
 			CurrentTool = tools_t.TOOL_NONE;
 			selection = new Selection(1, 0);
 			// initialize private stuff
-			layers = new List<Layer>();
+            mapfile = new MapFile();
 			SelectedLayer = 0;
 			ShowGrid = true;
 			TileMode = false;
@@ -147,15 +147,24 @@ namespace MapEdit.Controls
 		// returns true if there is an existing valid map
 		public bool containsMap()
 		{
-			return layers.Count > 0 && tileset != null;
+			return mapfile.layers.Count > 0 && tileset != null;
 		}
-		// creates a new map based on size & layers
-		public void createMap(int sizeX, int sizeY, int floors)
+        internal MapFile getMapFile()
+        {
+            return mapfile;
+        }
+        // creates a new map based on size & mapfile.layers
+        public void createMap(int sizeX, int sizeY, int floors)
 		{
-			// remove old layers
-			layers.Clear();
+            has_filename = false;
+            mapfile.Attributes = 0;
+            mapfile.X_location = 128;
+            mapfile.Y_location = 128;
 
-            // create new layers
+            // remove old mapfile.layers
+            mapfile.layers.Clear();
+
+            // create new mapfile.layers
             int layerCount = floors * Layer.LAYERS_PER_FLOOR;
 
 			for (int i = 0; i < layerCount; i++)
@@ -164,23 +173,23 @@ namespace MapEdit.Controls
 				L.create(this.tileset);
 				L.ShowMask = (i == 0);
 				L.invalidate();
-				layers.Add(L);
+				mapfile.layers.Add(L);
 			}
             // some changes were made to this map
             undoBuffer.Clear();
             redoBuffer.Clear();
 		}
-		public void setMap(List<Layer> layers)
+		public void setMap(Backend.MapFile mapfile)
 		{
-			this.layers = layers;
+			this.mapfile= mapfile;
 			this.has_filename = false;
 			this.is_saved = false;
 		}
 		public bool loadMap(string filename)
 		{
 			// load map
-			this.layers = LayerFile.loadFile(filename, this.tileset);
-			if (layers != null)
+			this.mapfile = LayerFile.loadFile(filename, this.tileset);
+			if (mapfile.layers != null)
 			{
 				this.Invalidate();
 				// set filename & no changes made
@@ -191,13 +200,13 @@ namespace MapEdit.Controls
 			}
 			else
 			{
-				this.layers = new List<Layer>();
+				this.mapfile.layers = new List<Layer>();
 				return false;
 			}
 		}
 		public bool saveMapAs(string filename)
 		{
-			if (LayerFile.saveFile(filename, this.layers))
+			if (LayerFile.saveFile(filename, this.mapfile))
 			{
 				this.filename = filename;
 				this.has_filename = true;
@@ -209,7 +218,7 @@ namespace MapEdit.Controls
 		public bool saveChanges()
 		{
 			if (has_filename)
-			if (LayerFile.saveFile(this.filename, this.layers))
+			if (LayerFile.saveFile(this.filename, this.mapfile))
 			{
 				this.is_saved = true;
 				return true;
@@ -224,7 +233,7 @@ namespace MapEdit.Controls
         private void aboutToMakeChanges(int layer)
         {
             // Clone layer tiles
-            var t = this.layers[layer].cloneTiles();
+            var t = this.mapfile.layers[layer].cloneTiles();
             // Create new undo buffer
             undoBuffer.Add(new LayerBuffer(t, layer));
             // Destroy any redo buffers
@@ -235,25 +244,25 @@ namespace MapEdit.Controls
 			// the file is no longer 'current'
 			this.is_saved = false;
             // enable the layer if modified
-            this.layers[SelectedLayer].Enabled = true;
+            this.mapfile.layers[SelectedLayer].Enabled = true;
 		}
 
 		public void setShowMask(bool mask)
 		{
             if (getLayerCount() == 0) return;
-            layers[SelectedLayer].ShowMask = mask;
-			layers[SelectedLayer].invalidate();
+            mapfile.layers[SelectedLayer].ShowMask = mask;
+			mapfile.layers[SelectedLayer].invalidate();
 			this.Invalidate();
 		}
 		public bool getShowMask(int layer)
 		{
-			return layers[layer].ShowMask;
+			return mapfile.layers[layer].ShowMask;
 		}
         internal void setShowFlags(int level)
         {
             if (getLayerCount() == 0) return;
-            layers[SelectedLayer].ShowFlags = level;
-            layers[SelectedLayer].invalidate();
+            mapfile.layers[SelectedLayer].ShowFlags = level;
+            mapfile.layers[SelectedLayer].invalidate();
             this.Invalidate();
         }
 
@@ -310,7 +319,7 @@ namespace MapEdit.Controls
 		private void applyTool(tools_t tool, int state, Point e)
 		{
 			// ignore empty maps
-			if (layers.Count == 0) return;
+			if (mapfile.layers.Count == 0) return;
 
 			PointF p = new PointF(e.X, e.Y);
 			// transformed relative mouse position
@@ -318,7 +327,7 @@ namespace MapEdit.Controls
 			p.X -= GraphOffset.X;
 			p.Y -= GraphOffset.Y;
 			// get current point & tile
-			Layer L = layers[SelectedLayer];
+			Layer L = mapfile.layers[SelectedLayer];
 			Point tp = L.toTileCoord(p.X, p.Y);
 			Tile t = L.getTile(tp);
 			// outside of area (most likely)
@@ -505,8 +514,8 @@ namespace MapEdit.Controls
 			renderBuffers();
 
 			// blit backbuffer to usercontrol
-			e.Graphics.DrawImageUnscaled(buffer, 0, 0);
-		}
+			e.Graphics.DrawImage(buffer, 0, 0);
+        }
 
 		tools_t selectedTool = tools_t.TOOL_NONE;
 
@@ -561,7 +570,7 @@ namespace MapEdit.Controls
 				p.X -= GraphOffset.X;
 				p.Y -= GraphOffset.Y;
 
-				if (layers.Count == 0)
+				if (mapfile.layers.Count == 0)
 				{
 					onTileChanged.Invoke(0, e.Location.X, e.Location.Y, 0, 0, 0, 0);
 				}
@@ -572,7 +581,7 @@ namespace MapEdit.Controls
 					if (TileMode == false)
 					{
 						// get current point & written tile
-						Layer L = layers[SelectedLayer];
+						Layer L = mapfile.layers[SelectedLayer];
 						Point tp = L.toTileCoord(p.X, p.Y);
 						Tile t = L.getTile(tp);
 						if (t != null)
@@ -652,12 +661,13 @@ namespace MapEdit.Controls
 			g.InterpolationMode = InterpolationMode.NearestNeighbor;
 			g.PixelOffsetMode = PixelOffsetMode.Half;
 			g.CompositingQuality = CompositingQuality.HighSpeed;
-			
-			/////////////////////////////
-			// -= coordinate system =- //
-			/////////////////////////////
-			
-			g.ResetTransform();
+            g.CompositingMode = CompositingMode.SourceCopy;
+
+            /////////////////////////////
+            // -= coordinate system =- //
+            /////////////////////////////
+
+            g.ResetTransform();
 			// rescale to (-sx, -sy)-(sx, sy)
 			g.ScaleTransform(zfactor, zfactor);
 			// offset
@@ -687,7 +697,7 @@ namespace MapEdit.Controls
 			}
 
 			//////////////////////////////
-			// -= render tile layers =- //
+			// -= render tile mapfile.layers =- //
 			//////////////////////////////
 
 			if (TileMode)
@@ -698,13 +708,17 @@ namespace MapEdit.Controls
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
                 g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
 			}
-			else
+			else if (mapfile.layers.Count > 0)
 			{
-				g.CompositingMode = CompositingMode.SourceOver;
-				for (int i = 0; i < layers.Count; i++)
+                // render bottom layer always
+                g.CompositingMode = CompositingMode.SourceCopy;
+                mapfile.layers[0].render(g);
+                // render layers above using source over
+                g.CompositingMode = CompositingMode.SourceOver;
+				for (int i = 1; i < mapfile.layers.Count; i++)
 				{
 					if (i <= SelectedLayer || LayersAbove)
-						layers[i].render(g);
+						mapfile.layers[i].render(g);
 				}
 			}
 
@@ -811,10 +825,10 @@ namespace MapEdit.Controls
                 var index = undoBuffer.Count - 1;
                 var buf = undoBuffer[index];
                 // Create redo
-                redoBuffer.Add(new LayerBuffer(layers[buf.getIndex()].getTiles(), buf.getIndex()));
+                redoBuffer.Add(new LayerBuffer(mapfile.layers[buf.getIndex()].getTiles(), buf.getIndex()));
 
                 // overwrite tiles of the old layer
-                layers[buf.getIndex()].setTiles(buf.getTiles());
+                mapfile.layers[buf.getIndex()].setTiles(buf.getTiles());
                 // remove undobuffer
                 undoBuffer.RemoveAt(index);
                 // redraw screen
@@ -828,10 +842,10 @@ namespace MapEdit.Controls
                 var index = redoBuffer.Count - 1;
                 var buf = redoBuffer[index];
                 // Create undo
-                undoBuffer.Add(new LayerBuffer(layers[buf.getIndex()].getTiles(), buf.getIndex()));
+                undoBuffer.Add(new LayerBuffer(mapfile.layers[buf.getIndex()].getTiles(), buf.getIndex()));
 
                 // overwrite tiles of the old layer
-                layers[buf.getIndex()].setTiles(buf.getTiles());
+                mapfile.layers[buf.getIndex()].setTiles(buf.getTiles());
                 // remove redobuffer
                 redoBuffer.RemoveAt(index);
                 // redraw screen

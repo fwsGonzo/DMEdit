@@ -16,7 +16,7 @@ namespace MapEdit.Backend
 			{
 				byte tx = (byte) (rect.X + x);
 				byte ty = (byte) (rect.Y + y);
-				tiles.Add(new Tile(tx, ty));
+				tiles.Add(new Tile(tx, ty, 0));
 			}
 		}
 		public Selection(int x, int y)

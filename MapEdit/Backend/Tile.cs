@@ -42,40 +42,37 @@ namespace MapEdit.Backend
 
 		public Tile()
 		{
-			tx = 0; ty = 0;
-			form = (int)TileForm.FORM_RECT;
-			data = 0;
+            this.tx = 0; this.ty = 0; this.tset = 0;
+            this.form = (int)TileForm.FORM_RECT;
+            this.data = 0;
 		}
-		public Tile(byte x, byte y)
+		public Tile(byte x, byte y, byte t)
 		{
-			tx = x;
-			ty = y;
-			form = (int)TileForm.FORM_RECT;
-			data = 0;
+            this.tx = x;
+            this.ty = y;
+            this.tset = t;
+            this.form = (int)TileForm.FORM_RECT;
+            this.data = 0;
 		}
-		public Tile(byte x, byte y, byte form, byte data)
+		public Tile(ulong data)
 		{
-			this.tx = x;
-			this.ty = y;
-			this.form = form;
-			this.data = data;
-		}
-		public Tile(uint data)
-		{
-			// Tile from 32bits uint
+			// Tile from 64bits ulong
 			this.tx =   (byte) ((data >> 0) & 255);
 			this.ty =   (byte) ((data >> 8) & 255);
-			this.form = (byte) ((data >> 16) & 255);
-			this.data = (byte) ((data >> 24) & 255);
+            this.tset = (byte)((data >> 16) & 255);
+            this.form = (byte) ((data >> 24) & 255);
+			this.data = (byte) ((data >> 32) & 255);
 		}
-		public uint compressed()
+		public ulong compressed()
 		{
-			return (uint)tx + ((uint)ty << 8) + ((uint)form << 16) + ((uint)data << 24);
+			return (ulong)tx + ((ulong)ty << 8) + ((ulong)tset << 16) + ((ulong)form << 24) + ((ulong)data << 32);
 		}
 
 		public byte getTX() { return tx; }
 		public byte getTY() { return ty; }
 		public void setXY(byte x, byte y) { tx = x; ty = y; }
+
+        public byte getTileset() { return this.tset;  }
 
 		public byte getForm() { return form; }
 		public void setForm(byte f) { form = f; }
@@ -103,6 +100,7 @@ namespace MapEdit.Backend
 
 		private byte tx;
 		private byte ty;
+        private byte tset;
 		private byte form;
 		private byte data;
 	}
