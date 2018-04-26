@@ -45,6 +45,7 @@ namespace MapEdit.Backend
             this.tx = 0; this.ty = 0; this.tset = 0;
             this.form = (int)TileForm.FORM_RECT;
             this.data = 0;
+            this.rot  = 0;
 		}
 		public Tile(byte x, byte y, byte t)
 		{
@@ -53,19 +54,22 @@ namespace MapEdit.Backend
             this.tset = t;
             this.form = (int)TileForm.FORM_RECT;
             this.data = 0;
-		}
-		public Tile(ulong data)
+            this.rot  = 0;
+        }
+        public Tile(ulong data)
 		{
 			// Tile from 64bits ulong
-			this.tx =   (byte) ((data >> 0) & 255);
-			this.ty =   (byte) ((data >> 8) & 255);
-            this.tset = (byte)((data >> 16) & 255);
+			this.tx =   (byte) ((data >>  0) & 255);
+			this.ty =   (byte) ((data >>  8) & 255);
+            this.tset = (byte) ((data >> 16) & 255);
             this.form = (byte) ((data >> 24) & 255);
 			this.data = (byte) ((data >> 32) & 255);
-		}
-		public ulong compressed()
+            this.rot  = (byte) ((data >> 40) & 255);
+        }
+        public ulong compressed()
 		{
-			return (ulong)tx + ((ulong)ty << 8) + ((ulong)tset << 16) + ((ulong)form << 24) + ((ulong)data << 32);
+			return (ulong)tx + ((ulong)ty << 8) + ((ulong)tset << 16)
+                + ((ulong)form << 24) + ((ulong)data << 32) + ((ulong)rot << 40);
 		}
 
 		public byte getTX() { return tx; }
@@ -77,6 +81,7 @@ namespace MapEdit.Backend
 		public byte getForm() { return form; }
 		public void setForm(byte f) { form = f; }
 
+        public void setData(byte src) { data = src; }
 		public byte getData() { return data; }
 
         public Flags getFlags()
@@ -86,6 +91,15 @@ namespace MapEdit.Backend
         public void setFlags(Flags flag)
         {
             data = (byte)flag;
+        }
+
+        public void setRot(int rotation)
+        {
+            this.rot = (byte) rotation;
+        }
+        public int getRot()
+        {
+            return this.rot;
         }
 
 		private static int tileSize;
@@ -103,5 +117,6 @@ namespace MapEdit.Backend
         private byte tset;
 		private byte form;
 		private byte data;
-	}
+        private byte rot;
+    }
 }

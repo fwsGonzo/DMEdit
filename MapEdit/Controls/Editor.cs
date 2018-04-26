@@ -16,9 +16,10 @@ namespace MapEdit.Controls
 		TOOL_RECT,
 		TOOL_FILL,
 		TOOL_REPLACE,
-	}
+        TOOL_ROTATE,
+    }
 
-	public partial class Editor : UserControl
+    public partial class Editor : UserControl
     {
 		public delegate void TileChangedEvent(int l, int x, int y, int tx, int ty, int stx, int sty);
 		public event TileChangedEvent onTileChanged;
@@ -306,11 +307,16 @@ namespace MapEdit.Controls
 
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		}
-		void drawTile(Layer L, int tx, int ty, byte sx, byte sy)
+		void drawTile(Layer L, int tx, int ty, Tile source)
 		{
 			Tile T = L.getTile(tx, ty);
 
-			if (TileDrawing) T.setXY(sx, sy);
+            if (TileDrawing)
+            {
+                T.setXY(source.getTX(), source.getTY());
+                T.setRot(source.getRot());
+                // ...
+            }
 			T.setFlags(TileFlags);
 			T.setForm((byte)TileForm);
 			L.updateTile(tx, ty);
@@ -379,7 +385,7 @@ namespace MapEdit.Controls
 					// get drawing deltas
 					Tile cur = selection.delta(originalTilePoint, tp);
 					// draw at tile position
-					drawTile(L, tp.X, tp.Y, cur.getTX(), cur.getTY());
+					drawTile(L, tp.X, tp.Y, cur);
 				}
 				this.Invalidate();
 				break;
@@ -399,7 +405,7 @@ namespace MapEdit.Controls
 						if (L.inRange(tx, ty))
 						{
 							Tile cur = selection.get(x, y);
-							drawTile(L, tx, ty, cur.getTX(), cur.getTY());
+							drawTile(L, tx, ty, cur);
 						}
 					}
 					// mouse up event, map has changed
@@ -425,13 +431,26 @@ namespace MapEdit.Controls
 					// get drawing deltas
 					Tile cur = selection.delta(originalTilePoint, tp);
 					// replace at tile position
-					L.replace(t.getTX(), t.getTY(), cur.getTX(), cur.getTY());
+					L.replace(t.getTX(), t.getTY(), cur);
 				}
 				L.invalidate();
 				this.Invalidate();
 				break;
+            case tools_t.TOOL_ROTATE:
+                // signal that changes are about to be made to @layer
+                if (state == 0) aboutToMakeChanges(SelectedLayer);
+                if (state != 2) // not mouse up
+                {
+                    // use original tile
+                    Tile cur = t;
+                    t.setRot((t.getRot() + 1) % 4);
+                    // draw at tile position
+                    drawTile(L, tp.X, tp.Y, cur);
+                }
+                this.Invalidate();
+                break;
 
-			default:
+                default:
 				// unimplemented tools can't change the map, just exit
 				return;
 			}
@@ -814,10 +833,10 @@ namespace MapEdit.Controls
 		}
 
 		private void Editor_KeyDown(object sender, KeyEventArgs e)
-		{
+        {
 			//MessageBox.Show(e.KeyCode.ToString());
-		}
-		
+        }
+
         public void undo()
         {
             if (undoBuffer.Count > 0)

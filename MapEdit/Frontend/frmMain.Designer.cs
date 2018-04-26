@@ -54,6 +54,7 @@
             this.toolRect = new System.Windows.Forms.RadioButton();
             this.toolFill = new System.Windows.Forms.RadioButton();
             this.toolReplace = new System.Windows.Forms.RadioButton();
+            this.toolRotate = new System.Windows.Forms.RadioButton();
             this.listTileForm = new System.Windows.Forms.ListBox();
             this.chkSetTile = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -70,6 +71,7 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnuGrid8x8 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuGrid16x16 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolUndo = new System.Windows.Forms.ToolStripButton();
             this.toolRedo = new System.Windows.Forms.ToolStripButton();
@@ -85,7 +87,6 @@
             this.toolShowFlags = new System.Windows.Forms.ToolStripComboBox();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
-            this.mapPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -335,6 +336,7 @@
             this.flowLayoutPanel1.Controls.Add(this.toolRect);
             this.flowLayoutPanel1.Controls.Add(this.toolFill);
             this.flowLayoutPanel1.Controls.Add(this.toolReplace);
+            this.flowLayoutPanel1.Controls.Add(this.toolRotate);
             this.flowLayoutPanel1.Controls.Add(this.listTileForm);
             this.flowLayoutPanel1.Controls.Add(this.chkSetTile);
             this.flowLayoutPanel1.Controls.Add(this.checkBox1);
@@ -396,6 +398,19 @@
             this.toolReplace.UseVisualStyleBackColor = true;
             this.toolReplace.Click += new System.EventHandler(this.toolDraw_Click);
             // 
+            // toolRotate
+            // 
+            this.toolRotate.Appearance = System.Windows.Forms.Appearance.Button;
+            this.toolRotate.Location = new System.Drawing.Point(3, 123);
+            this.toolRotate.Name = "toolRotate";
+            this.toolRotate.Size = new System.Drawing.Size(142, 24);
+            this.toolRotate.TabIndex = 14;
+            this.toolRotate.TabStop = true;
+            this.toolRotate.Text = "Rotate";
+            this.toolRotate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolRotate.UseVisualStyleBackColor = true;
+            this.toolRotate.Click += new System.EventHandler(this.toolDraw_Click);
+            // 
             // listTileForm
             // 
             this.listTileForm.FormattingEnabled = true;
@@ -405,7 +420,7 @@
             "NE: Up-Right",
             "SW: Down-Left",
             "SE: Down-Right"});
-            this.listTileForm.Location = new System.Drawing.Point(3, 123);
+            this.listTileForm.Location = new System.Drawing.Point(3, 153);
             this.listTileForm.Name = "listTileForm";
             this.listTileForm.Size = new System.Drawing.Size(142, 69);
             this.listTileForm.TabIndex = 7;
@@ -416,7 +431,7 @@
             this.chkSetTile.AutoSize = true;
             this.chkSetTile.Checked = true;
             this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSetTile.Location = new System.Drawing.Point(3, 198);
+            this.chkSetTile.Location = new System.Drawing.Point(3, 228);
             this.chkSetTile.Name = "chkSetTile";
             this.chkSetTile.Size = new System.Drawing.Size(72, 17);
             this.chkSetTile.TabIndex = 8;
@@ -429,7 +444,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(3, 221);
+            this.checkBox1.Location = new System.Drawing.Point(3, 251);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(65, 17);
             this.checkBox1.TabIndex = 13;
@@ -552,16 +567,24 @@
             // mnuGrid8x8
             // 
             this.mnuGrid8x8.Name = "mnuGrid8x8";
-            this.mnuGrid8x8.Size = new System.Drawing.Size(184, 26);
+            this.mnuGrid8x8.Size = new System.Drawing.Size(154, 22);
             this.mnuGrid8x8.Text = "Grid 8x8";
             this.mnuGrid8x8.Click += new System.EventHandler(this.mnuGrid8x8_Click);
             // 
             // mnuGrid16x16
             // 
             this.mnuGrid16x16.Name = "mnuGrid16x16";
-            this.mnuGrid16x16.Size = new System.Drawing.Size(184, 26);
+            this.mnuGrid16x16.Size = new System.Drawing.Size(154, 22);
             this.mnuGrid16x16.Text = "Grid 16x16";
             this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
+            // 
+            // mapPropertiesToolStripMenuItem
+            // 
+            this.mapPropertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mapPropertiesToolStripMenuItem.Image")));
+            this.mapPropertiesToolStripMenuItem.Name = "mapPropertiesToolStripMenuItem";
+            this.mapPropertiesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.mapPropertiesToolStripMenuItem.Text = "Map properties";
+            this.mapPropertiesToolStripMenuItem.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -693,14 +716,6 @@
             // 
             this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
             // 
-            // mapPropertiesToolStripMenuItem
-            // 
-            this.mapPropertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mapPropertiesToolStripMenuItem.Image")));
-            this.mapPropertiesToolStripMenuItem.Name = "mapPropertiesToolStripMenuItem";
-            this.mapPropertiesToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
-            this.mapPropertiesToolStripMenuItem.Text = "Map properties";
-            this.mapPropertiesToolStripMenuItem.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -790,6 +805,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuGrid8x8;
         private System.Windows.Forms.ToolStripMenuItem mnuGrid16x16;
         private System.Windows.Forms.ToolStripMenuItem mapPropertiesToolStripMenuItem;
+        private System.Windows.Forms.RadioButton toolRotate;
     }
 }
 

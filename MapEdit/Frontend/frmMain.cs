@@ -37,8 +37,8 @@ namespace MapEdit.Frontend
                 tiles = Image.FromFile(MOD_DIR_FB + "/bitmaps/tiles.png");
                 current_mod_dir = MOD_DIR_FB;
             }
-			editor1.initialize(checkers, tiles, 8);
-            mnuGrid8x8.Checked = true;
+			editor1.initialize(checkers, tiles, 16);
+            mnuGrid16x16.Checked = true;
 			
 			toolShowGrid.Checked = editor1.ShowGrid;
 			toolLayerAbove.Checked = editor1.LayersAbove;
@@ -129,8 +129,10 @@ namespace MapEdit.Frontend
 				editor1.CurrentTool = tools_t.TOOL_FILL;
 			else if (toolReplace.Checked)
 				editor1.CurrentTool = tools_t.TOOL_REPLACE;
+            else if (toolRotate.Checked)
+                editor1.CurrentTool = tools_t.TOOL_ROTATE;
 
-			editor1.Focus();
+            editor1.Focus();
 		}
 
 		private void toolReset_Click(object sender, EventArgs e)

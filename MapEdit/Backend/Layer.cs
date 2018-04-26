@@ -174,7 +174,18 @@ namespace MapEdit.Backend
 			if (!(tile.getTX() == 0 && tile.getTY() == 0) || overdraw)
 			{
 				Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
-				g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
+                if (tile.getRot() > 0)
+                {
+                    g.TranslateTransform((float)(dst.X + TSET.size / 2), (float) (dst.Y + TSET.size / 2));
+                    g.RotateTransform(tile.getRot() * 90);
+                    g.TranslateTransform(-(float)(dst.X + TSET.size / 2), -(float)(dst.Y + TSET.size / 2));
+                    //g.TranslateTransform(-(float)TSET.size / 2, -(float)TSET.size / 2);
+                }
+                g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
+                if (tile.getRot() > 0)
+                {
+                    g.ResetTransform();
+                }
             }
 			if (ShowFlags <= 0)
 				return;
@@ -264,20 +275,6 @@ namespace MapEdit.Backend
 			if (inRange(p.X, p.Y)) return getTile(p.X, p.Y);
 			return null;
 		}
-		public void setTile(int x, int y, Tile t)
-		{
-			if (inRange(x, y))
-			{
-				tiles[tcoord(x, y)] = t;
-			}
-		}
-		public void setTile(Point p, Tile t)
-		{
-			if (inRange(p.X, p.Y))
-			{
-				tiles[tcoord(p.X, p.Y)] = t;
-			}
-		}
 
 		public Point toTileCoord(float fx, float fy)
 		{
@@ -302,15 +299,18 @@ namespace MapEdit.Backend
 				fill(x, y + 1, ox, oy, tx, ty);
 			}
 		}
-		public void replace(byte oldX, byte oldY, byte tx, byte ty)
+		public void replace(byte oldX, byte oldY, Tile src)
 		{
 			foreach (Tile t in tiles)
 			{
 				if (t.getTX() == oldX && t.getTY() == oldY)
 				{
-					t.setXY(tx, ty);
-				}
-			}
+                    t.setXY(src.getTX(), src.getTY());
+                    t.setFlags(src.getFlags());
+                    t.setForm(src.getForm());
+                    t.setRot(src.getRot());
+                }
+            }
 		}
 
 	}
