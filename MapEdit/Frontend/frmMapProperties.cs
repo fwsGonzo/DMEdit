@@ -20,6 +20,10 @@ namespace MapEdit.Frontend
             InitializeComponent();
 
             this.mapfile = mf;
+            // size of current map (copyable)
+            txtMapSize.Text = mapfile.layers[0].getWidth() + ", " + mapfile.layers[0].getHeight()
+                     + " (" + mapfile.layers[0].getTilesX() + ", " + mapfile.layers[0].getTilesY() + ")";
+
             chkAutoScroll.Checked = (mf.Attributes & 1) == 1;
             locX.Value = mf.X_location;
             locY.Value = mf.Y_location;

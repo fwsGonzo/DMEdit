@@ -45,6 +45,8 @@
             this.txtPropKey3 = new System.Windows.Forms.TextBox();
             this.txtPropVal4 = new System.Windows.Forms.TextBox();
             this.txtPropKey4 = new System.Windows.Forms.TextBox();
+            this.lblMapSize = new System.Windows.Forms.Label();
+            this.txtMapSize = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.locY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locX)).BeginInit();
             this.SuspendLayout();
@@ -117,7 +119,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(12, 43);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(51, 13);
             this.label1.TabIndex = 14;
@@ -225,11 +227,34 @@
             this.txtPropKey4.Size = new System.Drawing.Size(134, 20);
             this.txtPropKey4.TabIndex = 25;
             // 
+            // lblMapSize
+            // 
+            this.lblMapSize.AutoSize = true;
+            this.lblMapSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMapSize.Location = new System.Drawing.Point(12, 9);
+            this.lblMapSize.Name = "lblMapSize";
+            this.lblMapSize.Size = new System.Drawing.Size(76, 20);
+            this.lblMapSize.TabIndex = 27;
+            this.lblMapSize.Text = "Map size:";
+            // 
+            // txtMapSize
+            // 
+            this.txtMapSize.Enabled = false;
+            this.txtMapSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMapSize.Location = new System.Drawing.Point(94, 9);
+            this.txtMapSize.Name = "txtMapSize";
+            this.txtMapSize.Size = new System.Drawing.Size(195, 26);
+            this.txtMapSize.TabIndex = 28;
+            this.txtMapSize.Text = "0, 0";
+            this.txtMapSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // frmMapProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(531, 312);
+            this.Controls.Add(this.txtMapSize);
+            this.Controls.Add(this.lblMapSize);
             this.Controls.Add(this.txtPropVal4);
             this.Controls.Add(this.txtPropKey4);
             this.Controls.Add(this.txtPropVal3);
@@ -276,5 +301,7 @@
         private System.Windows.Forms.TextBox txtPropKey3;
         private System.Windows.Forms.TextBox txtPropVal4;
         private System.Windows.Forms.TextBox txtPropKey4;
+        private System.Windows.Forms.Label lblMapSize;
+        private System.Windows.Forms.TextBox txtMapSize;
     }
 }

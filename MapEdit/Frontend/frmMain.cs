@@ -10,7 +10,7 @@ namespace MapEdit.Frontend
     {
 		List<ToolStripMenuItem> layerList;
 		static string MOD_DIR = "mods/HylianPhoenix";
-		static string MOD_DIR_FB = "//vmware-host/Shared Folders/dm2/Debug/mods/HylianPhoenix";
+		static string MOD_DIR_FB = "//vmware-host/Shared Folders/dm2/Debug/mods/GBC";
 
         private string current_mod_dir;
         private string getModDir()
@@ -18,8 +18,7 @@ namespace MapEdit.Frontend
             return current_mod_dir;
         }
 
-
-        public frmMain()
+        public frmMain(string[] args)
         {
             InitializeComponent();
 
@@ -27,17 +26,29 @@ namespace MapEdit.Frontend
 
             Image checkers = null; // Resource1.checker;
             Image tiles = null;
+            int tilesize = 16;
             try
             {
-                tiles = Image.FromFile(MOD_DIR + "/bitmaps/tiles.png");
-                current_mod_dir = MOD_DIR;
+                try
+                {
+                    current_mod_dir = args[0];
+                    System.Console.WriteLine("Mod: " + current_mod_dir);
+                    tiles = Image.FromFile(current_mod_dir + "/bitmaps/tiles.png");
+                }
+                catch (Exception)
+                {
+                    current_mod_dir = MOD_DIR;
+                    tiles = Image.FromFile(current_mod_dir + "/bitmaps/tiles.png");
+                }
             }
             catch (Exception)
             {
                 tiles = Image.FromFile(MOD_DIR_FB + "/bitmaps/tiles.png");
+                tilesize = 8;
                 current_mod_dir = MOD_DIR_FB;
             }
-			editor1.initialize(checkers, tiles, 16);
+            System.Console.WriteLine("Detected mod: " + current_mod_dir);
+            editor1.initialize(checkers, tiles, tilesize);
             mnuGrid16x16.Checked = true;
 			
 			toolShowGrid.Checked = editor1.ShowGrid;
@@ -92,12 +103,22 @@ namespace MapEdit.Frontend
 				e.Handled = true;
 				e.SuppressKeyPress = true;
 			}
-			if (e.KeyCode == Keys.G)
+            else if (e.KeyCode == Keys.G)
 			{
 				e.Handled = true;
 				e.SuppressKeyPress = true;
 				toggleGrid();
 			}
+            else if (e.KeyCode == Keys.L)
+            {
+                toolLayerAbove.Checked = !toolLayerAbove.Checked;
+                toolLayerAbove_Click(this, e);
+            }
+            else if (e.KeyValue >= 48 && e.KeyValue <= 57) // 1 - 0
+            {
+                int value = e.KeyValue - 48;
+                this.setLayer(value - 1);
+            }
             if (e.KeyCode == Keys.Z && e.Control && e.Shift) // Ctrl+Shift+Z
             {
                 toolRedo_Click(this, e);
@@ -110,7 +131,6 @@ namespace MapEdit.Frontend
             {
                 toolReloadTex_Click(this, e);
             }
-
         }
 
         private void toggleGrid()
@@ -195,21 +215,27 @@ namespace MapEdit.Frontend
 			layerSetUpdate();
 		}
 
-		private void mnuLayer_Click(object sender, EventArgs e)
-		{
-			if (layerList.Count == 0) return;
+        public void setLayer(int layer)
+        {
+            // silently ignore invalid layer selection
+            if (layerList.Count <= layer || layer < 0) return;
 
-			// unselect old layer
-			layerList[editor1.SelectedLayer].Checked = false;
-			// select new layer
-			ToolStripMenuItem layer = (sender as ToolStripMenuItem);
-			editor1.SelectedLayer = (int)layer.Tag;
-			// update GUI
-			layerSetUpdate();
-			// redraw
-			editor1.Invalidate();
-		}
-		private void layerSetUpdate()
+            // unselect old layer
+            layerList[editor1.SelectedLayer].Checked = false;
+            // select new layer
+            editor1.SelectedLayer = layer;
+            // update GUI
+            layerSetUpdate();
+            // redraw
+            editor1.Invalidate();
+        }
+        private void mnuLayer_Click(object sender, EventArgs e)
+		{
+            // select new layer
+            ToolStripMenuItem layer = (sender as ToolStripMenuItem);
+            this.setLayer( (int)layer.Tag );
+        }
+        private void layerSetUpdate()
 		{
 			layerList[editor1.SelectedLayer].Checked = true;
 			mnuSelectLayer.Text = "Layer: " + (editor1.SelectedLayer + 1);
