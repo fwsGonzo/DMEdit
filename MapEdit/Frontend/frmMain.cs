@@ -189,6 +189,7 @@ namespace MapEdit.Frontend
 			// get showmask value for selected layer
 			toolShowMask.Enabled = editor1.getLayerCount() > 0;
             toolShowFlags.Enabled = editor1.getLayerCount() > 0;
+            toolMapProperties.Enabled = editor1.getLayerCount() > 0;
             // recreate layer menu list
             resizeMenuLayers();
 		}
@@ -358,6 +359,10 @@ namespace MapEdit.Frontend
         private void radioWater_CheckedChanged(object sender, EventArgs e)
         {
             editor1.TileFlags = Backend.Tile.Flags.WATER;
+        }
+        private void radioShallow_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.SHALW;
         }
         private void radioSlow_CheckedChanged(object sender, EventArgs e)
         {

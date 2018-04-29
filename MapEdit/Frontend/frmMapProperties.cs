@@ -21,8 +21,8 @@ namespace MapEdit.Frontend
 
             this.mapfile = mf;
             // size of current map (copyable)
-            txtMapSize.Text = mapfile.layers[0].getWidth() + ", " + mapfile.layers[0].getHeight()
-                     + " (" + mapfile.layers[0].getTilesX() + ", " + mapfile.layers[0].getTilesY() + ")";
+            txtMapSize.Text = mapfile.layers[0].getTilesX() + ", " + mapfile.layers[0].getTilesY()
+                     + " (" + mapfile.layers[0].getWidth() + ", " + mapfile.layers[0].getHeight() + ")";
 
             chkAutoScroll.Checked = (mf.Attributes & 1) == 1;
             locX.Value = mf.X_location;

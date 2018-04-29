@@ -16,7 +16,8 @@ namespace MapEdit.Backend
 		static Brush solidBrush = new SolidBrush(Color.FromArgb(80, Color.Red));
 		static Brush abyssBrush = new SolidBrush(Color.FromArgb(80, Color.Magenta));
 		static Brush waterBrush = new SolidBrush(Color.FromArgb(80, Color.Green));
-		static Brush slowBrush = new SolidBrush(Color.FromArgb(80, Color.YellowGreen));
+        static Brush puddleBrush = new SolidBrush(Color.FromArgb(80, Color.CornflowerBlue));
+        static Brush slowBrush = new SolidBrush(Color.FromArgb(80, Color.YellowGreen));
         static Brush iceBrush = new SolidBrush(Color.FromArgb(80, Color.LightBlue));
         static Brush jumpBrush = new SolidBrush(Color.FromArgb(80, Color.MediumPurple));
 
@@ -201,6 +202,9 @@ namespace MapEdit.Backend
                     break;
                 case Tile.Flags.WATER:
                     brush = waterBrush;
+                    break;
+                case Tile.Flags.SHALW:
+                    brush = puddleBrush;
                     break;
                 case Tile.Flags.SLOW:
                     brush = slowBrush;

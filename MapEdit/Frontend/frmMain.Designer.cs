@@ -38,6 +38,7 @@
             this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarZoomLevel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupFlags = new System.Windows.Forms.GroupBox();
+            this.radioShallow = new System.Windows.Forms.RadioButton();
             this.radioJleft = new System.Windows.Forms.RadioButton();
             this.radioJright = new System.Windows.Forms.RadioButton();
             this.radioJdown = new System.Windows.Forms.RadioButton();
@@ -71,7 +72,7 @@
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnuGrid8x8 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuGrid16x16 = new System.Windows.Forms.ToolStripMenuItem();
-            this.mapPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolMapProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolUndo = new System.Windows.Forms.ToolStripButton();
             this.toolRedo = new System.Windows.Forms.ToolStripButton();
@@ -190,6 +191,7 @@
             // 
             // groupFlags
             // 
+            this.groupFlags.Controls.Add(this.radioShallow);
             this.groupFlags.Controls.Add(this.radioJleft);
             this.groupFlags.Controls.Add(this.radioJright);
             this.groupFlags.Controls.Add(this.radioJdown);
@@ -207,10 +209,21 @@
             this.groupFlags.TabStop = false;
             this.groupFlags.Text = "Flags";
             // 
+            // radioShallow
+            // 
+            this.radioShallow.AutoSize = true;
+            this.radioShallow.Location = new System.Drawing.Point(6, 88);
+            this.radioShallow.Name = "radioShallow";
+            this.radioShallow.Size = new System.Drawing.Size(58, 17);
+            this.radioShallow.TabIndex = 10;
+            this.radioShallow.Text = "Puddle";
+            this.radioShallow.UseVisualStyleBackColor = true;
+            this.radioShallow.CheckedChanged += new System.EventHandler(this.radioShallow_CheckedChanged);
+            // 
             // radioJleft
             // 
             this.radioJleft.AutoSize = true;
-            this.radioJleft.Location = new System.Drawing.Point(6, 159);
+            this.radioJleft.Location = new System.Drawing.Point(6, 196);
             this.radioJleft.Name = "radioJleft";
             this.radioJleft.Size = new System.Drawing.Size(71, 17);
             this.radioJleft.TabIndex = 9;
@@ -221,7 +234,7 @@
             // radioJright
             // 
             this.radioJright.AutoSize = true;
-            this.radioJright.Location = new System.Drawing.Point(6, 136);
+            this.radioJright.Location = new System.Drawing.Point(6, 173);
             this.radioJright.Name = "radioJright";
             this.radioJright.Size = new System.Drawing.Size(78, 17);
             this.radioJright.TabIndex = 8;
@@ -232,7 +245,7 @@
             // radioJdown
             // 
             this.radioJdown.AutoSize = true;
-            this.radioJdown.Location = new System.Drawing.Point(6, 112);
+            this.radioJdown.Location = new System.Drawing.Point(6, 149);
             this.radioJdown.Name = "radioJdown";
             this.radioJdown.Size = new System.Drawing.Size(81, 17);
             this.radioJdown.TabIndex = 7;
@@ -243,7 +256,7 @@
             // radioJup
             // 
             this.radioJup.AutoSize = true;
-            this.radioJup.Location = new System.Drawing.Point(6, 89);
+            this.radioJup.Location = new System.Drawing.Point(6, 126);
             this.radioJup.Name = "radioJup";
             this.radioJup.Size = new System.Drawing.Size(67, 17);
             this.radioJup.TabIndex = 6;
@@ -557,7 +570,7 @@
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuGrid8x8,
             this.mnuGrid16x16,
-            this.mapPropertiesToolStripMenuItem});
+            this.toolMapProperties});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -578,13 +591,14 @@
             this.mnuGrid16x16.Text = "Grid 16x16";
             this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
             // 
-            // mapPropertiesToolStripMenuItem
+            // toolMapProperties
             // 
-            this.mapPropertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("mapPropertiesToolStripMenuItem.Image")));
-            this.mapPropertiesToolStripMenuItem.Name = "mapPropertiesToolStripMenuItem";
-            this.mapPropertiesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.mapPropertiesToolStripMenuItem.Text = "Map properties";
-            this.mapPropertiesToolStripMenuItem.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
+            this.toolMapProperties.Enabled = false;
+            this.toolMapProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolMapProperties.Image")));
+            this.toolMapProperties.Name = "toolMapProperties";
+            this.toolMapProperties.Size = new System.Drawing.Size(154, 22);
+            this.toolMapProperties.Text = "Map properties";
+            this.toolMapProperties.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -804,8 +818,9 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem mnuGrid8x8;
         private System.Windows.Forms.ToolStripMenuItem mnuGrid16x16;
-        private System.Windows.Forms.ToolStripMenuItem mapPropertiesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolMapProperties;
         private System.Windows.Forms.RadioButton toolRotate;
+        private System.Windows.Forms.RadioButton radioShallow;
     }
 }
 
