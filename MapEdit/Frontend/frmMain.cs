@@ -186,8 +186,10 @@ namespace MapEdit.Frontend
 		{
 			// set default selected layer
 			editor1.SelectedLayer = 0;
-			// get showmask value for selected layer
-			toolShowMask.Enabled = editor1.getLayerCount() > 0;
+            toolShowGrid.Checked = editor1.ShowGrid;
+            toolLayerAbove.Checked = editor1.LayersAbove;
+            // get showmask value for selected layer
+            toolShowMask.Enabled = editor1.getLayerCount() > 0;
             toolShowFlags.Enabled = editor1.getLayerCount() > 0;
             toolMapProperties.Enabled = editor1.getLayerCount() > 0;
             // recreate layer menu list
@@ -371,6 +373,10 @@ namespace MapEdit.Frontend
         private void radioIce_CheckedChanged(object sender, EventArgs e)
         {
             editor1.TileFlags = Backend.Tile.Flags.ICE;
+        }
+        private void radioEntrance_CheckedChanged(object sender, EventArgs e)
+        {
+            editor1.TileFlags = Backend.Tile.Flags.ENTRANCE;
         }
         private void radioJup_CheckedChanged(object sender, EventArgs e)
         {

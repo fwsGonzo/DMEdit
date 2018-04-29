@@ -20,6 +20,9 @@ namespace MapEdit.Backend
         static Brush slowBrush = new SolidBrush(Color.FromArgb(80, Color.YellowGreen));
         static Brush iceBrush = new SolidBrush(Color.FromArgb(80, Color.LightBlue));
         static Brush jumpBrush = new SolidBrush(Color.FromArgb(80, Color.MediumPurple));
+        static Brush entranceBrush = new HatchBrush(HatchStyle.DiagonalCross,
+                                                    Color.FromArgb(160, Color.Black),
+                                                    Color.FromArgb(128, Color.NavajoWhite));
 
         int tilesX;
 		int tilesY;
@@ -212,6 +215,9 @@ namespace MapEdit.Backend
                 case Tile.Flags.ICE:
                     brush = iceBrush;
                     break;
+                case Tile.Flags.ENTRANCE:
+                    brush = entranceBrush;
+                    break;
                 case Tile.Flags.JUMP_UP:
                 case Tile.Flags.JUMP_DOWN:
                 case Tile.Flags.JUMP_RGT:
@@ -223,9 +229,16 @@ namespace MapEdit.Backend
             }
             if (brush != null)
             {
-                Color c = ((SolidBrush)brush).Color;
-                SolidBrush final = new SolidBrush(Color.FromArgb((ShowFlags > 1) ? 255 : 80, c.R, c.G, c.B));
-                renderData(g, dst, final, tile.getForm());
+                if (ShowFlags > 1 && brush is SolidBrush)
+                {
+                    Color c = ((SolidBrush)brush).Color;
+                    SolidBrush final = new SolidBrush(Color.FromArgb(255, c.R, c.G, c.B));
+                    renderData(g, dst, final, tile.getForm());
+                }
+                else
+                {
+                    renderData(g, dst, brush, tile.getForm());
+                }
             }
         }
         public void updateTile(int x, int y)

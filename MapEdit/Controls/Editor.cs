@@ -113,7 +113,7 @@ namespace MapEdit.Controls
 			ShowGrid = true;
 			TileMode = false;
 			TileDrawing = true;
-			LayersAbove = false;
+			LayersAbove = true;
 
 			// designer auto-generated initialization procedure
 			InitializeComponent();

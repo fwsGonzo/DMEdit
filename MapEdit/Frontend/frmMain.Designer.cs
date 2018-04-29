@@ -38,6 +38,7 @@
             this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarZoomLevel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupFlags = new System.Windows.Forms.GroupBox();
+            this.radioEntrance = new System.Windows.Forms.RadioButton();
             this.radioShallow = new System.Windows.Forms.RadioButton();
             this.radioJleft = new System.Windows.Forms.RadioButton();
             this.radioJright = new System.Windows.Forms.RadioButton();
@@ -130,7 +131,7 @@
             this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
             this.editor1.GraphZoom = 1.5F;
             this.editor1.GridSize = 16;
-            this.editor1.LayersAbove = false;
+            this.editor1.LayersAbove = true;
             this.editor1.Location = new System.Drawing.Point(0, 0);
             this.editor1.Margin = new System.Windows.Forms.Padding(4);
             this.editor1.Name = "editor1";
@@ -191,6 +192,7 @@
             // 
             // groupFlags
             // 
+            this.groupFlags.Controls.Add(this.radioEntrance);
             this.groupFlags.Controls.Add(this.radioShallow);
             this.groupFlags.Controls.Add(this.radioJleft);
             this.groupFlags.Controls.Add(this.radioJright);
@@ -208,6 +210,17 @@
             this.groupFlags.TabIndex = 2;
             this.groupFlags.TabStop = false;
             this.groupFlags.Text = "Flags";
+            // 
+            // radioEntrance
+            // 
+            this.radioEntrance.AutoSize = true;
+            this.radioEntrance.Location = new System.Drawing.Point(74, 88);
+            this.radioEntrance.Name = "radioEntrance";
+            this.radioEntrance.Size = new System.Drawing.Size(68, 17);
+            this.radioEntrance.TabIndex = 11;
+            this.radioEntrance.Text = "Entrance";
+            this.radioEntrance.UseVisualStyleBackColor = true;
+            this.radioEntrance.CheckedChanged += new System.EventHandler(this.radioEntrance_CheckedChanged);
             // 
             // radioShallow
             // 
@@ -821,6 +834,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolMapProperties;
         private System.Windows.Forms.RadioButton toolRotate;
         private System.Windows.Forms.RadioButton radioShallow;
+        private System.Windows.Forms.RadioButton radioEntrance;
     }
 }
 
