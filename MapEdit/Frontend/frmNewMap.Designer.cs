@@ -77,10 +77,12 @@
             this.numX.Size = new System.Drawing.Size(93, 20);
             this.numX.TabIndex = 3;
             this.numX.Value = new decimal(new int[] {
-            32,
+            64,
             0,
             0,
             0});
+            this.numX.Enter += new System.EventHandler(this.numX_Enter);
+            this.numX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.numX_MouseDown);
             // 
             // numY
             // 
@@ -99,10 +101,12 @@
             this.numY.Size = new System.Drawing.Size(94, 20);
             this.numY.TabIndex = 4;
             this.numY.Value = new decimal(new int[] {
-            22,
+            64,
             0,
             0,
             0});
+            this.numY.Enter += new System.EventHandler(this.numY_Enter);
+            this.numY.MouseDown += new System.Windows.Forms.MouseEventHandler(this.numY_MouseDown);
             // 
             // label2
             // 
@@ -130,7 +134,7 @@
             this.numFloors.Size = new System.Drawing.Size(93, 20);
             this.numFloors.TabIndex = 6;
             this.numFloors.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});

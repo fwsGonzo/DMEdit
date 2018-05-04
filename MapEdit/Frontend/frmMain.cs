@@ -427,5 +427,11 @@ namespace MapEdit.Frontend
             p.ShowDialog();
 
         }
+
+        private void toolImageToClipboard_Click(object sender, EventArgs e)
+        {
+            Bitmap b = editor1.renderToBitmap();
+            Clipboard.SetImage(b);
+        }
     }
 }

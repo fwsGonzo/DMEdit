@@ -47,8 +47,11 @@
             this.txtPropKey4 = new System.Windows.Forms.TextBox();
             this.lblMapSize = new System.Windows.Forms.Label();
             this.txtMapSize = new System.Windows.Forms.TextBox();
+            this.trackBrightness = new System.Windows.Forms.TrackBar();
+            this.lblBrightness = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.locY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.locX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBrightness)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdClose
@@ -63,7 +66,7 @@
             // 
             // locY
             // 
-            this.locY.Location = new System.Drawing.Point(114, 96);
+            this.locY.Location = new System.Drawing.Point(114, 65);
             this.locY.Maximum = new decimal(new int[] {
             256,
             0,
@@ -86,7 +89,7 @@
             // 
             // locX
             // 
-            this.locX.Location = new System.Drawing.Point(15, 96);
+            this.locX.Location = new System.Drawing.Point(15, 65);
             this.locX.Maximum = new decimal(new int[] {
             256,
             0,
@@ -110,7 +113,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 80);
+            this.label3.Location = new System.Drawing.Point(12, 49);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(90, 13);
             this.label3.TabIndex = 11;
@@ -119,7 +122,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 43);
+            this.label1.Location = new System.Drawing.Point(295, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(51, 13);
             this.label1.TabIndex = 14;
@@ -128,7 +131,7 @@
             // chkAutoScroll
             // 
             this.chkAutoScroll.AutoSize = true;
-            this.chkAutoScroll.Location = new System.Drawing.Point(214, 96);
+            this.chkAutoScroll.Location = new System.Drawing.Point(214, 65);
             this.chkAutoScroll.Name = "chkAutoScroll";
             this.chkAutoScroll.Size = new System.Drawing.Size(75, 17);
             this.chkAutoScroll.TabIndex = 15;
@@ -231,7 +234,7 @@
             // 
             this.lblMapSize.AutoSize = true;
             this.lblMapSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMapSize.Location = new System.Drawing.Point(12, 9);
+            this.lblMapSize.Location = new System.Drawing.Point(11, 12);
             this.lblMapSize.Name = "lblMapSize";
             this.lblMapSize.Size = new System.Drawing.Size(76, 20);
             this.lblMapSize.TabIndex = 27;
@@ -248,11 +251,34 @@
             this.txtMapSize.Text = "0, 0";
             this.txtMapSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // trackBrightness
+            // 
+            this.trackBrightness.LargeChange = 16;
+            this.trackBrightness.Location = new System.Drawing.Point(12, 107);
+            this.trackBrightness.Maximum = 255;
+            this.trackBrightness.Name = "trackBrightness";
+            this.trackBrightness.Size = new System.Drawing.Size(196, 45);
+            this.trackBrightness.TabIndex = 31;
+            this.trackBrightness.TickFrequency = 16;
+            this.trackBrightness.Value = 255;
+            this.trackBrightness.ValueChanged += new System.EventHandler(this.trackBrightness_ValueChanged);
+            // 
+            // lblBrightness
+            // 
+            this.lblBrightness.AutoSize = true;
+            this.lblBrightness.Location = new System.Drawing.Point(12, 91);
+            this.lblBrightness.Name = "lblBrightness";
+            this.lblBrightness.Size = new System.Drawing.Size(112, 13);
+            this.lblBrightness.TabIndex = 32;
+            this.lblBrightness.Text = "Map brightness: x (x%)";
+            // 
             // frmMapProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(531, 312);
+            this.Controls.Add(this.lblBrightness);
+            this.Controls.Add(this.trackBrightness);
             this.Controls.Add(this.txtMapSize);
             this.Controls.Add(this.lblMapSize);
             this.Controls.Add(this.txtPropVal4);
@@ -277,6 +303,7 @@
             this.Text = "Properties";
             ((System.ComponentModel.ISupportInitialize)(this.locY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.locX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBrightness)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -303,5 +330,7 @@
         private System.Windows.Forms.TextBox txtPropKey4;
         private System.Windows.Forms.Label lblMapSize;
         private System.Windows.Forms.TextBox txtMapSize;
+        private System.Windows.Forms.TrackBar trackBrightness;
+        private System.Windows.Forms.Label lblBrightness;
     }
 }

@@ -28,6 +28,8 @@ namespace MapEdit.Frontend
             locX.Value = mf.X_location;
             locY.Value = mf.Y_location;
             locX.Enabled = locY.Enabled = chkAutoScroll.Checked;
+            trackBrightness.Value = (int) (mapfile.Brightness * 255);
+            trackBrightness_ValueChanged(this, null);
             // map properties
             PropKeys[0] = txtPropKey1; PropKeys[1] = txtPropKey2; PropKeys[2] = txtPropKey3; PropKeys[3] = txtPropKey4;
             for (int i = 0; i < PropKeys.Length; i++)
@@ -74,6 +76,14 @@ namespace MapEdit.Frontend
             else
                 mapfile.Attributes &= ~1;
             locX.Enabled = locY.Enabled = chkAutoScroll.Checked;
+        }
+
+        private void trackBrightness_ValueChanged(object sender, EventArgs e)
+        {
+            int v = trackBrightness.Value;
+            float f = v / 255.0f;
+            lblBrightness.Text = "Map brightness: " + v + " (" + f + " / 1.0)";
+            mapfile.Brightness = f;
         }
     }
 }

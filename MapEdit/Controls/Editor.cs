@@ -230,6 +230,10 @@ namespace MapEdit.Controls
 		{
 			return this.is_saved;
 		}
+        public Bitmap renderToBitmap()
+        {
+            return new Bitmap(buffer);
+        }
 
         private void aboutToMakeChanges(int layer)
         {

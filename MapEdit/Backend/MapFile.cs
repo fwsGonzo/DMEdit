@@ -11,6 +11,7 @@ namespace MapEdit.Backend
         public Int64 Attributes { get; set; }
         public int X_location { get; set; }
         public int Y_location { get; set; }
+        public float Brightness { get; set; }
         public string[] PropKey = new string[4];
         public string[] PropVal = new string[4];
 
@@ -19,6 +20,7 @@ namespace MapEdit.Backend
             Attributes = 0;
             X_location = 0;
             Y_location = 0;
+            Brightness = 1.0f;
             for (int i = 0; i < PropKey.Length; i++)
             {
                 PropKey[i] = "";

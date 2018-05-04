@@ -8,6 +8,7 @@ namespace MapEdit.Frontend
 		public frmNewMap()
 		{
 			InitializeComponent();
+            numX.Select();
 		}
 
 		public static CreateReturn start()
@@ -36,8 +37,26 @@ namespace MapEdit.Frontend
 			this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.Close();
 		}
-	}
-	public class CreateReturn
+
+        private void numX_Enter(object sender, EventArgs e)
+        {
+            numX.Select(0, 99);
+        }
+        private void numX_MouseDown(object sender, MouseEventArgs e)
+        {
+            numX.Select(0, 99);
+        }
+
+        private void numY_Enter(object sender, EventArgs e)
+        {
+            numY.Select(0, 99);
+        }
+        private void numY_MouseDown(object sender, MouseEventArgs e)
+        {
+            numY.Select(0, 99);
+        }
+    }
+    public class CreateReturn
 	{
 		public CreateReturn(int sx = 0, int sy = 0, int f = 0)
 		{

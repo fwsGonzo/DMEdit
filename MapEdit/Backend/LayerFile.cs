@@ -7,6 +7,7 @@ namespace MapEdit.Backend
 	class LayerFile
 	{
         private static char[] MAGIC = { 'D', 'M', 'F', '\0' };
+        private static int VERSION = 1;
 
         struct layerdata_t {
             public bool enabled;
@@ -37,6 +38,12 @@ namespace MapEdit.Backend
                 {
                     throw new System.InvalidOperationException();
                 }
+                int version = sr.ReadInt32();
+                if (version != 1)
+                {
+                    // do version specific things
+                    throw new System.InvalidOperationException();
+                }
                 // map attributes
                 int sizeX = sr.ReadInt32();
                 int sizeY = sr.ReadInt32();
@@ -46,6 +53,7 @@ namespace MapEdit.Backend
                 result.Attributes = sr.ReadInt64();
                 result.X_location = sr.ReadInt32();
                 result.Y_location = sr.ReadInt32();
+                result.Brightness = sr.ReadSingle();
                 // map k/v properties
                 for (int i = 0; i < result.PropKey.Length; i++)
                 {
@@ -105,12 +113,14 @@ namespace MapEdit.Backend
                 var layers = mapfile.layers;
                 // header
                 sr.Write(MAGIC);
+                sr.Write(VERSION);
                 sr.Write((int) layers[0].getTilesX());
                 sr.Write((int) layers[0].getTilesY());
                 sr.Write((int) layers.Count / Layer.LAYERS_PER_FLOOR);
                 sr.Write(mapfile.Attributes);
                 sr.Write(mapfile.X_location);
                 sr.Write(mapfile.Y_location);
+                sr.Write(mapfile.Brightness);
                 // map properties
                 for (int i = 0; i < mapfile.PropKey.Length; i++)
                 {
