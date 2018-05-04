@@ -184,19 +184,28 @@ namespace MapEdit.Frontend
 		}
 		void updateGUI()
 		{
-			// set default selected layer
-			editor1.SelectedLayer = 0;
+            bool enabled = editor1.getLayerCount() > 0;
+            // set default selected layer
+            editor1.SelectedLayer = 0;
             toolShowGrid.Checked = editor1.ShowGrid;
             toolLayerAbove.Checked = editor1.LayersAbove;
             // get showmask value for selected layer
-            toolShowMask.Enabled = editor1.getLayerCount() > 0;
-            toolShowFlags.Enabled = editor1.getLayerCount() > 0;
-            toolMapProperties.Enabled = editor1.getLayerCount() > 0;
+            toolShowMask.Enabled = enabled;
+            toolShowFlags.Enabled = enabled;
+            toolMapProperties.Enabled = enabled;
+            addOneFloorOnTopToolStripMenuItem.Enabled = enabled;
             // recreate layer menu list
             resizeMenuLayers();
 		}
 
-		private void resizeMenuLayers()
+        private string layer_caption(int layer)
+        {
+            int fl = layer / Backend.Layer.LAYERS_PER_FLOOR;
+            int l  = layer % Backend.Layer.LAYERS_PER_FLOOR;
+            return "F" + fl + " Layer " + l;
+        }
+
+        private void resizeMenuLayers()
 		{
 			// remove old layers
 			mnuSelectLayer.DropDownItems.Clear();
@@ -207,9 +216,13 @@ namespace MapEdit.Frontend
 			// create new layers
 			for (int i = 0; i < editor1.getLayerCount(); i++)
 			{
-				ToolStripMenuItem layer = new ToolStripMenuItem("Layer &" + (i + 1), null, mnuLayer_Click);
-				layer.ShortcutKeys = Keys.Alt | (Keys.D1 + i);
-				layer.Tag = i;
+                ToolStripMenuItem layer = new ToolStripMenuItem(layer_caption(i), null, mnuLayer_Click);
+                if (i < 8) {
+                    layer.ShortcutKeys = Keys.Alt | (Keys.D1 + i);
+                } else {
+                    layer.ShortcutKeys = Keys.Control | Keys.Alt | (Keys.D1 + i-8);
+                }
+                layer.Tag = i;
 
 				layerList.Add(layer);
 				mnuSelectLayer.DropDownItems.Add(layer);
@@ -241,7 +254,7 @@ namespace MapEdit.Frontend
         private void layerSetUpdate()
 		{
 			layerList[editor1.SelectedLayer].Checked = true;
-			mnuSelectLayer.Text = "Layer: " + (editor1.SelectedLayer + 1);
+			mnuSelectLayer.Text = layer_caption(editor1.SelectedLayer);
 			toolShowMask.Checked = editor1.getShowMask(editor1.SelectedLayer);
 		}
 
@@ -432,6 +445,12 @@ namespace MapEdit.Frontend
         {
             Bitmap b = editor1.renderToBitmap();
             Clipboard.SetImage(b);
+        }
+
+        private void addOneFloorOnTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            editor1.createOneFloor();
+            updateGUI();
         }
     }
 }

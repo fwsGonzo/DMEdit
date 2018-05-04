@@ -158,13 +158,8 @@ namespace MapEdit.Controls
         public void createMap(int sizeX, int sizeY, int floors)
 		{
             has_filename = false;
-            mapfile.Attributes = 0;
-            mapfile.X_location = 128;
-            mapfile.Y_location = 128;
-
-            // remove old mapfile.layers
-            mapfile.layers.Clear();
-
+            mapfile = new MapFile();
+            
             // create new mapfile.layers
             int layerCount = floors * Layer.LAYERS_PER_FLOOR;
 
@@ -233,6 +228,17 @@ namespace MapEdit.Controls
         public Bitmap renderToBitmap()
         {
             return new Bitmap(buffer);
+        }
+        internal void createOneFloor()
+        {
+            int sx = mapfile.layers[0].getTilesX();
+            int sy = mapfile.layers[0].getTilesY();
+            for (int i = 0; i < Layer.LAYERS_PER_FLOOR; i++)
+            {
+                Layer L = new Layer(sx, sy);
+                L.create(this.tileset);
+                mapfile.layers.Add(L);
+            }
         }
 
         private void aboutToMakeChanges(int layer)
@@ -495,7 +501,7 @@ namespace MapEdit.Controls
 			this.Invalidate();
 		}
 
-		private void Editor_SizeChanged(object sender, EventArgs e)
+        private void Editor_SizeChanged(object sender, EventArgs e)
 		{
 			if (this.ClientSize.Height != 0)
 			{

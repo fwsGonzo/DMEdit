@@ -39,7 +39,7 @@ namespace MapEdit.Backend
 			this.tilesX = sizeX;
 			this.tilesY = sizeY;
 			this.Visible = false;
-			this.ShowMask = true;
+			this.ShowMask = false;
 			this.ShowFlags = 1;
 			// allocate room for X*Y tiles
 			this.tiles = new List<Tile>(sizeX * sizeY);

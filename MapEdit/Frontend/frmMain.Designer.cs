@@ -70,12 +70,13 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.mnuGrid8x8 = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuGrid16x16 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolMapProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.imageBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolImageToClipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.toolImageToFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuGrid8x8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuGrid16x16 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolMapProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolUndo = new System.Windows.Forms.ToolStripButton();
             this.toolRedo = new System.Windows.Forms.ToolStripButton();
@@ -91,7 +92,7 @@
             this.toolShowFlags = new System.Windows.Forms.ToolStripComboBox();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.addOneFloorOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editor1 = new MapEdit.Controls.Editor();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -564,35 +565,13 @@
             this.mnuGrid8x8,
             this.mnuGrid16x16,
             this.toolStripSeparator5,
-            this.toolMapProperties});
+            this.toolMapProperties,
+            this.addOneFloorOnTopToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(45, 24);
-            this.toolStripDropDownButton1.Text = "View";
-            // 
-            // mnuGrid8x8
-            // 
-            this.mnuGrid8x8.Name = "mnuGrid8x8";
-            this.mnuGrid8x8.Size = new System.Drawing.Size(184, 26);
-            this.mnuGrid8x8.Text = "Grid 8x8";
-            this.mnuGrid8x8.Click += new System.EventHandler(this.mnuGrid8x8_Click);
-            // 
-            // mnuGrid16x16
-            // 
-            this.mnuGrid16x16.Name = "mnuGrid16x16";
-            this.mnuGrid16x16.Size = new System.Drawing.Size(184, 26);
-            this.mnuGrid16x16.Text = "Grid 16x16";
-            this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
-            // 
-            // toolMapProperties
-            // 
-            this.toolMapProperties.Enabled = false;
-            this.toolMapProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolMapProperties.Image")));
-            this.toolMapProperties.Name = "toolMapProperties";
-            this.toolMapProperties.Size = new System.Drawing.Size(184, 26);
-            this.toolMapProperties.Text = "Map properties";
-            this.toolMapProperties.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(51, 24);
+            this.toolStripDropDownButton1.Text = "&Editor";
             // 
             // imageBufferToolStripMenuItem
             // 
@@ -601,13 +580,13 @@
             this.toolImageToFile});
             this.imageBufferToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("imageBufferToolStripMenuItem.Image")));
             this.imageBufferToolStripMenuItem.Name = "imageBufferToolStripMenuItem";
-            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(184, 26);
+            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
             this.imageBufferToolStripMenuItem.Text = "Image buffer";
             // 
             // toolImageToClipboard
             // 
             this.toolImageToClipboard.Name = "toolImageToClipboard";
-            this.toolImageToClipboard.Size = new System.Drawing.Size(180, 22);
+            this.toolImageToClipboard.Size = new System.Drawing.Size(140, 22);
             this.toolImageToClipboard.Text = "To clipboard";
             this.toolImageToClipboard.Click += new System.EventHandler(this.toolImageToClipboard_Click);
             // 
@@ -615,8 +594,36 @@
             // 
             this.toolImageToFile.Enabled = false;
             this.toolImageToFile.Name = "toolImageToFile";
-            this.toolImageToFile.Size = new System.Drawing.Size(180, 22);
+            this.toolImageToFile.Size = new System.Drawing.Size(140, 22);
             this.toolImageToFile.Text = "To file...";
+            // 
+            // mnuGrid8x8
+            // 
+            this.mnuGrid8x8.Name = "mnuGrid8x8";
+            this.mnuGrid8x8.Size = new System.Drawing.Size(189, 26);
+            this.mnuGrid8x8.Text = "Grid 8x8";
+            this.mnuGrid8x8.Click += new System.EventHandler(this.mnuGrid8x8_Click);
+            // 
+            // mnuGrid16x16
+            // 
+            this.mnuGrid16x16.Name = "mnuGrid16x16";
+            this.mnuGrid16x16.Size = new System.Drawing.Size(189, 26);
+            this.mnuGrid16x16.Text = "Grid 16x16";
+            this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(186, 6);
+            // 
+            // toolMapProperties
+            // 
+            this.toolMapProperties.Enabled = false;
+            this.toolMapProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolMapProperties.Image")));
+            this.toolMapProperties.Name = "toolMapProperties";
+            this.toolMapProperties.Size = new System.Drawing.Size(189, 26);
+            this.toolMapProperties.Text = "Map properties";
+            this.toolMapProperties.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -748,10 +755,13 @@
             // 
             this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
             // 
-            // toolStripSeparator5
+            // addOneFloorOnTopToolStripMenuItem
             // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(181, 6);
+            this.addOneFloorOnTopToolStripMenuItem.Enabled = false;
+            this.addOneFloorOnTopToolStripMenuItem.Name = "addOneFloorOnTopToolStripMenuItem";
+            this.addOneFloorOnTopToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
+            this.addOneFloorOnTopToolStripMenuItem.Text = "Add one floor on top";
+            this.addOneFloorOnTopToolStripMenuItem.Click += new System.EventHandler(this.addOneFloorOnTopToolStripMenuItem_Click);
             // 
             // editor1
             // 
@@ -874,6 +884,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolImageToClipboard;
         private System.Windows.Forms.ToolStripMenuItem toolImageToFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem addOneFloorOnTopToolStripMenuItem;
     }
 }
 
