@@ -72,11 +72,6 @@
             0,
             0,
             0});
-            this.locY.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.locY.Name = "locY";
             this.locY.Size = new System.Drawing.Size(94, 20);
             this.locY.TabIndex = 13;
@@ -92,11 +87,6 @@
             this.locX.Location = new System.Drawing.Point(15, 65);
             this.locX.Maximum = new decimal(new int[] {
             256,
-            0,
-            0,
-            0});
-            this.locX.Minimum = new decimal(new int[] {
-            1,
             0,
             0,
             0});

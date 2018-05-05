@@ -44,7 +44,7 @@ namespace MapEdit.Frontend
             catch (Exception)
             {
                 tiles = Image.FromFile(MOD_DIR_FB + "/bitmaps/tiles.png");
-                tilesize = 8;
+                //tilesize = 8;
                 current_mod_dir = MOD_DIR_FB;
             }
             System.Console.WriteLine("Detected mod: " + current_mod_dir);
