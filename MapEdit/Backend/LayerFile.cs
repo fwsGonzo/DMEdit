@@ -6,8 +6,9 @@ namespace MapEdit.Backend
 {
 	class LayerFile
 	{
-        private static char[] MAGIC = { 'D', 'M', 'F', '\0' };
-        private static int VERSION = 1;
+        private static char[] MAGIC    = { 'D', 'M', 'F', '\0' };
+        private static int VERSION     = 1;
+        private static int HEADER_SIZE = 300;
 
         struct layerdata_t {
             public bool enabled;
@@ -36,18 +37,24 @@ namespace MapEdit.Backend
                 int c = src.CompareTo(dst);
                 if (c != 0)
                 {
-                    throw new System.InvalidOperationException();
+                    throw new System.InvalidOperationException("Missing signature in map file");
                 }
                 int version = sr.ReadInt32();
                 if (version != 1)
                 {
                     // do version specific things
-                    throw new System.InvalidOperationException();
+                    throw new System.InvalidOperationException("Map version mismatch");
                 }
                 // map attributes
                 int sizeX = sr.ReadInt32();
                 int sizeY = sr.ReadInt32();
                 int floors = sr.ReadInt32();
+                int headersize = sr.ReadInt32();
+                if (headersize != HEADER_SIZE)
+                {
+                    // do version specific things
+                    throw new System.InvalidOperationException("Header size mismatch");
+                }
 
                 result.layers = layers;
                 result.Attributes = sr.ReadInt64();
@@ -117,6 +124,7 @@ namespace MapEdit.Backend
                 sr.Write((int) layers[0].getTilesX());
                 sr.Write((int) layers[0].getTilesY());
                 sr.Write((int) layers.Count / Layer.LAYERS_PER_FLOOR);
+                sr.Write((int) HEADER_SIZE); // header size
                 sr.Write(mapfile.Attributes);
                 sr.Write(mapfile.X_location);
                 sr.Write(mapfile.Y_location);
@@ -147,8 +155,8 @@ namespace MapEdit.Backend
                         }
                     }
 				}
-				return true;
-			}
-		}
-	}
+			} // binary writer
+            return true;
+        } // saveFile(...)
+    }
 }

@@ -10,7 +10,7 @@ namespace MapEdit.Frontend
     {
 		List<ToolStripMenuItem> layerList;
 		static string MOD_DIR = "mods/HylianPhoenix";
-		static string MOD_DIR_FB = "//vmware-host/Shared Folders/dm2/Debug/mods/GBC";
+		static string MOD_DIR_FB = "//vmware-host/Shared Folders/dm2/Debug/mods/HylianPhoenix";
 
         private string current_mod_dir;
         private string getModDir()
