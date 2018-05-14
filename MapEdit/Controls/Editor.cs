@@ -240,6 +240,17 @@ namespace MapEdit.Controls
                 mapfile.layers.Add(L);
             }
         }
+        internal void clearLayer(int layer)
+        {
+            aboutToMakeChanges(layer);
+            {
+                var L = mapfile.layers[layer];
+                L.clear();
+                L.invalidate();
+            }
+            changesWereMade();
+            this.Invalidate();
+        }
 
         private void aboutToMakeChanges(int layer)
         {

@@ -136,15 +136,19 @@ namespace MapEdit.Backend
                     sr.Write(StringToByteArray(mapfile.PropVal[i], 40));
                 }
                 // layer data
-                for (int i = 0; i < layers.Count; i++)
+                foreach(Layer L in layers)
                 {
-                    sr.Write(layers[i].Enabled);
-                    sr.Write(layers[i].Alpha);
+                    // verify if layer is actually empty during saving
+                    if (L.Enabled)
+                    {
+                        L.Enabled = !L.determineIfEmpty();
+                    }
+                    sr.Write(L.Enabled);
+                    sr.Write(L.Alpha);
                 }
                 // layer tile data
-                for (int l = 0; l < layers.Count; l++)
-				{
-					Layer L = layers[l];
+                foreach (Layer L in layers)
+                {
                     // only write enabled layers
                     if (L.Enabled)
                     {

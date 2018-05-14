@@ -55,6 +55,8 @@ namespace MapEdit.Frontend
 			toolLayerAbove.Checked = editor1.LayersAbove;
 			toolShowMask.Enabled = false;
             toolShowFlags.SelectedIndex = 1;
+            // no tile flags by default
+            cboTileFlags.SelectedIndex = 0;
 
 			layerList = new List<ToolStripMenuItem>();
         }
@@ -194,6 +196,7 @@ namespace MapEdit.Frontend
             toolShowFlags.Enabled = enabled;
             toolMapProperties.Enabled = enabled;
             addOneFloorOnTopToolStripMenuItem.Enabled = enabled;
+            clearAllTilesOnLayerToolStripMenuItem.Enabled = enabled;
             // recreate layer menu list
             resizeMenuLayers();
 		}
@@ -358,54 +361,9 @@ namespace MapEdit.Frontend
             editor1.redo();
         }
 
-        private void radioNone_CheckedChanged(object sender, EventArgs e)
+        private void cboTileFlags_SelectedIndexChanged(object sender, EventArgs e)
         {
-            editor1.TileFlags = Backend.Tile.Flags.NONE;
-        }
-        private void radioSolid_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.SOLID;
-        }
-
-        private void radioAbyss_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.ABYSS;
-        }
-        private void radioWater_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.WATER;
-        }
-        private void radioShallow_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.SHALW;
-        }
-        private void radioSlow_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.SLOW;
-        }
-        private void radioIce_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.ICE;
-        }
-        private void radioEntrance_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.ENTRANCE;
-        }
-        private void radioJup_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.JUMP_UP;
-        }
-        private void radioJdown_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.JUMP_DOWN;
-        }
-        private void radioJright_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.JUMP_RGT;
-        }
-        private void radioJleft_CheckedChanged(object sender, EventArgs e)
-        {
-            editor1.TileFlags = Backend.Tile.Flags.JUMP_LEFT;
+            editor1.TileFlags = (Backend.Tile.Flags) cboTileFlags.SelectedIndex;
         }
 
         private void toolReloadTex_Click(object sender, EventArgs e)
@@ -452,5 +410,11 @@ namespace MapEdit.Frontend
             editor1.createOneFloor();
             updateGUI();
         }
+
+        private void clearAllTilesOnLayerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            editor1.clearLayer(editor1.SelectedLayer);
+        }
+
     }
 }

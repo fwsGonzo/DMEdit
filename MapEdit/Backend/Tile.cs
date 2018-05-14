@@ -25,20 +25,27 @@ namespace MapEdit.Backend
             SOLID = 1,
             ABYSS = 2,
 
-            WATER = 3,
-            SHALW = 4,
-            SNOW = 5,
-            ICE = 6,
+            WATER  = 3,
+            PUDDLE = 4,
+            SNOW   = 5,
+            ICE    = 6,
+            DAMAGE = 7,
+            PUSHBACK = 9,
 
             SLOW = 12,
             CLIMB = 13,
-            STAIR = 14,
+            FENCE = 14,
             ENTRANCE = 15,
 
-            JUMP_UP   = 24,
-            JUMP_DOWN = 25,
-            JUMP_RGT  = 26,
-            JUMP_LEFT = 27,
+            JUMP_UP   = 32,
+            JUMP_DOWN = 33,
+            JUMP_RGT  = 34,
+            JUMP_LEFT = 35,
+
+            MOVE_UP = 36,
+            MOVE_DN = 37,
+            MOVE_RI = 38,
+            MOVE_LE = 39,
         };
 
 		public Tile()
@@ -75,40 +82,40 @@ namespace MapEdit.Backend
 
 		public byte getTX() { return tx; }
 		public byte getTY() { return ty; }
-		public void setXY(byte x, byte y) { tx = x; ty = y; }
+        internal void setXY(byte x, byte y) { tx = x; ty = y; }
 
         public byte getTileset() { return this.tset;  }
 
-		public byte getForm() { return form; }
-		public void setForm(byte f) { form = f; }
+        internal byte getForm() { return form; }
+        internal void setForm(byte f) { form = f; }
 
-        public void setData(byte src) { data = src; }
-		public byte getData() { return data; }
+        internal void setData(byte src) { data = src; }
+        internal byte getData() { return data; }
 
-        public Flags getFlags()
+        internal Flags getFlags()
         {
             return (Flags)data;
         }
-        public void setFlags(Flags flag)
+        internal void setFlags(Flags flag)
         {
             data = (byte)flag;
         }
 
-        public void setRot(int rotation)
+        internal void setRot(int rotation)
         {
             this.rot = (byte) rotation;
         }
-        public int getRot()
+        internal int getRot()
         {
             return this.rot;
         }
 
 		private static int tileSize;
-		public static int getSize()
+        internal static int getSize()
 		{
 			return tileSize;
 		}
-		public static void setSize(int size)
+        internal static void setSize(int size)
 		{
 			tileSize = size;
 		}
@@ -119,5 +126,10 @@ namespace MapEdit.Backend
 		private byte form;
 		private byte data;
         private byte rot;
+
+        internal void clear()
+        {
+            tx = 0; ty = 0; tset = 0; form = 0; data = 0; rot = 0;
+        }
     }
 }

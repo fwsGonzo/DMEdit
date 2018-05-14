@@ -178,6 +178,7 @@
   <ItemGroup>
     <None Include="Resources\checkers.png" />
     <None Include="Resources\checker.png" />
+    <None Include="Resources\8M1tZ.png" />
     <Content Include="themes.ico" />
   </ItemGroup>
   <ItemGroup>

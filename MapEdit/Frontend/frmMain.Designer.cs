@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.editor1 = new MapEdit.Controls.Editor();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.sbarXY = new System.Windows.Forms.ToolStripStatusLabel();
@@ -37,18 +39,7 @@
             this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarZoomLevel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupFlags = new System.Windows.Forms.GroupBox();
-            this.radioEntrance = new System.Windows.Forms.RadioButton();
-            this.radioShallow = new System.Windows.Forms.RadioButton();
-            this.radioJleft = new System.Windows.Forms.RadioButton();
-            this.radioJright = new System.Windows.Forms.RadioButton();
-            this.radioJdown = new System.Windows.Forms.RadioButton();
-            this.radioJup = new System.Windows.Forms.RadioButton();
-            this.radioIce = new System.Windows.Forms.RadioButton();
-            this.radioSlow = new System.Windows.Forms.RadioButton();
-            this.radioWater = new System.Windows.Forms.RadioButton();
-            this.radioAbyss = new System.Windows.Forms.RadioButton();
-            this.radioSolid = new System.Windows.Forms.RadioButton();
-            this.radioNone = new System.Windows.Forms.RadioButton();
+            this.cboTileFlags = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.toolDraw = new System.Windows.Forms.RadioButton();
@@ -58,7 +49,6 @@
             this.toolRotate = new System.Windows.Forms.RadioButton();
             this.listTileForm = new System.Windows.Forms.ListBox();
             this.chkSetTile = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuNewWnd = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,9 +63,14 @@
             this.imageBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolImageToClipboard = new System.Windows.Forms.ToolStripMenuItem();
             this.toolImageToFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolReset = new System.Windows.Forms.ToolStripButton();
             this.mnuGrid8x8 = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuGrid16x16 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolReloadTex = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearAllTilesOnLayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.addOneFloorOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMapProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolUndo = new System.Windows.Forms.ToolStripButton();
@@ -84,16 +79,16 @@
             this.mnuSelectLayer = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnuLayer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolReloadTex = new System.Windows.Forms.ToolStripButton();
-            this.toolReset = new System.Windows.Forms.ToolStripButton();
             this.toolShowGrid = new System.Windows.Forms.ToolStripButton();
             this.toolLayerAbove = new System.Windows.Forms.ToolStripButton();
             this.toolShowMask = new System.Windows.Forms.ToolStripButton();
             this.toolShowFlags = new System.Windows.Forms.ToolStripComboBox();
             this.openFile1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFile1 = new System.Windows.Forms.SaveFileDialog();
-            this.addOneFloorOnTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editor1 = new MapEdit.Controls.Editor();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.drawTilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolTileFlags = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -103,6 +98,7 @@
             this.groupBox1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -122,9 +118,34 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupFlags);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(1031, 700);
-            this.splitContainer1.SplitterDistance = 871;
+            this.splitContainer1.Size = new System.Drawing.Size(1064, 719);
+            this.splitContainer1.SplitterDistance = 904;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // editor1
+            // 
+            this.editor1.BackColor = System.Drawing.Color.Black;
+            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
+            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
+            this.editor1.GraphGridOpacity = 0.5F;
+            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
+            this.editor1.GraphZoom = 1.5F;
+            this.editor1.GridSize = 16;
+            this.editor1.LayersAbove = true;
+            this.editor1.Location = new System.Drawing.Point(0, 0);
+            this.editor1.Margin = new System.Windows.Forms.Padding(4);
+            this.editor1.Name = "editor1";
+            this.editor1.SelectedLayer = 0;
+            this.editor1.ShowGrid = true;
+            this.editor1.Size = new System.Drawing.Size(902, 692);
+            this.editor1.TabIndex = 0;
+            this.editor1.TileDrawing = true;
+            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
+            this.editor1.TileForm = 0;
+            this.editor1.TileMode = false;
+            this.editor1.OnZoomChanged += new MapEdit.Controls.Editor.zoom_event_t(this.editor1_OnZoomChanged);
+            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
             // 
             // statusStrip1
             // 
@@ -135,9 +156,9 @@
             this.sbarTXY,
             this.sbarSTXY,
             this.sbarZoomLevel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 673);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 692);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(869, 25);
+            this.statusStrip1.Size = new System.Drawing.Size(902, 25);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -172,158 +193,69 @@
             // 
             // groupFlags
             // 
-            this.groupFlags.Controls.Add(this.radioEntrance);
-            this.groupFlags.Controls.Add(this.radioShallow);
-            this.groupFlags.Controls.Add(this.radioJleft);
-            this.groupFlags.Controls.Add(this.radioJright);
-            this.groupFlags.Controls.Add(this.radioJdown);
-            this.groupFlags.Controls.Add(this.radioJup);
-            this.groupFlags.Controls.Add(this.radioIce);
-            this.groupFlags.Controls.Add(this.radioSlow);
-            this.groupFlags.Controls.Add(this.radioWater);
-            this.groupFlags.Controls.Add(this.radioAbyss);
-            this.groupFlags.Controls.Add(this.radioSolid);
-            this.groupFlags.Controls.Add(this.radioNone);
-            this.groupFlags.Location = new System.Drawing.Point(0, 296);
+            this.groupFlags.Controls.Add(this.cboTileFlags);
+            this.groupFlags.Location = new System.Drawing.Point(1, 410);
             this.groupFlags.Name = "groupFlags";
-            this.groupFlags.Size = new System.Drawing.Size(154, 227);
+            this.groupFlags.Size = new System.Drawing.Size(154, 69);
             this.groupFlags.TabIndex = 2;
             this.groupFlags.TabStop = false;
-            this.groupFlags.Text = "Flags";
+            this.groupFlags.Text = "Tile typing";
             // 
-            // radioEntrance
+            // cboTileFlags
             // 
-            this.radioEntrance.AutoSize = true;
-            this.radioEntrance.Location = new System.Drawing.Point(74, 88);
-            this.radioEntrance.Name = "radioEntrance";
-            this.radioEntrance.Size = new System.Drawing.Size(68, 17);
-            this.radioEntrance.TabIndex = 11;
-            this.radioEntrance.Text = "Entrance";
-            this.radioEntrance.UseVisualStyleBackColor = true;
-            this.radioEntrance.CheckedChanged += new System.EventHandler(this.radioEntrance_CheckedChanged);
-            // 
-            // radioShallow
-            // 
-            this.radioShallow.AutoSize = true;
-            this.radioShallow.Location = new System.Drawing.Point(6, 88);
-            this.radioShallow.Name = "radioShallow";
-            this.radioShallow.Size = new System.Drawing.Size(58, 17);
-            this.radioShallow.TabIndex = 10;
-            this.radioShallow.Text = "Puddle";
-            this.radioShallow.UseVisualStyleBackColor = true;
-            this.radioShallow.CheckedChanged += new System.EventHandler(this.radioShallow_CheckedChanged);
-            // 
-            // radioJleft
-            // 
-            this.radioJleft.AutoSize = true;
-            this.radioJleft.Location = new System.Drawing.Point(6, 196);
-            this.radioJleft.Name = "radioJleft";
-            this.radioJleft.Size = new System.Drawing.Size(71, 17);
-            this.radioJleft.TabIndex = 9;
-            this.radioJleft.Text = "Jump Left";
-            this.radioJleft.UseVisualStyleBackColor = true;
-            this.radioJleft.CheckedChanged += new System.EventHandler(this.radioJleft_CheckedChanged);
-            // 
-            // radioJright
-            // 
-            this.radioJright.AutoSize = true;
-            this.radioJright.Location = new System.Drawing.Point(6, 173);
-            this.radioJright.Name = "radioJright";
-            this.radioJright.Size = new System.Drawing.Size(78, 17);
-            this.radioJright.TabIndex = 8;
-            this.radioJright.Text = "Jump Right";
-            this.radioJright.UseVisualStyleBackColor = true;
-            this.radioJright.CheckedChanged += new System.EventHandler(this.radioJright_CheckedChanged);
-            // 
-            // radioJdown
-            // 
-            this.radioJdown.AutoSize = true;
-            this.radioJdown.Location = new System.Drawing.Point(6, 149);
-            this.radioJdown.Name = "radioJdown";
-            this.radioJdown.Size = new System.Drawing.Size(81, 17);
-            this.radioJdown.TabIndex = 7;
-            this.radioJdown.Text = "Jump Down";
-            this.radioJdown.UseVisualStyleBackColor = true;
-            this.radioJdown.CheckedChanged += new System.EventHandler(this.radioJdown_CheckedChanged);
-            // 
-            // radioJup
-            // 
-            this.radioJup.AutoSize = true;
-            this.radioJup.Location = new System.Drawing.Point(6, 126);
-            this.radioJup.Name = "radioJup";
-            this.radioJup.Size = new System.Drawing.Size(67, 17);
-            this.radioJup.TabIndex = 6;
-            this.radioJup.Text = "Jump Up";
-            this.radioJup.UseVisualStyleBackColor = true;
-            this.radioJup.CheckedChanged += new System.EventHandler(this.radioJup_CheckedChanged);
-            // 
-            // radioIce
-            // 
-            this.radioIce.AutoSize = true;
-            this.radioIce.Location = new System.Drawing.Point(74, 65);
-            this.radioIce.Name = "radioIce";
-            this.radioIce.Size = new System.Drawing.Size(40, 17);
-            this.radioIce.TabIndex = 5;
-            this.radioIce.Text = "Ice";
-            this.radioIce.UseVisualStyleBackColor = true;
-            this.radioIce.CheckedChanged += new System.EventHandler(this.radioIce_CheckedChanged);
-            // 
-            // radioSlow
-            // 
-            this.radioSlow.AutoSize = true;
-            this.radioSlow.Location = new System.Drawing.Point(6, 65);
-            this.radioSlow.Name = "radioSlow";
-            this.radioSlow.Size = new System.Drawing.Size(48, 17);
-            this.radioSlow.TabIndex = 4;
-            this.radioSlow.Text = "Slow";
-            this.radioSlow.UseVisualStyleBackColor = true;
-            this.radioSlow.CheckedChanged += new System.EventHandler(this.radioSlow_CheckedChanged);
-            // 
-            // radioWater
-            // 
-            this.radioWater.AutoSize = true;
-            this.radioWater.Location = new System.Drawing.Point(74, 42);
-            this.radioWater.Name = "radioWater";
-            this.radioWater.Size = new System.Drawing.Size(54, 17);
-            this.radioWater.TabIndex = 3;
-            this.radioWater.Text = "Water";
-            this.radioWater.UseVisualStyleBackColor = true;
-            this.radioWater.CheckedChanged += new System.EventHandler(this.radioWater_CheckedChanged);
-            // 
-            // radioAbyss
-            // 
-            this.radioAbyss.AutoSize = true;
-            this.radioAbyss.Location = new System.Drawing.Point(74, 19);
-            this.radioAbyss.Name = "radioAbyss";
-            this.radioAbyss.Size = new System.Drawing.Size(53, 17);
-            this.radioAbyss.TabIndex = 2;
-            this.radioAbyss.Text = "Abyss";
-            this.radioAbyss.UseVisualStyleBackColor = true;
-            this.radioAbyss.CheckedChanged += new System.EventHandler(this.radioAbyss_CheckedChanged);
-            // 
-            // radioSolid
-            // 
-            this.radioSolid.AutoSize = true;
-            this.radioSolid.Location = new System.Drawing.Point(6, 42);
-            this.radioSolid.Name = "radioSolid";
-            this.radioSolid.Size = new System.Drawing.Size(48, 17);
-            this.radioSolid.TabIndex = 1;
-            this.radioSolid.Text = "Solid";
-            this.radioSolid.UseVisualStyleBackColor = true;
-            this.radioSolid.CheckedChanged += new System.EventHandler(this.radioSolid_CheckedChanged);
-            // 
-            // radioNone
-            // 
-            this.radioNone.AutoSize = true;
-            this.radioNone.Checked = true;
-            this.radioNone.Location = new System.Drawing.Point(6, 19);
-            this.radioNone.Name = "radioNone";
-            this.radioNone.Size = new System.Drawing.Size(51, 17);
-            this.radioNone.TabIndex = 0;
-            this.radioNone.TabStop = true;
-            this.radioNone.Text = "None";
-            this.radioNone.UseVisualStyleBackColor = true;
-            this.radioNone.CheckedChanged += new System.EventHandler(this.radioNone_CheckedChanged);
+            this.cboTileFlags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTileFlags.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboTileFlags.FormattingEnabled = true;
+            this.cboTileFlags.Items.AddRange(new object[] {
+            "None",
+            "Solid",
+            "Abyss",
+            "Water",
+            "Puddle",
+            "Snow",
+            "Ice",
+            "Damage",
+            "-",
+            "Pushback",
+            "-",
+            "-",
+            "Slow",
+            "Climb",
+            "Fence",
+            "Entrance",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "-",
+            "Auto-jump up",
+            "Auto-jump down",
+            "Auto-jump right",
+            "Auto-jump left",
+            "Conveyor up",
+            "Conveyor down",
+            "Conveyor right",
+            "Conveyor left",
+            "Fast-track up",
+            "Fast-track down",
+            "Fast-track left",
+            "Fast-track right"});
+            this.cboTileFlags.Location = new System.Drawing.Point(6, 19);
+            this.cboTileFlags.Name = "cboTileFlags";
+            this.cboTileFlags.Size = new System.Drawing.Size(142, 21);
+            this.cboTileFlags.TabIndex = 0;
+            this.cboTileFlags.SelectedIndexChanged += new System.EventHandler(this.cboTileFlags_SelectedIndexChanged);
             // 
             // groupBox1
             // 
@@ -331,7 +263,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(154, 293);
+            this.groupBox1.Size = new System.Drawing.Size(154, 407);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tools";
@@ -345,11 +277,10 @@
             this.flowLayoutPanel1.Controls.Add(this.toolRotate);
             this.flowLayoutPanel1.Controls.Add(this.listTileForm);
             this.flowLayoutPanel1.Controls.Add(this.chkSetTile);
-            this.flowLayoutPanel1.Controls.Add(this.checkBox1);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(148, 274);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(148, 388);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // toolDraw
@@ -410,7 +341,7 @@
             this.toolRotate.Location = new System.Drawing.Point(3, 123);
             this.toolRotate.Name = "toolRotate";
             this.toolRotate.Size = new System.Drawing.Size(142, 24);
-            this.toolRotate.TabIndex = 14;
+            this.toolRotate.TabIndex = 4;
             this.toolRotate.TabStop = true;
             this.toolRotate.Text = "Rotate";
             this.toolRotate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -429,33 +360,25 @@
             this.listTileForm.Location = new System.Drawing.Point(3, 153);
             this.listTileForm.Name = "listTileForm";
             this.listTileForm.Size = new System.Drawing.Size(142, 69);
-            this.listTileForm.TabIndex = 7;
+            this.listTileForm.TabIndex = 5;
             this.listTileForm.SelectedIndexChanged += new System.EventHandler(this.listTileForm_SelectedIndexChanged);
             // 
             // chkSetTile
             // 
+            this.chkSetTile.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkSetTile.AutoSize = true;
             this.chkSetTile.Checked = true;
             this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSetTile.Image = global::MapEdit.Properties.Resources._8M1tZ;
             this.chkSetTile.Location = new System.Drawing.Point(3, 228);
             this.chkSetTile.Name = "chkSetTile";
-            this.chkSetTile.Size = new System.Drawing.Size(72, 17);
-            this.chkSetTile.TabIndex = 8;
+            this.chkSetTile.Size = new System.Drawing.Size(134, 151);
+            this.chkSetTile.TabIndex = 6;
             this.chkSetTile.Text = "Draw tiles";
+            this.chkSetTile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkSetTile.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
             this.chkSetTile.UseVisualStyleBackColor = true;
             this.chkSetTile.CheckedChanged += new System.EventHandler(this.chkSetTile_CheckedChanged);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(3, 251);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(65, 17);
-            this.checkBox1.TabIndex = 13;
-            this.checkBox1.Text = "Lift flags";
-            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // toolStrip1
             // 
@@ -469,15 +392,13 @@
             this.toolStripSeparator3,
             this.mnuSelectLayer,
             this.toolStripSeparator4,
-            this.toolReloadTex,
-            this.toolReset,
             this.toolShowGrid,
             this.toolLayerAbove,
             this.toolShowMask,
             this.toolShowFlags});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1031, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1064, 27);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -562,11 +483,15 @@
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.imageBufferToolStripMenuItem,
+            this.toolReset,
             this.mnuGrid8x8,
             this.mnuGrid16x16,
+            this.toolReloadTex,
             this.toolStripSeparator5,
-            this.toolMapProperties,
-            this.addOneFloorOnTopToolStripMenuItem});
+            this.clearAllTilesOnLayerToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.addOneFloorOnTopToolStripMenuItem,
+            this.toolMapProperties});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -580,7 +505,7 @@
             this.toolImageToFile});
             this.imageBufferToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("imageBufferToolStripMenuItem.Image")));
             this.imageBufferToolStripMenuItem.Name = "imageBufferToolStripMenuItem";
-            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
+            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.imageBufferToolStripMenuItem.Text = "Image buffer";
             // 
             // toolImageToClipboard
@@ -597,31 +522,67 @@
             this.toolImageToFile.Size = new System.Drawing.Size(140, 22);
             this.toolImageToFile.Text = "To file...";
             // 
+            // toolReset
+            // 
+            this.toolReset.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolReset.Name = "toolReset";
+            this.toolReset.Size = new System.Drawing.Size(81, 19);
+            this.toolReset.Text = "Reset camera";
+            // 
             // mnuGrid8x8
             // 
             this.mnuGrid8x8.Name = "mnuGrid8x8";
-            this.mnuGrid8x8.Size = new System.Drawing.Size(189, 26);
+            this.mnuGrid8x8.Size = new System.Drawing.Size(185, 22);
             this.mnuGrid8x8.Text = "Grid 8x8";
             this.mnuGrid8x8.Click += new System.EventHandler(this.mnuGrid8x8_Click);
             // 
             // mnuGrid16x16
             // 
             this.mnuGrid16x16.Name = "mnuGrid16x16";
-            this.mnuGrid16x16.Size = new System.Drawing.Size(189, 26);
+            this.mnuGrid16x16.Size = new System.Drawing.Size(185, 22);
             this.mnuGrid16x16.Text = "Grid 16x16";
             this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
+            // 
+            // toolReloadTex
+            // 
+            this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
+            this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolReloadTex.Name = "toolReloadTex";
+            this.toolReloadTex.Size = new System.Drawing.Size(107, 20);
+            this.toolReloadTex.Text = "Reload textures";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(182, 6);
+            // 
+            // clearAllTilesOnLayerToolStripMenuItem
+            // 
+            this.clearAllTilesOnLayerToolStripMenuItem.Enabled = false;
+            this.clearAllTilesOnLayerToolStripMenuItem.Name = "clearAllTilesOnLayerToolStripMenuItem";
+            this.clearAllTilesOnLayerToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.clearAllTilesOnLayerToolStripMenuItem.Text = "Clear all tiles on layer";
+            this.clearAllTilesOnLayerToolStripMenuItem.Click += new System.EventHandler(this.clearAllTilesOnLayerToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(182, 6);
+            // 
+            // addOneFloorOnTopToolStripMenuItem
+            // 
+            this.addOneFloorOnTopToolStripMenuItem.Enabled = false;
+            this.addOneFloorOnTopToolStripMenuItem.Name = "addOneFloorOnTopToolStripMenuItem";
+            this.addOneFloorOnTopToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.addOneFloorOnTopToolStripMenuItem.Text = "Add one floor on top";
+            this.addOneFloorOnTopToolStripMenuItem.Click += new System.EventHandler(this.addOneFloorOnTopToolStripMenuItem_Click);
             // 
             // toolMapProperties
             // 
             this.toolMapProperties.Enabled = false;
             this.toolMapProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolMapProperties.Image")));
             this.toolMapProperties.Name = "toolMapProperties";
-            this.toolMapProperties.Size = new System.Drawing.Size(189, 26);
+            this.toolMapProperties.Size = new System.Drawing.Size(185, 22);
             this.toolMapProperties.Text = "Map properties";
             this.toolMapProperties.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
             // 
@@ -680,24 +641,6 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
             // 
-            // toolReloadTex
-            // 
-            this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
-            this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolReloadTex.Name = "toolReloadTex";
-            this.toolReloadTex.Size = new System.Drawing.Size(74, 24);
-            this.toolReloadTex.Text = "Textures";
-            this.toolReloadTex.Click += new System.EventHandler(this.toolReloadTex_Click);
-            // 
-            // toolReset
-            // 
-            this.toolReset.Image = ((System.Drawing.Image)(resources.GetObject("toolReset.Image")));
-            this.toolReset.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolReset.Name = "toolReset";
-            this.toolReset.Size = new System.Drawing.Size(72, 24);
-            this.toolReset.Text = "Camera";
-            this.toolReset.Click += new System.EventHandler(this.toolReset_Click);
-            // 
             // toolShowGrid
             // 
             this.toolShowGrid.Checked = true;
@@ -755,44 +698,41 @@
             // 
             this.saveFile1.Filter = "DM Map files|*.dmf|All files|*.*";
             // 
-            // addOneFloorOnTopToolStripMenuItem
+            // contextMenuStrip1
             // 
-            this.addOneFloorOnTopToolStripMenuItem.Enabled = false;
-            this.addOneFloorOnTopToolStripMenuItem.Name = "addOneFloorOnTopToolStripMenuItem";
-            this.addOneFloorOnTopToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
-            this.addOneFloorOnTopToolStripMenuItem.Text = "Add one floor on top";
-            this.addOneFloorOnTopToolStripMenuItem.Click += new System.EventHandler(this.addOneFloorOnTopToolStripMenuItem_Click);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.drawTilesToolStripMenuItem,
+            this.toolStripSeparator7,
+            this.toolTileFlags});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(126, 54);
             // 
-            // editor1
+            // drawTilesToolStripMenuItem
             // 
-            this.editor1.BackColor = System.Drawing.Color.Black;
-            this.editor1.CurrentTool = MapEdit.Controls.tools_t.TOOL_DRAW;
-            this.editor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editor1.GraphGridColor = System.Drawing.Color.DarkOliveGreen;
-            this.editor1.GraphGridOpacity = 0.5F;
-            this.editor1.GraphOffset = ((System.Drawing.PointF)(resources.GetObject("editor1.GraphOffset")));
-            this.editor1.GraphZoom = 1.5F;
-            this.editor1.GridSize = 16;
-            this.editor1.LayersAbove = true;
-            this.editor1.Location = new System.Drawing.Point(0, 0);
-            this.editor1.Margin = new System.Windows.Forms.Padding(4);
-            this.editor1.Name = "editor1";
-            this.editor1.SelectedLayer = 0;
-            this.editor1.ShowGrid = true;
-            this.editor1.Size = new System.Drawing.Size(869, 673);
-            this.editor1.TabIndex = 0;
-            this.editor1.TileDrawing = true;
-            this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
-            this.editor1.TileForm = 0;
-            this.editor1.TileMode = false;
-            this.editor1.OnZoomChanged += new MapEdit.Controls.Editor.zoom_event_t(this.editor1_OnZoomChanged);
-            this.editor1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editor1_KeyDown);
+            this.drawTilesToolStripMenuItem.Checked = true;
+            this.drawTilesToolStripMenuItem.CheckOnClick = true;
+            this.drawTilesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.drawTilesToolStripMenuItem.Image = global::MapEdit.Properties.Resources._8M1tZ;
+            this.drawTilesToolStripMenuItem.Name = "drawTilesToolStripMenuItem";
+            this.drawTilesToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.drawTilesToolStripMenuItem.Text = "Draw tiles";
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(122, 6);
+            // 
+            // toolTileFlags
+            // 
+            this.toolTileFlags.Name = "toolTileFlags";
+            this.toolTileFlags.Size = new System.Drawing.Size(125, 22);
+            this.toolTileFlags.Text = "None";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1031, 727);
+            this.ClientSize = new System.Drawing.Size(1064, 746);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -807,12 +747,12 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.groupFlags.ResumeLayout(false);
-            this.groupFlags.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -838,7 +778,6 @@
 		private System.Windows.Forms.ToolStripButton toolUndo;
 		private System.Windows.Forms.ToolStripButton toolRedo;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-		private System.Windows.Forms.ToolStripButton toolReset;
 		private System.Windows.Forms.ToolStripButton toolLayerAbove;
 		private System.Windows.Forms.ToolStripButton toolShowMask;
 		private System.Windows.Forms.ToolStripDropDownButton mnuSelectLayer;
@@ -859,32 +798,27 @@
 		private System.Windows.Forms.ListBox listTileForm;
 		private System.Windows.Forms.CheckBox chkSetTile;
         private System.Windows.Forms.GroupBox groupFlags;
-        private System.Windows.Forms.RadioButton radioIce;
-        private System.Windows.Forms.RadioButton radioSlow;
-        private System.Windows.Forms.RadioButton radioWater;
-        private System.Windows.Forms.RadioButton radioAbyss;
-        private System.Windows.Forms.RadioButton radioSolid;
-        private System.Windows.Forms.RadioButton radioNone;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.ToolStripButton toolReloadTex;
         private System.Windows.Forms.ToolStripStatusLabel sbarZoomLevel;
-        private System.Windows.Forms.RadioButton radioJleft;
-        private System.Windows.Forms.RadioButton radioJright;
-        private System.Windows.Forms.RadioButton radioJdown;
-        private System.Windows.Forms.RadioButton radioJup;
         private System.Windows.Forms.ToolStripComboBox toolShowFlags;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem mnuGrid8x8;
         private System.Windows.Forms.ToolStripMenuItem mnuGrid16x16;
         private System.Windows.Forms.ToolStripMenuItem toolMapProperties;
         private System.Windows.Forms.RadioButton toolRotate;
-        private System.Windows.Forms.RadioButton radioShallow;
-        private System.Windows.Forms.RadioButton radioEntrance;
         private System.Windows.Forms.ToolStripMenuItem imageBufferToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolImageToClipboard;
         private System.Windows.Forms.ToolStripMenuItem toolImageToFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem addOneFloorOnTopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearAllTilesOnLayerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ComboBox cboTileFlags;
+        private System.Windows.Forms.ToolStripButton toolReset;
+        private System.Windows.Forms.ToolStripButton toolReloadTex;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolTileFlags;
+        private System.Windows.Forms.ToolStripMenuItem drawTilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
 }
 
