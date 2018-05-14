@@ -328,7 +328,7 @@ namespace MapEdit.Controls
 
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		}
-		void drawTile(Layer L, int tx, int ty, Tile source)
+		void drawTile(Layer L, int tx, int ty, Tile source, bool flags = true)
 		{
 			Tile T = L.getTile(tx, ty);
 
@@ -336,11 +336,13 @@ namespace MapEdit.Controls
             {
                 T.setXY(source.getTX(), source.getTY());
                 T.setRot(source.getRot());
-                // ...
             }
-			T.setFlags(TileFlags);
-			T.setForm((byte)TileForm);
-			L.updateTile(tx, ty);
+            if (flags)
+            {
+                T.setFlags(TileFlags);
+                T.setForm((byte)TileForm);
+            }
+            L.updateTile(tx, ty);
 		}
 
 		private void applyTool(tools_t tool, int state, Point e)
@@ -466,7 +468,7 @@ namespace MapEdit.Controls
                     Tile cur = t;
                     t.setRot((t.getRot() + 1) % 4);
                     // draw at tile position
-                    drawTile(L, tp.X, tp.Y, cur);
+                    drawTile(L, tp.X, tp.Y, cur, false);
                 }
                 this.Invalidate();
                 break;

@@ -119,7 +119,34 @@ namespace MapEdit.Frontend
             else if (e.KeyValue >= 48 && e.KeyValue <= 57) // 1 - 0
             {
                 int value = e.KeyValue - 48;
-                this.setLayer(value - 1);
+                if (e.Control == false && e.Shift == false)
+                {
+                    switch (value)
+                    {
+                        case 1:
+                            toolDraw.Checked = true;
+                            break;
+                        case 2:
+                            toolRect.Checked = true;
+                            break;
+                        case 3:
+                            toolFill.Checked = true;
+                            break;
+                        case 4:
+                            toolReplace.Checked = true;
+                            break;
+                        case 5:
+                            toolRotate.Checked = true;
+                            break;
+                        default:
+                            return;
+                    }
+                    toolDraw_Click(sender, e);
+                }
+                else
+                {
+                    this.setLayer(value - 1);
+                }
             }
             if (e.KeyCode == Keys.Z && e.Control && e.Shift) // Ctrl+Shift+Z
             {

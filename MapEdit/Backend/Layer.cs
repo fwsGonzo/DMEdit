@@ -26,6 +26,8 @@ namespace MapEdit.Backend
         static Brush pushbackBrush = new HatchBrush(HatchStyle.DiagonalCross,
                                                     Color.FromArgb(120, Color.Black),
                                                     Color.FromArgb(80, Color.Red));
+        static Pen arrowPen = new Pen(Color.Magenta, 3.0f);
+        static AdjustableArrowCap cap = new AdjustableArrowCap(4, 2);
 
         int tilesX;
         int tilesY;
@@ -38,6 +40,8 @@ namespace MapEdit.Backend
 
         public Layer(int sizeX, int sizeY)
         {
+            arrowPen.CustomEndCap = cap;
+            
             this.TSET = null;
             this.tilesX = sizeX;
             this.tilesY = sizeY;
@@ -189,7 +193,6 @@ namespace MapEdit.Backend
                     g.TranslateTransform((float)(dst.X + TSET.size / 2), (float)(dst.Y + TSET.size / 2));
                     g.RotateTransform(tile.getRot() * 90);
                     g.TranslateTransform(-(float)(dst.X + TSET.size / 2), -(float)(dst.Y + TSET.size / 2));
-                    //g.TranslateTransform(-(float)TSET.size / 2, -(float)TSET.size / 2);
                 }
                 g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
                 if (tile.getRot() > 0)
@@ -227,10 +230,7 @@ namespace MapEdit.Backend
                 case Tile.Flags.PUSHBACK:
                     brush = pushbackBrush;
                     break;
-                case Tile.Flags.JUMP_UP:
-                case Tile.Flags.JUMP_DOWN:
-                case Tile.Flags.JUMP_RGT:
-                case Tile.Flags.JUMP_LEFT:
+                case Tile.Flags.AUTOJUMP:
                     brush = jumpBrush;
                     break;
                 default:
@@ -248,6 +248,33 @@ namespace MapEdit.Backend
                 {
                     renderData(g, dst, brush, tile.getForm());
                 }
+            }
+            // assist showing rotation
+            if ((int) tile.getFlags() >= 32)
+            {
+                Point p0, p1;
+                switch(tile.getRot())
+                {
+                    case 0:
+                        p0 = new Point(dst.X + dst.Size.Width / 2, dst.Y + dst.Size.Height);
+                        p1 = new Point(dst.X + dst.Size.Width / 2, dst.Y);
+                        break;
+                    case 1:
+                        p0 = new Point(dst.X, dst.Y + dst.Size.Height / 2);
+                        p1 = new Point(dst.X + dst.Size.Width, dst.Y + dst.Size.Height / 2);
+                        break;
+                    case 2:
+                        p0 = new Point(dst.X + dst.Size.Width / 2, dst.Y);
+                        p1 = new Point(dst.X + dst.Size.Width / 2, dst.Y + dst.Size.Height);
+                        break;
+                    case 3:
+                        p0 = new Point(dst.X + dst.Size.Width, dst.Y + dst.Size.Height / 2);
+                        p1 = new Point(dst.X, dst.Y + dst.Size.Height / 2);
+                        break;
+                    default:
+                        throw new System.Exception("Invalid rotation for direction arrow");
+                }
+                g.DrawLine(arrowPen, p0, p1);
             }
         }
         public void updateTile(int x, int y)

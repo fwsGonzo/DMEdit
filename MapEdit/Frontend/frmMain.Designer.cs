@@ -239,18 +239,9 @@
             "-",
             "-",
             "-",
-            "Auto-jump up",
-            "Auto-jump down",
-            "Auto-jump right",
-            "Auto-jump left",
-            "Conveyor up",
-            "Conveyor down",
-            "Conveyor right",
-            "Conveyor left",
-            "Fast-track up",
-            "Fast-track down",
-            "Fast-track left",
-            "Fast-track right"});
+            "Auto-jump",
+            "Conveyor (normal)",
+            "Conveyor (fast)"});
             this.cboTileFlags.Location = new System.Drawing.Point(6, 19);
             this.cboTileFlags.Name = "cboTileFlags";
             this.cboTileFlags.Size = new System.Drawing.Size(142, 21);

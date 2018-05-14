@@ -37,15 +37,9 @@ namespace MapEdit.Backend
             FENCE = 14,
             ENTRANCE = 15,
 
-            JUMP_UP   = 32,
-            JUMP_DOWN = 33,
-            JUMP_RGT  = 34,
-            JUMP_LEFT = 35,
-
-            MOVE_UP = 36,
-            MOVE_DN = 37,
-            MOVE_RI = 38,
-            MOVE_LE = 39,
+            AUTOJUMP  = 32,
+            AUTOMOVE  = 33,
+            MOVEFAST  = 34,
         };
 
 		public Tile()
