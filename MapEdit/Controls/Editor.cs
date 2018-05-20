@@ -227,6 +227,13 @@ namespace MapEdit.Controls
 		{
 			return this.is_saved;
 		}
+        public void applyProperties()
+        {
+            this.tileset.setTexture(mapfile.applyTiles(current_mod_dir, default_tiles));
+            foreach (Layer L in mapfile.layers) L.invalidate(this.tileset);
+            this.Invalidate();
+        }
+
         public Bitmap renderToBitmap()
         {
             return new Bitmap(buffer);

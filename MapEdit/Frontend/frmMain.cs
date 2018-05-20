@@ -422,7 +422,7 @@ namespace MapEdit.Frontend
         {
             var p = new frmMapProperties(editor1.getMapFile());
             p.ShowDialog();
-
+            editor1.applyProperties();
         }
 
         private void toolImageToClipboard_Click(object sender, EventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -43,6 +44,29 @@ namespace MapEdit.Backend
                 if (PropKey[i] == key) return PropVal[i];
             }
             return "";
+        }
+
+        public Image applyTiles(string mod_dir, Image defaultTiles)
+        {
+            if (this.hasProperty("tiles"))
+            {
+                try
+                {
+                    var tiles = Image.FromFile(mod_dir + "/" + this.get("tiles"));
+                    Console.WriteLine("Using tileset from " + this.get("tiles"));
+                    return tiles;
+                }
+                catch (System.IO.IOException)
+                {
+                    Console.WriteLine("Could not find " + this.get("tiles") + ", using default");
+                    return defaultTiles;
+                }
+            }
+            else
+            {
+                Console.WriteLine("No custom tileset for this map, using default");
+                return defaultTiles;
+            }
         }
     }
 }

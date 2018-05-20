@@ -73,26 +73,9 @@ namespace MapEdit.Backend
                     result.PropKey[i] = new string(rkey, 0, keylen);
                     result.PropVal[i] = new string(rval, 0, vallen);
                 }
-
-                if (result.hasProperty("tiles"))
-                {
-                    try
-                    {
-                        Image tiles = Image.FromFile(mod_dir + "/" + result.get("tiles"));
-                        tset.setTexture(tiles);
-                        Console.WriteLine("Using tileset: " + result.get("tiles"));
-                    }
-                    catch (System.IO.IOException)
-                    {
-                        Console.WriteLine("Could not load tileset: " + result.get("tiles"));
-                        tset.setTexture(default_tiles);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No custom tileset for this map, using default");
-                    tset.setTexture(default_tiles);
-                }
+                // resolve tiles image
+                Image tiles = result.applyTiles(mod_dir, default_tiles);
+                tset.setTexture(tiles);
 
                 // layer data
                 int layerCount = floors * Layer.LAYERS_PER_FLOOR;
