@@ -9,7 +9,7 @@ namespace MapEdit.Backend
     {
         public const int LAYERS_PER_FLOOR = 8;
 
-        Tileset TSET;
+        private int tile_size;
         List<Tile> tiles;
         Bitmap buffer;
         // brushes
@@ -38,11 +38,11 @@ namespace MapEdit.Backend
         public bool Enabled { get; set; }
         public byte Alpha { get; set; }
 
-        public Layer(int sizeX, int sizeY)
+        public Layer(int sizeX, int sizeY, int tilesize)
         {
             arrowPen.CustomEndCap = cap;
             
-            this.TSET = null;
+            this.tile_size = tilesize;
             this.tilesX = sizeX;
             this.tilesY = sizeY;
             this.Visible = false;
@@ -55,26 +55,30 @@ namespace MapEdit.Backend
             Alpha = 0xFF;
         }
 
-        public void create(Tileset tset)
+        public void create()
         {
             this.Visible = true;
             for (int x = 0; x < tilesX; x++)
-                for (int y = 0; y < tilesY; y++)
-                {
-                    tiles.Add(new Tile());
-                }
+            for (int y = 0; y < tilesY; y++)
+            {
+                tiles.Add(new Tile());
+            }
             // initialize buffer with tileset
-            initializeBuffers(tset);
+            initializeBuffers();
         }
-        public void load(List<ulong> values, Tileset tset)
+        public void load(List<ulong> values)
         {
             this.Visible = true;
             foreach (var v in values)
             {
                 tiles.Add(new Tile(v));
             }
-            // initialize buffer with tileset
-            initializeBuffers(tset);
+            // initialize draw buffer
+            initializeBuffers();
+        }
+        public void setTiles(List<Tile> tiles)
+        {
+            this.tiles = tiles;
         }
         public List<ulong> export()
         {
@@ -93,21 +97,20 @@ namespace MapEdit.Backend
                 t.clear();
             }
         }
-        public void initializeBuffers(Tileset tset)
+        private void initializeBuffers()
         {
-            this.TSET = tset;
             // create buffer for layer
-            buffer = new Bitmap(this.tilesX * TSET.size, this.tilesY * TSET.size);
+            buffer = new Bitmap(this.tilesX * this.tile_size, this.tilesY * this.tile_size);
             buffer.MakeTransparent(Color.Magenta);
         }
 
         public int getWidth()
         {
-            return tilesX * TSET.size;
+            return tilesX * this.tile_size;
         }
         public int getHeight()
         {
-            return tilesY * TSET.size;
+            return tilesY * this.tile_size;
         }
         public int getTilesX()
         {
@@ -127,11 +130,6 @@ namespace MapEdit.Backend
             var newlist = new List<Tile>();
             tiles.ForEach((tile) => { newlist.Add(new Tile(tile.compressed())); });
             return newlist;
-        }
-        public void setTiles(List<Tile> tlist)
-        {
-            tiles = tlist;
-            this.invalidate();
         }
 
         private int tcoord(int x, int y)
@@ -180,21 +178,21 @@ namespace MapEdit.Backend
                     break;
             }
         }
-        void renderTile(Graphics g, int x, int y, bool overdraw = false)
+        void renderTile(Tileset tset, Graphics g, int x, int y, bool overdraw = false)
         {
             Tile tile = tiles[tcoord(x, y)];
-            Rectangle dst = new Rectangle(x * TSET.size, y * TSET.size, TSET.size, TSET.size);
+            Rectangle dst = new Rectangle(x * this.tile_size, y * this.tile_size, this.tile_size, this.tile_size);
             // only draw tile if not (0, 0)
             if (!(tile.getTX() == 0 && tile.getTY() == 0) || overdraw)
             {
-                Rectangle src = new Rectangle(tile.getTX() * TSET.size, tile.getTY() * TSET.size, TSET.size, TSET.size);
+                Rectangle src = new Rectangle(tile.getTX() * this.tile_size, tile.getTY() * this.tile_size, this.tile_size, this.tile_size);
                 if (tile.getRot() > 0)
                 {
-                    g.TranslateTransform((float)(dst.X + TSET.size / 2), (float)(dst.Y + TSET.size / 2));
+                    g.TranslateTransform((float)(dst.X + this.tile_size / 2), (float)(dst.Y + this.tile_size / 2));
                     g.RotateTransform(tile.getRot() * 90);
-                    g.TranslateTransform(-(float)(dst.X + TSET.size / 2), -(float)(dst.Y + TSET.size / 2));
+                    g.TranslateTransform(-(float)(dst.X + this.tile_size / 2), -(float)(dst.Y + this.tile_size / 2));
                 }
-                g.DrawImage(TSET.getBuffer(), dst, src, GraphicsUnit.Pixel);
+                g.DrawImage(tset.getBuffer(), dst, src, GraphicsUnit.Pixel);
                 if (tile.getRot() > 0)
                 {
                     g.ResetTransform();
@@ -277,17 +275,17 @@ namespace MapEdit.Backend
                 g.DrawLine(arrowPen, p0, p1);
             }
         }
-        public void updateTile(int x, int y)
+        public void updateTile(Tileset tset, int x, int y)
         {
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                renderTile(g, x, y, true);
+                renderTile(tset, g, x, y, true);
             }
             if (ShowMask == false)
                 buffer.MakeTransparent(Color.Magenta);
         }
-        public void invalidate()
+        public void invalidate(Tileset tset)
         {
             if (tiles.Count == 0) return;
 
@@ -297,10 +295,10 @@ namespace MapEdit.Backend
                 g.Clear(Color.Magenta);
 
                 for (int y = 0; y < tilesY; y++)
-                    for (int x = 0; x < tilesX; x++)
-                    {
-                        renderTile(g, x, y);
-                    }
+                for (int x = 0; x < tilesX; x++)
+                {
+                    renderTile(tset, g, x, y);
+                }
             }
             if (ShowMask == false)
                 buffer.MakeTransparent(Color.Magenta);
@@ -331,8 +329,8 @@ namespace MapEdit.Backend
 
         public Point toTileCoord(float fx, float fy)
         {
-            int x = (int)fx / TSET.size;
-            int y = (int)fy / TSET.size;
+            int x = (int)fx / this.tile_size;
+            int y = (int)fy / this.tile_size;
             return new Point(x, y);
         }
 

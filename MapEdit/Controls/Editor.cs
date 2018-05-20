@@ -24,13 +24,15 @@ namespace MapEdit.Controls
 		public delegate void TileChangedEvent(int l, int x, int y, int tx, int ty, int stx, int sty);
 		public event TileChangedEvent onTileChanged;
 
-		string filename;
+        string current_mod_dir = "";
+        string filename;
 		bool   has_filename = false;
 		bool   is_saved = false;
 
-        Bitmap buffer = null;
-		Image checkers = null;
-		Tileset tileset = null;
+        Bitmap  buffer   = null;
+        Image   checkers = null;
+        Image   default_tiles = null;
+        Tileset tileset  = null;
 		Selection selection = null;
 
         MapFile mapfile;
@@ -131,12 +133,12 @@ namespace MapEdit.Controls
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint
 					| ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 		}
-		public void initialize(Image background, Image tileset, int tilesize)
+		public void initialize(string mod_dir, Image tileset, int tilesize)
 		{
-			// checkerboard background
-			this.checkers = background;
-			// tileset image && tilesize
-			this.tileset = new Tileset(tileset, tilesize);
+			this.current_mod_dir = mod_dir;
+            // tileset image && tilesize
+            this.default_tiles = tileset;
+            this.tileset = new Tileset(tileset, tilesize);
             GridSize = tilesize;
 		}
         public void reload_textures(Image tiles)
@@ -165,10 +167,10 @@ namespace MapEdit.Controls
 
 			for (int i = 0; i < layerCount; i++)
 			{
-				Layer L = new Layer(sizeX, sizeY);
-				L.create(this.tileset);
+				Layer L = new Layer(sizeX, sizeY, tileset.size);
+				L.create();
 				L.ShowMask = (i == 0);
-				L.invalidate();
+				L.invalidate(tileset);
 				mapfile.layers.Add(L);
 			}
             // some changes were made to this map
@@ -184,12 +186,12 @@ namespace MapEdit.Controls
 		public bool loadMap(string filename)
 		{
 			// load map
-			this.mapfile = LayerFile.loadFile(filename, this.tileset);
+			this.mapfile = LayerFile.loadFile(current_mod_dir, filename, this.tileset, default_tiles);
 			if (mapfile.layers != null)
 			{
 				this.Invalidate();
-				// set filename & no changes made
-				this.filename = filename;
+                // set filename & no changes made
+                this.filename = filename;
 				this.has_filename = true;
 				this.is_saved = true;
 				return true;
@@ -235,8 +237,8 @@ namespace MapEdit.Controls
             int sy = mapfile.layers[0].getTilesY();
             for (int i = 0; i < Layer.LAYERS_PER_FLOOR; i++)
             {
-                Layer L = new Layer(sx, sy);
-                L.create(this.tileset);
+                Layer L = new Layer(sx, sy, this.tileset.size);
+                L.create();
                 mapfile.layers.Add(L);
             }
         }
@@ -246,7 +248,7 @@ namespace MapEdit.Controls
             {
                 var L = mapfile.layers[layer];
                 L.clear();
-                L.invalidate();
+                L.invalidate(this.tileset);
             }
             changesWereMade();
             this.Invalidate();
@@ -273,7 +275,7 @@ namespace MapEdit.Controls
 		{
             if (getLayerCount() == 0) return;
             mapfile.layers[SelectedLayer].ShowMask = mask;
-			mapfile.layers[SelectedLayer].invalidate();
+			mapfile.layers[SelectedLayer].invalidate(this.tileset);
 			this.Invalidate();
 		}
 		public bool getShowMask(int layer)
@@ -284,7 +286,7 @@ namespace MapEdit.Controls
         {
             if (getLayerCount() == 0) return;
             mapfile.layers[SelectedLayer].ShowFlags = level;
-            mapfile.layers[SelectedLayer].invalidate();
+            mapfile.layers[SelectedLayer].invalidate(this.tileset);
             this.Invalidate();
         }
 
@@ -342,7 +344,7 @@ namespace MapEdit.Controls
                 T.setFlags(TileFlags);
                 T.setForm((byte)TileForm);
             }
-            L.updateTile(tx, ty);
+            L.updateTile(this.tileset, tx, ty);
 		}
 
 		private void applyTool(tools_t tool, int state, Point e)
@@ -444,7 +446,7 @@ namespace MapEdit.Controls
 					// fill at tile position
 					L.fill(tp.X, tp.Y, t.getTX(), t.getTY(), cur.getTX(), cur.getTY());
 				}
-				L.invalidate();
+				L.invalidate(this.tileset);
 				this.Invalidate();
 				break;
 			case tools_t.TOOL_REPLACE:
@@ -456,7 +458,7 @@ namespace MapEdit.Controls
 					// replace at tile position
 					L.replace(t.getTX(), t.getTY(), cur);
 				}
-				L.invalidate();
+				L.invalidate(this.tileset);
 				this.Invalidate();
 				break;
             case tools_t.TOOL_ROTATE:

@@ -27,5 +27,22 @@ namespace MapEdit.Backend
                 PropVal[i] = "";
             }
         }
+
+        public bool hasProperty(string key)
+        {
+            foreach (string k in PropKey)
+            {
+                if (k == key) return true;
+            }
+            return false;
+        }
+        public string get(string key)
+        {
+            for (int i = 0; i < PropKey.Length; i++)
+            {
+                if (PropKey[i] == key) return PropVal[i];
+            }
+            return "";
+        }
     }
 }

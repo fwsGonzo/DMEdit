@@ -24,7 +24,6 @@ namespace MapEdit.Frontend
 
 			editor1.onTileChanged += editor1_onTileChanged;
 
-            Image checkers = null; // Resource1.checker;
             Image tiles = null;
             int tilesize = 16;
             try
@@ -48,7 +47,7 @@ namespace MapEdit.Frontend
                 current_mod_dir = MOD_DIR_FB;
             }
             System.Console.WriteLine("Detected mod: " + current_mod_dir);
-            editor1.initialize(checkers, tiles, tilesize);
+            editor1.initialize(current_mod_dir, tiles, tilesize);
             mnuGrid16x16.Checked = true;
 			
 			toolShowGrid.Checked = editor1.ShowGrid;

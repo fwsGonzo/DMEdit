@@ -132,7 +132,7 @@
             // txtPropKey1
             // 
             this.txtPropKey1.Location = new System.Drawing.Point(53, 166);
-            this.txtPropKey1.MaxLength = 23;
+            this.txtPropKey1.MaxLength = 20;
             this.txtPropKey1.Name = "txtPropKey1";
             this.txtPropKey1.Size = new System.Drawing.Size(134, 20);
             this.txtPropKey1.TabIndex = 16;
@@ -158,7 +158,7 @@
             // txtPropVal1
             // 
             this.txtPropVal1.Location = new System.Drawing.Point(233, 166);
-            this.txtPropVal1.MaxLength = 23;
+            this.txtPropVal1.MaxLength = 44;
             this.txtPropVal1.Name = "txtPropVal1";
             this.txtPropVal1.Size = new System.Drawing.Size(286, 20);
             this.txtPropVal1.TabIndex = 19;
@@ -175,7 +175,7 @@
             // txtPropVal2
             // 
             this.txtPropVal2.Location = new System.Drawing.Point(233, 192);
-            this.txtPropVal2.MaxLength = 23;
+            this.txtPropVal2.MaxLength = 44;
             this.txtPropVal2.Name = "txtPropVal2";
             this.txtPropVal2.Size = new System.Drawing.Size(286, 20);
             this.txtPropVal2.TabIndex = 22;
@@ -183,7 +183,7 @@
             // txtPropKey2
             // 
             this.txtPropKey2.Location = new System.Drawing.Point(53, 192);
-            this.txtPropKey2.MaxLength = 23;
+            this.txtPropKey2.MaxLength = 20;
             this.txtPropKey2.Name = "txtPropKey2";
             this.txtPropKey2.Size = new System.Drawing.Size(134, 20);
             this.txtPropKey2.TabIndex = 21;
@@ -191,7 +191,7 @@
             // txtPropVal3
             // 
             this.txtPropVal3.Location = new System.Drawing.Point(233, 218);
-            this.txtPropVal3.MaxLength = 23;
+            this.txtPropVal3.MaxLength = 44;
             this.txtPropVal3.Name = "txtPropVal3";
             this.txtPropVal3.Size = new System.Drawing.Size(286, 20);
             this.txtPropVal3.TabIndex = 24;
@@ -199,7 +199,7 @@
             // txtPropKey3
             // 
             this.txtPropKey3.Location = new System.Drawing.Point(53, 218);
-            this.txtPropKey3.MaxLength = 23;
+            this.txtPropKey3.MaxLength = 20;
             this.txtPropKey3.Name = "txtPropKey3";
             this.txtPropKey3.Size = new System.Drawing.Size(134, 20);
             this.txtPropKey3.TabIndex = 23;
@@ -207,7 +207,7 @@
             // txtPropVal4
             // 
             this.txtPropVal4.Location = new System.Drawing.Point(233, 244);
-            this.txtPropVal4.MaxLength = 23;
+            this.txtPropVal4.MaxLength = 44;
             this.txtPropVal4.Name = "txtPropVal4";
             this.txtPropVal4.Size = new System.Drawing.Size(286, 20);
             this.txtPropVal4.TabIndex = 26;
@@ -215,7 +215,7 @@
             // txtPropKey4
             // 
             this.txtPropKey4.Location = new System.Drawing.Point(53, 244);
-            this.txtPropKey4.MaxLength = 23;
+            this.txtPropKey4.MaxLength = 20;
             this.txtPropKey4.Name = "txtPropKey4";
             this.txtPropKey4.Size = new System.Drawing.Size(134, 20);
             this.txtPropKey4.TabIndex = 25;

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 
@@ -9,6 +11,8 @@ namespace MapEdit.Backend
         private static char[] MAGIC    = { 'D', 'M', 'F', '\0' };
         private static int VERSION     = 1;
         private static int HEADER_SIZE = 300;
+        private static int KEY_LENGTH = 20;
+        private static int VAL_LENGTH = 44;
 
         struct layerdata_t {
             public bool enabled;
@@ -20,9 +24,9 @@ namespace MapEdit.Backend
             return Encoding.ASCII.GetBytes(str.PadRight(length, '\0'));
         }
 
-        public static MapFile loadFile(string file, Tileset tset)
+        public static MapFile loadFile(string mod_dir, string file, 
+                                       Tileset tset, Image default_tiles)
 		{
-
             using (var sr = new BinaryReader(File.Open(file, FileMode.Open, FileAccess.Read)))
             {
                 MapFile result = new MapFile();
@@ -64,8 +68,30 @@ namespace MapEdit.Backend
                 // map k/v properties
                 for (int i = 0; i < result.PropKey.Length; i++)
                 {
-                    result.PropKey[i] = new string(sr.ReadChars(24));
-                    result.PropVal[i] = new string(sr.ReadChars(40));
+                    var rkey = sr.ReadChars(KEY_LENGTH); int keylen = strlen(rkey);
+                    var rval = sr.ReadChars(VAL_LENGTH); int vallen = strlen(rval);
+                    result.PropKey[i] = new string(rkey, 0, keylen);
+                    result.PropVal[i] = new string(rval, 0, vallen);
+                }
+
+                if (result.hasProperty("tiles"))
+                {
+                    try
+                    {
+                        Image tiles = Image.FromFile(mod_dir + "/" + result.get("tiles"));
+                        tset.setTexture(tiles);
+                        Console.WriteLine("Using tileset: " + result.get("tiles"));
+                    }
+                    catch (System.IO.IOException)
+                    {
+                        Console.WriteLine("Could not load tileset: " + result.get("tiles"));
+                        tset.setTexture(default_tiles);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No custom tileset for this map, using default");
+                    tset.setTexture(default_tiles);
                 }
 
                 // layer data
@@ -80,7 +106,7 @@ namespace MapEdit.Backend
                 // layer tile data
                 for (int i = 0; i < layerCount; i++)
                 {
-                    Layer L = new Layer(sizeX, sizeY);
+                    Layer L = new Layer(sizeX, sizeY, tset.size);
                     // set layer properties
                     L.Alpha = layerdata[i].alpha;
                     L.Enabled = layerdata[i].enabled;
@@ -93,18 +119,18 @@ namespace MapEdit.Backend
                         {
                             values.Add(sr.ReadUInt64());
                         }
-                        L.load(values, tset);
+                        L.load(values);
                     }
                     else
                     {
                         // have to create empty layer
-                        L.create(tset);
+                        L.create();
                     }
 
                     // default show mask only for layer 1
                     L.ShowMask = (i == 0);
                     // redraw
-                    L.invalidate();
+                    L.invalidate(tset);
                     // add to list
                     layers.Add(L);
                 }
@@ -112,8 +138,17 @@ namespace MapEdit.Backend
                 return result;
             }
 		}
-		
-		public static bool saveFile(string file, MapFile mapfile)
+
+        private static int strlen(char[] str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == 0) return i;
+            }
+            return str.Length;
+        }
+
+        public static bool saveFile(string file, MapFile mapfile)
 		{
 			using (var sr = new BinaryWriter(File.Open(file, FileMode.Create, FileAccess.Write)))
 			{
@@ -132,8 +167,8 @@ namespace MapEdit.Backend
                 // map properties
                 for (int i = 0; i < mapfile.PropKey.Length; i++)
                 {
-                    sr.Write(StringToByteArray(mapfile.PropKey[i], 24));
-                    sr.Write(StringToByteArray(mapfile.PropVal[i], 40));
+                    sr.Write(StringToByteArray(mapfile.PropKey[i], KEY_LENGTH));
+                    sr.Write(StringToByteArray(mapfile.PropVal[i], VAL_LENGTH));
                 }
                 // layer data
                 foreach(Layer L in layers)
