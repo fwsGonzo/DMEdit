@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace MapEdit.Backend
 {
 	enum TileForm
@@ -44,7 +43,7 @@ namespace MapEdit.Backend
 
 		public Tile()
 		{
-            this.tx = 0; this.ty = 0; this.tset = 0;
+            this.tx = 0; this.ty = 0;
             this.form = (int)TileForm.FORM_RECT;
             this.data = 0;
             this.rot  = 0;
@@ -53,7 +52,6 @@ namespace MapEdit.Backend
 		{
             this.tx = x;
             this.ty = y;
-            this.tset = t;
             this.form = (int)TileForm.FORM_RECT;
             this.data = 0;
             this.rot  = 0;
@@ -63,22 +61,20 @@ namespace MapEdit.Backend
 			// Tile from 64bits ulong
 			this.tx =   (byte) ((data >>  0) & 255);
 			this.ty =   (byte) ((data >>  8) & 255);
-            this.tset = (byte) ((data >> 16) & 255);
+            //this.?? = (byte) ((data >> 16) & 255);
             this.form = (byte) ((data >> 24) & 255);
 			this.data = (byte) ((data >> 32) & 255);
             this.rot  = (byte) ((data >> 40) & 255);
         }
         public ulong compressed()
 		{
-			return (ulong)tx + ((ulong)ty << 8) + ((ulong)tset << 16)
+			return (ulong)tx + ((ulong)ty << 8) // + ((ulong)tset << 16)
                 + ((ulong)form << 24) + ((ulong)data << 32) + ((ulong)rot << 40);
 		}
 
 		public byte getTX() { return tx; }
 		public byte getTY() { return ty; }
         internal void setXY(byte x, byte y) { tx = x; ty = y; }
-
-        public byte getTileset() { return this.tset;  }
 
         internal byte getForm() { return form; }
         internal void setForm(byte f) { form = f; }
@@ -116,14 +112,13 @@ namespace MapEdit.Backend
 
 		private byte tx;
 		private byte ty;
-        private byte tset;
 		private byte form;
 		private byte data;
         private byte rot;
 
         internal void clear()
         {
-            tx = 0; ty = 0; tset = 0; form = 0; data = 0; rot = 0;
+            tx = 0; ty = 0; form = 0; data = 0; rot = 0;
         }
     }
 }
