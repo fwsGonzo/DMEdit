@@ -131,6 +131,10 @@
             // 
             // txtPropKey1
             // 
+            this.txtPropKey1.AutoCompleteCustomSource.AddRange(new string[] {
+            "tiles"});
+            this.txtPropKey1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.txtPropKey1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.txtPropKey1.Location = new System.Drawing.Point(53, 166);
             this.txtPropKey1.MaxLength = 20;
             this.txtPropKey1.Name = "txtPropKey1";
@@ -157,6 +161,10 @@
             // 
             // txtPropVal1
             // 
+            this.txtPropVal1.AutoCompleteCustomSource.AddRange(new string[] {
+            "bitmaps/tiles.png"});
+            this.txtPropVal1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.txtPropVal1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.txtPropVal1.Location = new System.Drawing.Point(233, 166);
             this.txtPropVal1.MaxLength = 44;
             this.txtPropVal1.Name = "txtPropVal1";
