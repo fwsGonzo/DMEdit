@@ -9,13 +9,10 @@ namespace MapEdit.Frontend
     public partial class frmMain : Form
     {
 		List<ToolStripMenuItem> layerList;
-		static string MOD_DIR = "mods/HylianPhoenix";
-		static string MOD_DIR_FB = "//vmware-host/Shared Folders/dm2/Debug/mods/HylianPhoenix";
-
-        private string current_mod_dir;
+        private Backend.ModSelection modsel;
         private string getModDir()
         {
-            return current_mod_dir;
+            return modsel.ModDir;
         }
 
         public frmMain(string[] args)
@@ -23,34 +20,25 @@ namespace MapEdit.Frontend
             InitializeComponent();
 
 			editor1.onTileChanged += editor1_onTileChanged;
+            string custom_path = "";
+            if (args.Length > 0) custom_path = args[0];
 
-            Image tiles = null;
-            int tilesize = 16;
-            try
-            {
-                try
-                {
-                    current_mod_dir = args[0];
-                    System.Console.WriteLine("Mod: " + current_mod_dir);
-                    tiles = Image.FromFile(current_mod_dir + "/bitmaps/tiles.png");
-                }
-                catch (Exception)
-                {
-                    current_mod_dir = MOD_DIR;
-                    tiles = Image.FromFile(current_mod_dir + "/bitmaps/tiles.png");
-                }
-            }
-            catch (Exception)
-            {
-                tiles = Image.FromFile(MOD_DIR_FB + "/bitmaps/tiles.png");
-                //tilesize = 8;
-                current_mod_dir = MOD_DIR_FB;
-            }
-            System.Console.WriteLine("Detected mod: " + current_mod_dir);
-            editor1.initialize(current_mod_dir, tiles, tilesize);
-            mnuGrid16x16.Checked = true;
-			
-			toolShowGrid.Checked = editor1.ShowGrid;
+            modsel = new Backend.ModSelection(custom_path);
+            var p = new frmSelectMod(modsel);
+            p.ShowDialog();
+            System.Console.WriteLine("Detected mod: " + modsel.ModDir);
+
+            Image tiles = Image.FromFile(modsel.ModDir + "/bitmaps/tiles.png");
+            editor1.initialize(modsel.ModDir, tiles, modsel.TileSize);
+            if (modsel.TileSize == 16)
+                mnuGrid16x16.Checked = true;
+            else
+                mnuGrid8x8.Checked = true;
+            string replaced = modsel.ModDir.Replace("/", "\\") + "\\maps";
+            openFile1.InitialDirectory = replaced;
+            saveFile1.InitialDirectory = replaced;
+
+            toolShowGrid.Checked = editor1.ShowGrid;
 			toolLayerAbove.Checked = editor1.LayersAbove;
 			toolShowMask.Enabled = false;
             toolShowFlags.SelectedIndex = 1;
@@ -306,7 +294,6 @@ namespace MapEdit.Frontend
 
 		private void mnuOpen_Click(object sender, EventArgs e)
 		{
-			openFile1.InitialDirectory = current_mod_dir + "/maps";
 			DialogResult res = openFile1.ShowDialog(this);
 
 			if (res == System.Windows.Forms.DialogResult.OK)
@@ -348,8 +335,6 @@ namespace MapEdit.Frontend
 		private void mnuSaveAs_Click(object sender, EventArgs e)
 		{
 			if (containsMapMessage() == false) return;
-
-			saveFile1.InitialDirectory = current_mod_dir + "/maps";
 			DialogResult res = saveFile1.ShowDialog(this);
 			
 			if (res == System.Windows.Forms.DialogResult.OK)

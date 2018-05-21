@@ -92,6 +92,7 @@
     <Compile Include="Backend\Layer.cs" />
     <Compile Include="Backend\LayerFile.cs" />
     <Compile Include="Backend\MapFile.cs" />
+    <Compile Include="Backend\ModSelection.cs" />
     <Compile Include="Backend\Selection.cs" />
     <Compile Include="Backend\Tile.cs" />
     <Compile Include="Backend\Tileset.cs" />
@@ -125,6 +126,12 @@
     <Compile Include="Frontend\frmNewMap.Designer.cs">
       <DependentUpon>frmNewMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frontend\frmSelectMod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend\frmSelectMod.Designer.cs">
+      <DependentUpon>frmSelectMod.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frontend\Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -146,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\frmNewMap.resx">
       <DependentUpon>frmNewMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend\frmSelectMod.resx">
+      <DependentUpon>frmSelectMod.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\Resource1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
