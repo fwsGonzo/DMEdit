@@ -76,9 +76,10 @@ namespace MapEdit.Backend
             // initialize draw buffer
             initializeBuffers();
         }
-        public void setTiles(List<Tile> tiles)
+        public void setTiles(List<Tile> tiles, Tileset tset)
         {
             this.tiles = tiles;
+            this.invalidate(tset);
         }
         public List<ulong> export()
         {

@@ -878,8 +878,8 @@ namespace MapEdit.Controls
                 // Create redo
                 redoBuffer.Add(new LayerBuffer(mapfile.layers[buf.getIndex()].getTiles(), buf.getIndex()));
 
-                // overwrite tiles of the old layer
-                mapfile.layers[buf.getIndex()].setTiles(buf.getTiles());
+                // overwrite tiles of the old layer (and re-render layer)
+                mapfile.layers[buf.getIndex()].setTiles(buf.getTiles(), this.tileset);
                 // remove undobuffer
                 undoBuffer.RemoveAt(index);
                 // redraw screen
@@ -895,8 +895,8 @@ namespace MapEdit.Controls
                 // Create undo
                 undoBuffer.Add(new LayerBuffer(mapfile.layers[buf.getIndex()].getTiles(), buf.getIndex()));
 
-                // overwrite tiles of the old layer
-                mapfile.layers[buf.getIndex()].setTiles(buf.getTiles());
+                // overwrite tiles of the old layer (and re-render layer)
+                mapfile.layers[buf.getIndex()].setTiles(buf.getTiles(), this.tileset);
                 // remove redobuffer
                 redoBuffer.RemoveAt(index);
                 // redraw screen
