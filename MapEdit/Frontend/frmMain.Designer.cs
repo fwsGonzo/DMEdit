@@ -496,7 +496,7 @@
             this.toolImageToFile});
             this.imageBufferToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("imageBufferToolStripMenuItem.Image")));
             this.imageBufferToolStripMenuItem.Name = "imageBufferToolStripMenuItem";
-            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
             this.imageBufferToolStripMenuItem.Text = "Image buffer";
             // 
             // toolImageToClipboard
@@ -523,14 +523,14 @@
             // mnuGrid8x8
             // 
             this.mnuGrid8x8.Name = "mnuGrid8x8";
-            this.mnuGrid8x8.Size = new System.Drawing.Size(185, 22);
+            this.mnuGrid8x8.Size = new System.Drawing.Size(189, 26);
             this.mnuGrid8x8.Text = "Grid 8x8";
             this.mnuGrid8x8.Click += new System.EventHandler(this.mnuGrid8x8_Click);
             // 
             // mnuGrid16x16
             // 
             this.mnuGrid16x16.Name = "mnuGrid16x16";
-            this.mnuGrid16x16.Size = new System.Drawing.Size(185, 22);
+            this.mnuGrid16x16.Size = new System.Drawing.Size(189, 26);
             this.mnuGrid16x16.Text = "Grid 16x16";
             this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
             // 
@@ -539,32 +539,33 @@
             this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
             this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolReloadTex.Name = "toolReloadTex";
-            this.toolReloadTex.Size = new System.Drawing.Size(107, 20);
+            this.toolReloadTex.Size = new System.Drawing.Size(111, 24);
             this.toolReloadTex.Text = "Reload textures";
+            this.toolReloadTex.Click += new System.EventHandler(this.toolReloadTex_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(182, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(186, 6);
             // 
             // clearAllTilesOnLayerToolStripMenuItem
             // 
             this.clearAllTilesOnLayerToolStripMenuItem.Enabled = false;
             this.clearAllTilesOnLayerToolStripMenuItem.Name = "clearAllTilesOnLayerToolStripMenuItem";
-            this.clearAllTilesOnLayerToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.clearAllTilesOnLayerToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
             this.clearAllTilesOnLayerToolStripMenuItem.Text = "Clear all tiles on layer";
             this.clearAllTilesOnLayerToolStripMenuItem.Click += new System.EventHandler(this.clearAllTilesOnLayerToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(182, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(186, 6);
             // 
             // addOneFloorOnTopToolStripMenuItem
             // 
             this.addOneFloorOnTopToolStripMenuItem.Enabled = false;
             this.addOneFloorOnTopToolStripMenuItem.Name = "addOneFloorOnTopToolStripMenuItem";
-            this.addOneFloorOnTopToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.addOneFloorOnTopToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
             this.addOneFloorOnTopToolStripMenuItem.Text = "Add one floor on top";
             this.addOneFloorOnTopToolStripMenuItem.Click += new System.EventHandler(this.addOneFloorOnTopToolStripMenuItem_Click);
             // 
@@ -573,7 +574,7 @@
             this.toolMapProperties.Enabled = false;
             this.toolMapProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolMapProperties.Image")));
             this.toolMapProperties.Name = "toolMapProperties";
-            this.toolMapProperties.Size = new System.Drawing.Size(185, 22);
+            this.toolMapProperties.Size = new System.Drawing.Size(189, 26);
             this.toolMapProperties.Text = "Map properties";
             this.toolMapProperties.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
             // 
