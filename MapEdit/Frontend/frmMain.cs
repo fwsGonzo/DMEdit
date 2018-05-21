@@ -70,7 +70,7 @@ namespace MapEdit.Frontend
 			// reset camera to def values
 			toolReset_Click(null, null);
 			// select rectangular
-			listTileForm.SelectedIndex = 0;
+			cboTileForm.SelectedIndex = 0;
 			// set GUI in correct state
 			updateGUI();
 
@@ -352,11 +352,6 @@ namespace MapEdit.Frontend
 			}
 		}
 
-		private void listTileForm_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			editor1.TileForm = listTileForm.SelectedIndex;
-		}
-
 		private void chkSetTile_CheckedChanged(object sender, EventArgs e)
 		{
 			editor1.TileDrawing = chkSetTile.Checked;
@@ -427,5 +422,9 @@ namespace MapEdit.Frontend
             editor1.clearLayer(editor1.SelectedLayer);
         }
 
+        private void cboTileForm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            editor1.TileForm = cboTileForm.SelectedIndex;
+        }
     }
 }

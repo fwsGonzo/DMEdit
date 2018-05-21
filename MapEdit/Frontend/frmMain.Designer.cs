@@ -39,6 +39,7 @@
             this.sbarSTXY = new System.Windows.Forms.ToolStripStatusLabel();
             this.sbarZoomLevel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupFlags = new System.Windows.Forms.GroupBox();
+            this.cboTileForm = new System.Windows.Forms.ComboBox();
             this.cboTileFlags = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -47,7 +48,6 @@
             this.toolFill = new System.Windows.Forms.RadioButton();
             this.toolReplace = new System.Windows.Forms.RadioButton();
             this.toolRotate = new System.Windows.Forms.RadioButton();
-            this.listTileForm = new System.Windows.Forms.ListBox();
             this.chkSetTile = new System.Windows.Forms.CheckBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -193,13 +193,35 @@
             // 
             // groupFlags
             // 
+            this.groupFlags.Controls.Add(this.cboTileForm);
             this.groupFlags.Controls.Add(this.cboTileFlags);
-            this.groupFlags.Location = new System.Drawing.Point(1, 410);
+            this.groupFlags.Location = new System.Drawing.Point(0, 332);
             this.groupFlags.Name = "groupFlags";
-            this.groupFlags.Size = new System.Drawing.Size(154, 69);
+            this.groupFlags.Size = new System.Drawing.Size(154, 78);
             this.groupFlags.TabIndex = 2;
             this.groupFlags.TabStop = false;
             this.groupFlags.Text = "Tile typing";
+            // 
+            // cboTileForm
+            // 
+            this.cboTileForm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTileForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cboTileForm.FormattingEnabled = true;
+            this.cboTileForm.Items.AddRange(new object[] {
+            "Rectangle",
+            "Upper half",
+            "Lower half",
+            "Right half",
+            "Left half",
+            "Diagonal Upper-Left",
+            "Diagonal Upper-Right",
+            "Diagonal Lower-Left",
+            "Diagonal Lower-Right"});
+            this.cboTileForm.Location = new System.Drawing.Point(6, 19);
+            this.cboTileForm.Name = "cboTileForm";
+            this.cboTileForm.Size = new System.Drawing.Size(142, 21);
+            this.cboTileForm.TabIndex = 1;
+            this.cboTileForm.SelectedIndexChanged += new System.EventHandler(this.cboTileForm_SelectedIndexChanged);
             // 
             // cboTileFlags
             // 
@@ -242,7 +264,7 @@
             "Auto-jump",
             "Conveyor (normal)",
             "Conveyor (fast)"});
-            this.cboTileFlags.Location = new System.Drawing.Point(6, 19);
+            this.cboTileFlags.Location = new System.Drawing.Point(6, 46);
             this.cboTileFlags.Name = "cboTileFlags";
             this.cboTileFlags.Size = new System.Drawing.Size(142, 21);
             this.cboTileFlags.TabIndex = 0;
@@ -254,7 +276,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(154, 407);
+            this.groupBox1.Size = new System.Drawing.Size(154, 329);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tools";
@@ -266,12 +288,11 @@
             this.flowLayoutPanel1.Controls.Add(this.toolFill);
             this.flowLayoutPanel1.Controls.Add(this.toolReplace);
             this.flowLayoutPanel1.Controls.Add(this.toolRotate);
-            this.flowLayoutPanel1.Controls.Add(this.listTileForm);
             this.flowLayoutPanel1.Controls.Add(this.chkSetTile);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(148, 388);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(148, 310);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // toolDraw
@@ -339,21 +360,6 @@
             this.toolRotate.UseVisualStyleBackColor = true;
             this.toolRotate.Click += new System.EventHandler(this.toolDraw_Click);
             // 
-            // listTileForm
-            // 
-            this.listTileForm.FormattingEnabled = true;
-            this.listTileForm.Items.AddRange(new object[] {
-            "Rectangle",
-            "NW: Up-Left",
-            "NE: Up-Right",
-            "SW: Down-Left",
-            "SE: Down-Right"});
-            this.listTileForm.Location = new System.Drawing.Point(3, 153);
-            this.listTileForm.Name = "listTileForm";
-            this.listTileForm.Size = new System.Drawing.Size(142, 69);
-            this.listTileForm.TabIndex = 5;
-            this.listTileForm.SelectedIndexChanged += new System.EventHandler(this.listTileForm_SelectedIndexChanged);
-            // 
             // chkSetTile
             // 
             this.chkSetTile.Appearance = System.Windows.Forms.Appearance.Button;
@@ -361,7 +367,7 @@
             this.chkSetTile.Checked = true;
             this.chkSetTile.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkSetTile.Image = global::MapEdit.Properties.Resources._8M1tZ;
-            this.chkSetTile.Location = new System.Drawing.Point(3, 228);
+            this.chkSetTile.Location = new System.Drawing.Point(3, 153);
             this.chkSetTile.Name = "chkSetTile";
             this.chkSetTile.Size = new System.Drawing.Size(134, 151);
             this.chkSetTile.TabIndex = 6;
@@ -496,7 +502,7 @@
             this.toolImageToFile});
             this.imageBufferToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("imageBufferToolStripMenuItem.Image")));
             this.imageBufferToolStripMenuItem.Name = "imageBufferToolStripMenuItem";
-            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
+            this.imageBufferToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.imageBufferToolStripMenuItem.Text = "Image buffer";
             // 
             // toolImageToClipboard
@@ -523,14 +529,14 @@
             // mnuGrid8x8
             // 
             this.mnuGrid8x8.Name = "mnuGrid8x8";
-            this.mnuGrid8x8.Size = new System.Drawing.Size(189, 26);
+            this.mnuGrid8x8.Size = new System.Drawing.Size(185, 22);
             this.mnuGrid8x8.Text = "Grid 8x8";
             this.mnuGrid8x8.Click += new System.EventHandler(this.mnuGrid8x8_Click);
             // 
             // mnuGrid16x16
             // 
             this.mnuGrid16x16.Name = "mnuGrid16x16";
-            this.mnuGrid16x16.Size = new System.Drawing.Size(189, 26);
+            this.mnuGrid16x16.Size = new System.Drawing.Size(185, 22);
             this.mnuGrid16x16.Text = "Grid 16x16";
             this.mnuGrid16x16.Click += new System.EventHandler(this.mnuGrid16x16_Click);
             // 
@@ -539,33 +545,33 @@
             this.toolReloadTex.Image = ((System.Drawing.Image)(resources.GetObject("toolReloadTex.Image")));
             this.toolReloadTex.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolReloadTex.Name = "toolReloadTex";
-            this.toolReloadTex.Size = new System.Drawing.Size(111, 24);
+            this.toolReloadTex.Size = new System.Drawing.Size(107, 20);
             this.toolReloadTex.Text = "Reload textures";
             this.toolReloadTex.Click += new System.EventHandler(this.toolReloadTex_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(182, 6);
             // 
             // clearAllTilesOnLayerToolStripMenuItem
             // 
             this.clearAllTilesOnLayerToolStripMenuItem.Enabled = false;
             this.clearAllTilesOnLayerToolStripMenuItem.Name = "clearAllTilesOnLayerToolStripMenuItem";
-            this.clearAllTilesOnLayerToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
+            this.clearAllTilesOnLayerToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.clearAllTilesOnLayerToolStripMenuItem.Text = "Clear all tiles on layer";
             this.clearAllTilesOnLayerToolStripMenuItem.Click += new System.EventHandler(this.clearAllTilesOnLayerToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(186, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(182, 6);
             // 
             // addOneFloorOnTopToolStripMenuItem
             // 
             this.addOneFloorOnTopToolStripMenuItem.Enabled = false;
             this.addOneFloorOnTopToolStripMenuItem.Name = "addOneFloorOnTopToolStripMenuItem";
-            this.addOneFloorOnTopToolStripMenuItem.Size = new System.Drawing.Size(189, 26);
+            this.addOneFloorOnTopToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.addOneFloorOnTopToolStripMenuItem.Text = "Add one floor on top";
             this.addOneFloorOnTopToolStripMenuItem.Click += new System.EventHandler(this.addOneFloorOnTopToolStripMenuItem_Click);
             // 
@@ -574,7 +580,7 @@
             this.toolMapProperties.Enabled = false;
             this.toolMapProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolMapProperties.Image")));
             this.toolMapProperties.Name = "toolMapProperties";
-            this.toolMapProperties.Size = new System.Drawing.Size(189, 26);
+            this.toolMapProperties.Size = new System.Drawing.Size(185, 22);
             this.toolMapProperties.Text = "Map properties";
             this.toolMapProperties.Click += new System.EventHandler(this.mapPropertiesToolStripMenuItem_Click);
             // 
@@ -787,7 +793,6 @@
 		private System.Windows.Forms.ToolStripStatusLabel sbarSTXY;
 		private System.Windows.Forms.OpenFileDialog openFile1;
 		private System.Windows.Forms.SaveFileDialog saveFile1;
-		private System.Windows.Forms.ListBox listTileForm;
 		private System.Windows.Forms.CheckBox chkSetTile;
         private System.Windows.Forms.GroupBox groupFlags;
         private System.Windows.Forms.ToolStripStatusLabel sbarZoomLevel;
@@ -811,6 +816,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolTileFlags;
         private System.Windows.Forms.ToolStripMenuItem drawTilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ComboBox cboTileForm;
     }
 }
 

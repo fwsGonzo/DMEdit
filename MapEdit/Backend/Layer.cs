@@ -140,12 +140,12 @@ namespace MapEdit.Backend
 
         void renderData(Graphics g, Rectangle dst, Brush brush, byte form)
         {
-            switch (form)
+            switch ((TileForm) form)
             {
-                case 0:
+                case TileForm.FORM_RECT:
                     g.FillRectangle(brush, dst);
                     break;
-                case 1: // Up Left
+                case TileForm.FORM_DIAG_UL: // Up Left
                     g.FillPolygon(brush, new Point[]
                         {
                         new Point(dst.X + dst.Width, dst.Y-1),
@@ -153,7 +153,7 @@ namespace MapEdit.Backend
                         new Point(dst.X + dst.Width, dst.Y + dst.Height),
                         });
                     break;
-                case 2: // Up Right
+                case TileForm.FORM_DIAG_UR: // Up Right
                     g.FillPolygon(brush, new Point[]
                         {
                         new Point(dst.X, dst.Y-1),
@@ -161,7 +161,7 @@ namespace MapEdit.Backend
                         new Point(dst.X + dst.Width, dst.Y + dst.Height),
                         });
                     break;
-                case 3:
+                case TileForm.FORM_DIAG_DL:
                     g.FillPolygon(brush, new Point[]
                         {
                         new Point(dst.X, dst.Y),
@@ -169,13 +169,33 @@ namespace MapEdit.Backend
                         new Point(dst.X + dst.Width, dst.Y + dst.Height),
                         });
                     break;
-                case 4:
+                case TileForm.FORM_DIAG_DR:
                     g.FillPolygon(brush, new Point[]
                         {
                         new Point(dst.X, dst.Y),
                         new Point(dst.X + dst.Width, dst.Y),
                         new Point(dst.X, dst.Y + dst.Height),
                         });
+                    break;
+                case TileForm.FORM_HALF_U: // upper half
+                    g.FillRectangle(brush, new RectangleF(
+                        dst.X, dst.Y, dst.Width, dst.Height / 2
+                    ));
+                    break;
+                case TileForm.FORM_HALF_D: // lower half
+                    g.FillRectangle(brush, new RectangleF(
+                        dst.X, dst.Y + dst.Height / 2, dst.Width, dst.Height / 2
+                    ));
+                    break;
+                case TileForm.FORM_HALF_R: // right half
+                    g.FillRectangle(brush, new RectangleF(
+                        dst.X + dst.Width / 2, dst.Y, dst.Width / 2, dst.Height
+                    ));
+                    break;
+                case TileForm.FORM_HALF_L: // left half
+                    g.FillRectangle(brush, new RectangleF(
+                        dst.X, dst.Y, dst.Width / 2, dst.Height
+                    ));
                     break;
             }
         }

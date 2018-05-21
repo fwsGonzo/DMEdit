@@ -1,19 +1,19 @@
 ﻿
 namespace MapEdit.Backend
 {
-	enum TileForm
+	public enum TileForm
 	{
 		FORM_RECT = 0,
 
-		FORM_DIAG_UL = 1,
-		FORM_DIAG_UR = 2,
-		FORM_DIAG_DL = 3,
-		FORM_DIAG_DR = 4,
+        FORM_HALF_U,
+        FORM_HALF_D,
+        FORM_HALF_R,
+        FORM_HALF_L,
 
-		FORM_HALF_U = 5,
-		FORM_HALF_D = 6,
-		FORM_HALF_R = 7,
-		FORM_HALF_L = 8,
+        FORM_DIAG_UL,
+		FORM_DIAG_UR,
+		FORM_DIAG_DL,
+		FORM_DIAG_DR,
 	};
 
 	public class Tile
