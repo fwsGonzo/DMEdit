@@ -52,7 +52,7 @@ namespace MapEdit.Frontend
 		{
 			sbarXY.Text = "Layer: " + (l + 1) + " XY: " + x + ", " + y;
 			sbarTXY.Text = "Tile: " + tx + ", " + ty;
-			sbarSTXY.Text = "Selected: " + stx + ", " + sty;
+			sbarSTXY.Text = "Tile value: " + stx + ", " + sty;
 		}
         private void editor1_OnZoomChanged(float v)
         {
