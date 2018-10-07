@@ -738,7 +738,7 @@ namespace MapEdit.Controls
 			}
 			else
 			{
-				g.Clear(this.BackColor);
+                g.Clear(this.BackColor);
 			}
 			
 			// nothing to do without at least a tileset
@@ -753,10 +753,16 @@ namespace MapEdit.Controls
 
 			if (TileMode)
 			{
-				// draw tileset
 				Rectangle src = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
 				Rectangle dst = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
+                // draw magenta behind the tiles (not strictly necessary)
+                //var myBrush = new HatchBrush(HatchStyle.LargeCheckerBoard, Color.Magenta, Color.Cyan);
+                var myBrush = new SolidBrush(Color.Magenta);
+                g.FillRectangle(myBrush, dst);
+                myBrush.Dispose();
+                // draw tileset
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.CompositingMode = CompositingMode.SourceOver;
                 g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
 			}
 			else if (mapfile.layers.Count > 0)
