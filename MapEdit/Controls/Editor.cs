@@ -170,6 +170,7 @@ namespace MapEdit.Controls
 				Layer L = new Layer(sizeX, sizeY, tileset.size);
 				L.create();
 				L.ShowMask = (i == 0);
+                L.Enabled  = (i == 0);
 				L.invalidate(tileset);
 				mapfile.layers.Add(L);
 			}
@@ -773,7 +774,7 @@ namespace MapEdit.Controls
                         var L = mapfile.layers[i];
                         if (L.Enabled && (i <= SelectedLayer || LayersAbove))
                         {
-                            if (L.ShowMask)
+                            if (L.ShowMask || i == 0)
                             {
                                 // draw magenta behind the tiles (not strictly necessary)
                                 g.FillRectangle(myBrush, area);
