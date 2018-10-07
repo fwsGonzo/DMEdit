@@ -769,6 +769,7 @@ namespace MapEdit.Controls
 				for (int i = 1; i < mapfile.layers.Count; i++)
 				{
 					if (i <= SelectedLayer || LayersAbove)
+                    if (mapfile.layers[i].Enabled)
 						mapfile.layers[i].render(g);
 				}
 			}
