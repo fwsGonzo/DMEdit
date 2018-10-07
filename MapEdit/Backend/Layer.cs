@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System;
 
 namespace MapEdit.Backend
 {
@@ -304,8 +305,6 @@ namespace MapEdit.Backend
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
                 renderTile(tset, g, x, y, true);
             }
-            //if (ShowMask == false)
-            //    buffer.MakeTransparent(Color.Magenta);
         }
         public void invalidate(Tileset tset)
         {
@@ -322,8 +321,6 @@ namespace MapEdit.Backend
                     renderTile(tset, g, x, y);
                 }
             }
-            //if (ShowMask == false)
-            //    buffer.MakeTransparent(Color.Magenta);
         }
 
         public void render(Graphics g)
@@ -393,6 +390,11 @@ namespace MapEdit.Backend
                 if (t.getTX() != 0 || t.getTY() != 0) return false;
             }
             return true;
+        }
+
+        internal Size getSizePixels()
+        {
+            return new Size(getTilesX() * tile_size, getTilesY() * tile_size);
         }
     } // Layer
 }

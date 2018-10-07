@@ -186,7 +186,7 @@ namespace MapEdit.Controls
 		public bool loadMap(string filename)
 		{
 			// load map
-			this.mapfile = LayerFile.loadFile(current_mod_dir, filename, this.tileset, default_tiles);
+			this.mapfile = MapFile.load(current_mod_dir, filename, this.tileset, default_tiles);
 			if (mapfile.layers != null)
 			{
 				this.Invalidate();
@@ -204,7 +204,7 @@ namespace MapEdit.Controls
 		}
 		public bool saveMapAs(string filename)
 		{
-			if (LayerFile.saveFile(filename, this.mapfile))
+			if (this.mapfile.save(filename))
 			{
 				this.filename = filename;
 				this.has_filename = true;
@@ -216,7 +216,7 @@ namespace MapEdit.Controls
 		public bool saveChanges()
 		{
 			if (has_filename)
-			if (LayerFile.saveFile(this.filename, this.mapfile))
+			if (this.mapfile.save(this.filename))
 			{
 				this.is_saved = true;
 				return true;
@@ -282,7 +282,6 @@ namespace MapEdit.Controls
 		{
             if (getLayerCount() == 0) return;
             mapfile.layers[SelectedLayer].ShowMask = mask;
-			mapfile.layers[SelectedLayer].invalidate(this.tileset);
 			this.Invalidate();
 		}
 		public bool getShowMask(int layer)
@@ -703,7 +702,7 @@ namespace MapEdit.Controls
 			this.drawDragRect = false;
 		}
 
-		void renderBuffers()
+		private void renderBuffers()
 		{
             float zfactor = getZoomFactor();
             // get graphics object from buffer image
@@ -747,38 +746,44 @@ namespace MapEdit.Controls
 				return;
 			}
 
-			//////////////////////////////
-			// -= render tile mapfile.layers =- //
-			//////////////////////////////
+            //////////////////////////////
+            // -= render tile layers =- //
+            //////////////////////////////
 
-			if (TileMode)
-			{
-				Rectangle src = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
-				Rectangle dst = new Rectangle(new Point(0, 0), tileset.getBuffer().Size);
-                // draw magenta behind the tiles (not strictly necessary)
-                //var myBrush = new HatchBrush(HatchStyle.LargeCheckerBoard, Color.Magenta, Color.Cyan);
-                var myBrush = new SolidBrush(Color.Magenta);
-                g.FillRectangle(myBrush, dst);
-                myBrush.Dispose();
-                // draw tileset
-                g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.CompositingMode = CompositingMode.SourceOver;
-                g.DrawImage(tileset.getBuffer(), dst, src, GraphicsUnit.Pixel);
-			}
-			else if (mapfile.layers.Count > 0)
-			{
-                // render bottom layer always
-                g.CompositingMode = CompositingMode.SourceCopy;
-                mapfile.layers[0].render(g);
-                // render layers above using source over
-                g.CompositingMode = CompositingMode.SourceOver;
-				for (int i = 1; i < mapfile.layers.Count; i++)
-				{
-					if (i <= SelectedLayer || LayersAbove)
-                    if (mapfile.layers[i].Enabled)
-						mapfile.layers[i].render(g);
-				}
-			}
+            using (var myBrush = new SolidBrush(Color.Magenta))
+            {
+                if (TileMode)
+                {
+                    Rectangle area = new Rectangle(Point.Empty, tileset.getBuffer().Size);
+                    // draw magenta behind the tiles (not strictly necessary)
+                    g.FillRectangle(myBrush, area);
+                    // draw tileset
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.CompositingMode = CompositingMode.SourceOver;
+                    g.DrawImageUnscaled(tileset.getBuffer(), 0, 0);
+                }
+                else if (mapfile.layers.Count > 0)
+                {
+                    Rectangle area = new Rectangle(Point.Empty, mapfile.layers[0].getSizePixels());
+                    g.CompositingMode = CompositingMode.SourceOver;
+                    int startLayer = mapfile.getFirstVisibleLayer();
+                    // render layers above using source over
+                    for (int i = startLayer; i < mapfile.layers.Count; i++)
+                    {
+                        var L = mapfile.layers[i];
+                        if (L.Enabled && (i <= SelectedLayer || LayersAbove))
+                        {
+                            if (L.ShowMask)
+                            {
+                                // draw magenta behind the tiles (not strictly necessary)
+                                g.FillRectangle(myBrush, area);
+                                //g.CompositingMode = CompositingMode.SourceCopy;
+                            }
+                            L.render(g);
+                        }
+                    }
+                }
+            }
 
 			///////////////////////
 			// -= render grid =- //

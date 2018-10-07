@@ -90,7 +90,6 @@
   <ItemGroup>
     <Compile Include="Backend\LayerBuffer.cs" />
     <Compile Include="Backend\Layer.cs" />
-    <Compile Include="Backend\LayerFile.cs" />
     <Compile Include="Backend\MapFile.cs" />
     <Compile Include="Backend\ModSelection.cs" />
     <Compile Include="Backend\Selection.cs" />

@@ -25,7 +25,8 @@ namespace MapEdit.Backend
             {
                 g.DrawImageUnscaled(img, 0, 0);
             }
-            replaceColor(this.tileset, Color.FromArgb(255, Color.Magenta), Color.FromArgb(0));
+            // replace magenta with invisible magenta
+            replaceColor(this.tileset, Color.Magenta, Color.FromArgb(0, 255, 0, 255));
         }
 
         private void replaceColor(Bitmap bmp, System.Drawing.Color source, System.Drawing.Color target)
@@ -44,16 +45,19 @@ namespace MapEdit.Backend
             int i = 0;
             for (int y = 0; y < bmpData.Height; y++)
             {
-                for (int x = 0; x < bmpData.Stride; x += 4)
+                for (int x = 0; x < bmpData.Stride; x += 4, i +=4)
                 {
-                    if (buffer[i+0] == source.R && buffer[i+1] == source.G && buffer[i+2] == source.B)
+                    int color = ((int) buffer[i+0] << 0)  | 
+                                ((int) buffer[i+1] << 8)  | 
+                                ((int) buffer[i+2] << 16) | 
+                                ((int) buffer[i+3] << 24);
+                    if (source.ToArgb() == color)
                     {
-                        buffer[i+0] = target.R;
+                        buffer[i+0] = target.B;
                         buffer[i+1] = target.G;
-                        buffer[i+2] = target.B;
+                        buffer[i+2] = target.R;
                         buffer[i+3] = target.A;
                     }
-                    i += 4;
                 }
             }
             Debug.Assert(i == bytes);
