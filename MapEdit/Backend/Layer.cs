@@ -314,6 +314,7 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.CompositingMode = CompositingMode.SourceCopy;
                 g.Clear(Color.Transparent);
 
                 for (int y = 0; y < tilesY; y++)
