@@ -303,6 +303,7 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.CompositingMode = CompositingMode.SourceCopy;
                 renderTile(tset, g, x, y, true);
             }
         }
