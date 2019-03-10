@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
+using System.Drawing.Imaging;
+using System;
 
 namespace MapEdit.Backend
 {
@@ -104,8 +106,8 @@ namespace MapEdit.Backend
         private void initializeBuffers()
         {
             // create buffer for layer
-            buffer = new Bitmap(this.tilesX * this.tile_size, this.tilesY * this.tile_size);
-            buffer.MakeTransparent(Color.Magenta);
+            buffer = new Bitmap(this.tilesX * this.tile_size, this.tilesY * this.tile_size, PixelFormat.Format32bppArgb);
+            //buffer.MakeTransparent(Color.Magenta);
         }
 
         public int getWidth()
@@ -307,10 +309,9 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.CompositingMode = CompositingMode.SourceCopy;
                 renderTile(tset, g, x, y, true);
             }
-            if (ShowMask == false)
-                buffer.MakeTransparent(Color.Magenta);
         }
         public void invalidate(Tileset tset)
         {
@@ -319,7 +320,8 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.Clear(Color.Magenta);
+                g.CompositingMode = CompositingMode.SourceCopy;
+                g.Clear(Color.Transparent);
 
                 for (int y = 0; y < tilesY; y++)
                 for (int x = 0; x < tilesX; x++)
@@ -327,8 +329,6 @@ namespace MapEdit.Backend
                     renderTile(tset, g, x, y);
                 }
             }
-            if (ShowMask == false)
-                buffer.MakeTransparent(Color.Magenta);
         }
 
         public void render(Graphics g)
@@ -398,6 +398,11 @@ namespace MapEdit.Backend
                 if (t.getTX() != 0 || t.getTY() != 0) return false;
             }
             return true;
+        }
+
+        internal Size getSizePixels()
+        {
+            return new Size(getTilesX() * tile_size, getTilesY() * tile_size);
         }
     } // Layer
 }
