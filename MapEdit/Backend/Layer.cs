@@ -23,6 +23,9 @@ namespace MapEdit.Backend
         static Brush entranceBrush = new HatchBrush(HatchStyle.DiagonalCross,
                                                     Color.FromArgb(160, Color.Black),
                                                     Color.FromArgb(128, Color.NavajoWhite));
+        static Brush activateBrush = new HatchBrush(HatchStyle.ZigZag, // looks watery
+                                                    Color.FromArgb(160, Color.Brown),
+                                                    Color.FromArgb(128, Color.Yellow));
         static Brush pushbackBrush = new HatchBrush(HatchStyle.DiagonalCross,
                                                     Color.FromArgb(120, Color.Black),
                                                     Color.FromArgb(80, Color.Red));
@@ -245,6 +248,9 @@ namespace MapEdit.Backend
                     break;
                 case Tile.Flags.ENTRANCE:
                     brush = entranceBrush;
+                    break;
+                case Tile.Flags.ACTIVATE:
+                    brush = activateBrush;
                     break;
                 case Tile.Flags.PUSHBACK:
                     brush = pushbackBrush;

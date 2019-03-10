@@ -35,6 +35,7 @@ namespace MapEdit.Backend
             CLIMB = 13,
             FENCE = 14,
             ENTRANCE = 15,
+            ACTIVATE = 16,
 
             AUTOJUMP  = 32,
             AUTOMOVE  = 33,
