@@ -206,6 +206,7 @@ namespace MapEdit.Frontend
             toolShowGrid.Checked = editor1.ShowGrid;
             toolLayerAbove.Checked = editor1.LayersAbove;
             // get showmask value for selected layer
+            toolLayerProperties.Enabled = enabled;
             toolShowMask.Enabled = enabled;
             toolShowFlags.Enabled = enabled;
             toolMapProperties.Enabled = enabled;
@@ -425,6 +426,14 @@ namespace MapEdit.Frontend
         private void cboTileForm_SelectedIndexChanged(object sender, EventArgs e)
         {
             editor1.TileForm = cboTileForm.SelectedIndex;
+        }
+
+        private void toolLayerProperties_Click(object sender, EventArgs e)
+        {
+            var prop = new frmLayerProperties(editor1.getCurrentLayer());
+            prop.ShowDialog();
+            // changing layer properties could require redrawing the graphics
+            editor1.Invalidate();
         }
     }
 }

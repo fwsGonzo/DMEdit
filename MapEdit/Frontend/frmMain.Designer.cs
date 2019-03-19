@@ -89,6 +89,7 @@
             this.drawTilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolTileFlags = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolLayerProperties = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -401,6 +402,7 @@
             this.toolStripSeparator3,
             this.mnuSelectLayer,
             this.toolStripSeparator4,
+            this.toolLayerProperties,
             this.toolShowGrid,
             this.toolLayerAbove,
             this.toolShowMask,
@@ -741,6 +743,16 @@
             this.toolTileFlags.Size = new System.Drawing.Size(125, 22);
             this.toolTileFlags.Text = "None";
             // 
+            // toolLayerProperties
+            // 
+            this.toolLayerProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolLayerProperties.Image")));
+            this.toolLayerProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolLayerProperties.Name = "toolLayerProperties";
+            this.toolLayerProperties.Size = new System.Drawing.Size(132, 24);
+            this.toolLayerProperties.Text = "Layer properties";
+            this.toolLayerProperties.ToolTipText = "Layer properties";
+            this.toolLayerProperties.Click += new System.EventHandler(this.toolLayerProperties_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -832,6 +844,7 @@
         private System.Windows.Forms.ToolStripMenuItem drawTilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ComboBox cboTileForm;
+        private System.Windows.Forms.ToolStripButton toolLayerProperties;
     }
 }
 

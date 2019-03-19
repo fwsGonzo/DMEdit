@@ -107,6 +107,12 @@
     <Compile Include="Frontend\frmDialogue.Designer.cs">
       <DependentUpon>frmDialogue.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frontend\frmLayerProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frontend\frmLayerProperties.Designer.cs">
+      <DependentUpon>frmLayerProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frontend\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\frmDialogue.resx">
       <DependentUpon>frmDialogue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frontend\frmLayerProperties.resx">
+      <DependentUpon>frmLayerProperties.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frontend\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>

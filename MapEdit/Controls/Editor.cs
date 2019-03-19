@@ -276,13 +276,13 @@ namespace MapEdit.Controls
 			// the file is no longer 'current'
 			this.is_saved = false;
             // enable the layer if modified
-            this.mapfile.layers[SelectedLayer].Enabled = true;
+            this.getCurrentLayer().Enabled = true;
 		}
 
 		public void setShowMask(bool mask)
 		{
             if (getLayerCount() == 0) return;
-            mapfile.layers[SelectedLayer].ShowMask = mask;
+            getCurrentLayer().ShowMask = mask;
 			this.Invalidate();
 		}
 		public bool getShowMask(int layer)
@@ -292,9 +292,20 @@ namespace MapEdit.Controls
         internal void setShowFlags(int level)
         {
             if (getLayerCount() == 0) return;
-            mapfile.layers[SelectedLayer].ShowFlags = level;
-            mapfile.layers[SelectedLayer].invalidate(this.tileset);
+            getCurrentLayer().ShowFlags = level;
+            getCurrentLayer().invalidate(this.tileset);
             this.Invalidate();
+        }
+        internal void setShowLayer(bool visible)
+        {
+            if (getLayerCount() == 0) return;
+            getCurrentLayer().Visible = visible;
+            getCurrentLayer().invalidate(this.tileset);
+            this.Invalidate();
+        }
+        public Layer getCurrentLayer()
+        {
+            return mapfile.layers[SelectedLayer];
         }
 
         // transforms a point p, in window coordinate system
@@ -365,7 +376,7 @@ namespace MapEdit.Controls
 			p.X -= GraphOffset.X;
 			p.Y -= GraphOffset.Y;
 			// get current point & tile
-			Layer L = mapfile.layers[SelectedLayer];
+			Layer L = getCurrentLayer();
 			Point tp = L.toTileCoord(p.X, p.Y);
 			Tile t = L.getTile(tp);
 			// outside of area (most likely)
@@ -632,7 +643,7 @@ namespace MapEdit.Controls
 					if (TileMode == false)
 					{
 						// get current point & written tile
-						Layer L = mapfile.layers[SelectedLayer];
+						Layer L = getCurrentLayer();
 						Point tp = L.toTileCoord(p.X, p.Y);
 						Tile t = L.getTile(tp);
 						if (t != null)

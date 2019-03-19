@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Diagnostics;
 using System.Drawing.Imaging;
-using System;
 
 namespace MapEdit.Backend
 {
