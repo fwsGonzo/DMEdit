@@ -49,10 +49,10 @@ namespace MapEdit.Backend
             this.data = 0;
             this.rot  = 0;
 		}
-		public Tile(byte x, byte y, byte t)
+		public Tile(int x, int y, byte t)
 		{
-            this.tx = x;
-            this.ty = y;
+            this.tx = (short) x;
+            this.ty = (short) y;
             this.form = (int)TileForm.FORM_RECT;
             this.data = 0;
             this.rot  = 0;
@@ -60,22 +60,23 @@ namespace MapEdit.Backend
         public Tile(ulong data)
 		{
 			// Tile from 64bits ulong
-			this.tx =   (byte) ((data >>  0) & 255);
-			this.ty =   (byte) ((data >>  8) & 255);
-            //this.?? = (byte) ((data >> 16) & 255);
-            this.form = (byte) ((data >> 24) & 255);
-			this.data = (byte) ((data >> 32) & 255);
-            this.rot  = (byte) ((data >> 40) & 255);
+			this.tx =   (short) ((data >>  0) & 0xFFFF);
+			this.ty =   (short) ((data >> 16) & 0xFFFF);
+            this.rot = (byte)((data >> 32) & 255);
+            this.form = (byte) ((data >> 40) & 255);
+			this.data = (byte) ((data >> 48) & 255);
         }
         public ulong compressed()
 		{
-			return (ulong)tx + ((ulong)ty << 8) // + ((ulong)tset << 16)
-                + ((ulong)form << 24) + ((ulong)data << 32) + ((ulong)rot << 40);
+			return (ulong)tx + ((ulong)ty << 16)
+                + ((ulong)rot << 32) + ((ulong)form << 40) + ((ulong)data << 48);
 		}
 
-		public byte getTX() { return tx; }
-		public byte getTY() { return ty; }
-        internal void setXY(byte x, byte y) { tx = x; ty = y; }
+		public int getTX() { return tx; }
+		public int getTY() { return ty; }
+        internal void setXY(int x, int y) {
+            tx = (short) x; ty = (short) y;
+        }
 
         internal byte getForm() { return form; }
         internal void setForm(byte f) { form = f; }
@@ -111,8 +112,8 @@ namespace MapEdit.Backend
 			tileSize = size;
 		}
 
-		private byte tx;
-		private byte ty;
+		private short tx;
+		private short ty;
 		private byte form;
 		private byte data;
         private byte rot;

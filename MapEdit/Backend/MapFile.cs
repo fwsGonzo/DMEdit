@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace MapEdit.Backend
@@ -18,7 +17,7 @@ namespace MapEdit.Backend
         public string[] PropVal = new string[4];
 
         private static char[] MAGIC = { 'D', 'M', 'F', '\0' };
-        private static int VERSION = 1;
+        private static int VERSION = 2;
         private static int HEADER_SIZE = 300;
         private static int KEY_LENGTH = 20;
         private static int VAL_LENGTH = 44;
@@ -114,7 +113,7 @@ namespace MapEdit.Backend
                         throw new System.InvalidOperationException("Missing signature in map file");
                     }
                     int version = sr.ReadInt32();
-                    if (version != 1)
+                    if (version != 2)
                     {
                         // do version specific things
                         throw new System.InvalidOperationException("Map version mismatch");
@@ -171,12 +170,12 @@ namespace MapEdit.Backend
                         // only load enabled layers
                         if (L.Enabled)
                         {
-                            List<ulong> values = new List<ulong>();
+                            List<Tile> tilelist = new List<Tile>();
                             for (int t = 0; t < sizeX * sizeY; t++)
                             {
-                                values.Add(sr.ReadUInt64());
+                                tilelist.Add(new Tile(sr.ReadUInt64()));
                             }
-                            L.load(values);
+                            L.load(tilelist);
                         }
                         else
                         {

@@ -69,13 +69,10 @@ namespace MapEdit.Backend
             // initialize buffer with tileset
             initializeBuffers();
         }
-        public void load(List<ulong> values)
+        public void load(List<Tile> tiles)
         {
             this.Visible = true;
-            foreach (var v in values)
-            {
-                tiles.Add(new Tile(v));
-            }
+            this.tiles = tiles;
             // initialize draw buffer
             initializeBuffers();
         }
@@ -307,7 +304,7 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.CompositingMode = CompositingMode.SourceCopy;
+                g.CompositingMode = CompositingMode.SourceOver;
                 renderTile(tset, g, x, y, true);
             }
         }
@@ -318,7 +315,7 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.CompositingMode = CompositingMode.SourceCopy;
+                g.CompositingMode = CompositingMode.SourceOver;
                 g.Clear(Color.Transparent);
 
                 for (int y = 0; y < tilesY; y++)
@@ -359,7 +356,7 @@ namespace MapEdit.Backend
             return new Point(x, y);
         }
 
-        public void fill(int x, int y, byte ox, byte oy, byte tx, byte ty)
+        public void fill(int x, int y, int ox, int oy, int tx, int ty)
         {
             if (inRange(x, y) == false) return;
             if (tx == ox && ty == oy) return;
@@ -375,7 +372,7 @@ namespace MapEdit.Backend
                 fill(x, y + 1, ox, oy, tx, ty);
             }
         }
-        public void replace(byte oldX, byte oldY, Tile src)
+        public void replace(int oldX, int oldY, Tile src)
         {
             foreach (Tile t in tiles)
             {

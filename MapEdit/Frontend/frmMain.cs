@@ -29,8 +29,9 @@ namespace MapEdit.Frontend
             System.Console.WriteLine("Detected mod: " + modsel.ModDir);
 
             Image tiles = Image.FromFile(modsel.ModDir + "/bitmaps/tiles.png");
-            editor1.initialize(modsel.ModDir, tiles, modsel.TileSize);
-            if (modsel.TileSize == 16)
+            const int gridsize = 16;
+            editor1.initialize(modsel.ModDir, tiles, modsel.TileSize, gridsize);
+            if (gridsize == 16)
                 mnuGrid16x16.Checked = true;
             else
                 mnuGrid8x8.Checked = true;
@@ -48,11 +49,11 @@ namespace MapEdit.Frontend
 			layerList = new List<ToolStripMenuItem>();
         }
 
-		void editor1_onTileChanged(int l, int x, int y, int tx, int ty, int stx, int sty)
+		void editor1_onTileChanged(int l, int x, int y, int tx, int ty, Backend.Tile tile)
 		{
 			sbarXY.Text = "Layer: " + (l + 1) + " XY: " + x + ", " + y;
 			sbarTXY.Text = "Tile: " + tx + ", " + ty;
-			sbarSTXY.Text = "Tile value: " + stx + ", " + sty;
+			sbarSTXY.Text = "Tile value: " + tile.getTX() + ", " + tile.getTY() + " Form: " + tile.getForm() + " Flags: " + tile.getFlags();
 		}
         private void editor1_OnZoomChanged(float v)
         {

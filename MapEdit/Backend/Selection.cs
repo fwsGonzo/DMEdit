@@ -14,8 +14,8 @@ namespace MapEdit.Backend
 			for (int y = 0; y < size.Height; y++)
 			for (int x = 0; x < size.Width;  x++)
 			{
-				byte tx = (byte) (rect.X + x);
-				byte ty = (byte) (rect.Y + y);
+				int tx = (int) (rect.X + x);
+				int ty = (int) (rect.Y + y);
 				tiles.Add(new Tile(tx, ty, 0));
 			}
 		}
@@ -32,8 +32,8 @@ namespace MapEdit.Backend
 			for (int y = 0; y < size.Height; y++)
 			for (int x = 0; x < size.Width; x++)
 			{
-				byte tx = (byte)(rect.X + x);
-				byte ty = (byte)(rect.Y + y);
+				int tx = (int)(rect.X + x);
+				int ty = (int)(rect.Y + y);
 				tiles.Add(L.getTile(tx, ty));
 			}
 		}

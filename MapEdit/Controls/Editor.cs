@@ -21,7 +21,7 @@ namespace MapEdit.Controls
 
     public partial class Editor : UserControl
     {
-		public delegate void TileChangedEvent(int l, int x, int y, int tx, int ty, int stx, int sty);
+		public delegate void TileChangedEvent(int l, int x, int y, int tx, int ty, Tile t);
 		public event TileChangedEvent onTileChanged;
 
         string current_mod_dir = "";
@@ -133,13 +133,13 @@ namespace MapEdit.Controls
 			this.SetStyle(ControlStyles.AllPaintingInWmPaint
 					| ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 		}
-		public void initialize(string mod_dir, Image tileset, int tilesize)
+		public void initialize(string mod_dir, Image tileset, int tilesize, int gridsize)
 		{
 			this.current_mod_dir = mod_dir;
             // tileset image && tilesize
             this.default_tiles = tileset;
             this.tileset = new Tileset(tileset, tilesize);
-            GridSize = tilesize;
+            GridSize = gridsize;
 		}
         public void reload_textures(Image tiles)
         {
@@ -634,7 +634,7 @@ namespace MapEdit.Controls
 
 				if (mapfile.layers.Count == 0)
 				{
-					onTileChanged.Invoke(0, e.Location.X, e.Location.Y, 0, 0, 0, 0);
+					onTileChanged.Invoke(0, e.Location.X, e.Location.Y, 0, 0, new Tile(0));
 				}
 				else
 				{
@@ -648,18 +648,18 @@ namespace MapEdit.Controls
 						Tile t = L.getTile(tp);
 						if (t != null)
 						{
-							onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, tp.X, tp.Y, t.getTX(), t.getTY());
+							onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, tp.X, tp.Y, t);
 						}
 						else
 						{
-							onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, tp.X, tp.Y, 0, 0);
+							onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, tp.X, tp.Y, new Tile(0));
 						}
 					}
 					else
 					{
                         Point sp = toTilesheet(p);
                         // tilemode
-                        onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, sp.X, sp.Y, sp.X, sp.Y);
+                        onTileChanged.Invoke(SelectedLayer, (int)p.X, (int)p.Y, sp.X, sp.Y, new Tile(sp.X, sp.Y, 0));
 					}
 				}
 			}

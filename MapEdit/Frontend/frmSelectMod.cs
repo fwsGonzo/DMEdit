@@ -46,7 +46,7 @@ namespace MapEdit.Frontend
             // select first available mod
             cboModlist.SelectedIndex = 0;
             // select most common tile size
-            cboTileSize.SelectedIndex = 1;
+            cboTileSize.SelectedIndex = 0;
         }
 
         private void cboModlist_SelectedIndexChanged(object sender, EventArgs e)
