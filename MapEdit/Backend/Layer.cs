@@ -304,7 +304,7 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.CompositingMode = CompositingMode.SourceOver;
+                g.CompositingMode = CompositingMode.SourceCopy;
                 renderTile(tset, g, x, y, true);
             }
         }
@@ -315,13 +315,13 @@ namespace MapEdit.Backend
             using (Graphics g = Graphics.FromImage(buffer))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
-                g.CompositingMode = CompositingMode.SourceOver;
+                g.CompositingMode = CompositingMode.SourceCopy;
                 g.Clear(Color.Transparent);
 
                 for (int y = 0; y < tilesY; y++)
                 for (int x = 0; x < tilesX; x++)
                 {
-                    renderTile(tset, g, x, y);
+                    renderTile(tset, g, x, y, false);
                 }
             }
         }
