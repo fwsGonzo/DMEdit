@@ -222,6 +222,7 @@ namespace MapEdit.Backend
             if (ShowFlags <= 0)
                 return;
             // always draw flags, if any
+            g.CompositingMode = CompositingMode.SourceOver;
             Brush brush = null;
             switch (tile.getFlags())
             {
