@@ -17,7 +17,7 @@ namespace MapEdit.Backend
         public string[] PropVal = new string[4];
 
         private static char[] MAGIC = { 'D', 'M', 'F', '\0' };
-        private static int VERSION = 2;
+        private static int VERSION = 3;
         private static int HEADER_SIZE = 300;
         private static int KEY_LENGTH = 20;
         private static int VAL_LENGTH = 44;
