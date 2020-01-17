@@ -48,14 +48,16 @@ namespace MapEdit.Backend
             this.form = (int)TileForm.FORM_RECT;
             this.data = 0;
             this.rot  = 0;
+            this.shader = 0;
 		}
-		public Tile(int x, int y, byte t)
+		public Tile(int x, int y, byte shader)
 		{
             this.tx = (short) x;
             this.ty = (short) y;
             this.form = (int)TileForm.FORM_RECT;
             this.data = 0;
             this.rot  = 0;
+            this.shader = shader;
         }
         public Tile(ulong data)
 		{
@@ -102,7 +104,16 @@ namespace MapEdit.Backend
             return this.rot;
         }
 
-		private static int tileSize;
+        internal void setShader(int shader)
+        {
+            this.shader = (byte)shader;
+        }
+        internal int getShader()
+        {
+            return this.shader;
+        }
+
+        private static int tileSize;
         internal static int getSize()
 		{
 			return tileSize;
@@ -117,6 +128,7 @@ namespace MapEdit.Backend
 		private byte form;
 		private byte data;
         private byte rot;
+        private byte shader;
 
         internal void clear()
         {

@@ -7,7 +7,7 @@ namespace MapEdit.Backend
 {
     public class Layer
     {
-        public const int LAYERS_PER_FLOOR = 8;
+        public const int LAYERS_PER_FLOOR = 16;
 
         private int tile_size;
         List<Tile> tiles;

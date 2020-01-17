@@ -11,7 +11,7 @@ namespace MapEdit.Frontend
     public partial class frmSelectMod : Form
     {
         private Backend.ModSelection modsel;
-        private static string MOD_DIR_FB = "//vmware-host/Shared Folders/dm2/Debug/";
+        private static string MOD_DIR_FB = "C:/Users/fwsgo/Dropbox/dm2/Debug/";
 
         public frmSelectMod(Backend.ModSelection selector)
         {

@@ -156,7 +156,7 @@ $RECYCLE.BIN/
 .DS_Store
 .vs/VSWorkspaceState.json
 .vs/slnx.sqlite
-.vs/MapEdit/v15/Server/sqlite3/storage.ide-wal
-.vs/MapEdit/v15/Server/sqlite3/storage.ide-shm
-.vs/MapEdit/v15/Server/sqlite3/storage.ide
-.vs/MapEdit/v15/Server/sqlite3/db.lock
+.vs/MapEdit/v16/Server/sqlite3/storage.ide-wal
+.vs/MapEdit/v16/Server/sqlite3/storage.ide-shm
+.vs/MapEdit/v16/Server/sqlite3/storage.ide
+.vs/MapEdit/v16/Server/sqlite3/db.lock

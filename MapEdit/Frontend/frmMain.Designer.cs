@@ -79,6 +79,7 @@
             this.mnuSelectLayer = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnuLayer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolLayerProperties = new System.Windows.Forms.ToolStripButton();
             this.toolShowGrid = new System.Windows.Forms.ToolStripButton();
             this.toolLayerAbove = new System.Windows.Forms.ToolStripButton();
             this.toolShowMask = new System.Windows.Forms.ToolStripButton();
@@ -89,7 +90,8 @@
             this.drawTilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolTileFlags = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolLayerProperties = new System.Windows.Forms.ToolStripButton();
+            this.mnuSelectFloor = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -119,7 +121,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupFlags);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(1064, 719);
+            this.splitContainer1.Size = new System.Drawing.Size(1064, 674);
             this.splitContainer1.SplitterDistance = 904;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -139,7 +141,7 @@
             this.editor1.Name = "editor1";
             this.editor1.SelectedLayer = 0;
             this.editor1.ShowGrid = true;
-            this.editor1.Size = new System.Drawing.Size(902, 692);
+            this.editor1.Size = new System.Drawing.Size(902, 647);
             this.editor1.TabIndex = 0;
             this.editor1.TileDrawing = true;
             this.editor1.TileFlags = MapEdit.Backend.Tile.Flags.NONE;
@@ -157,7 +159,7 @@
             this.sbarTXY,
             this.sbarSTXY,
             this.sbarZoomLevel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 692);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 647);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(902, 25);
             this.statusStrip1.TabIndex = 1;
@@ -400,6 +402,7 @@
             this.toolUndo,
             this.toolRedo,
             this.toolStripSeparator3,
+            this.mnuSelectFloor,
             this.mnuSelectLayer,
             this.toolStripSeparator4,
             this.toolLayerProperties,
@@ -645,7 +648,7 @@
             this.mnuLayer.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mnuLayer.Enabled = false;
             this.mnuLayer.Name = "mnuLayer";
-            this.mnuLayer.Size = new System.Drawing.Size(123, 24);
+            this.mnuLayer.Size = new System.Drawing.Size(180, 24);
             this.mnuLayer.Text = "Layer 1";
             this.mnuLayer.Click += new System.EventHandler(this.mnuLayer_Click);
             // 
@@ -653,6 +656,16 @@
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolLayerProperties
+            // 
+            this.toolLayerProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolLayerProperties.Image")));
+            this.toolLayerProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolLayerProperties.Name = "toolLayerProperties";
+            this.toolLayerProperties.Size = new System.Drawing.Size(132, 24);
+            this.toolLayerProperties.Text = "Layer properties";
+            this.toolLayerProperties.ToolTipText = "Layer properties";
+            this.toolLayerProperties.Click += new System.EventHandler(this.toolLayerProperties_Click);
             // 
             // toolShowGrid
             // 
@@ -743,21 +756,31 @@
             this.toolTileFlags.Size = new System.Drawing.Size(125, 22);
             this.toolTileFlags.Text = "None";
             // 
-            // toolLayerProperties
+            // mnuSelectFloor
             // 
-            this.toolLayerProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolLayerProperties.Image")));
-            this.toolLayerProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolLayerProperties.Name = "toolLayerProperties";
-            this.toolLayerProperties.Size = new System.Drawing.Size(132, 24);
-            this.toolLayerProperties.Text = "Layer properties";
-            this.toolLayerProperties.ToolTipText = "Layer properties";
-            this.toolLayerProperties.Click += new System.EventHandler(this.toolLayerProperties_Click);
+            this.mnuSelectFloor.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2});
+            this.mnuSelectFloor.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.mnuSelectFloor.Image = ((System.Drawing.Image)(resources.GetObject("mnuSelectFloor.Image")));
+            this.mnuSelectFloor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.mnuSelectFloor.Name = "mnuSelectFloor";
+            this.mnuSelectFloor.Size = new System.Drawing.Size(79, 24);
+            this.mnuSelectFloor.Text = "Floors";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Checked = true;
+            this.toolStripMenuItem2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripMenuItem2.Enabled = false;
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 24);
+            this.toolStripMenuItem2.Text = "Floor 1";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1064, 746);
+            this.ClientSize = new System.Drawing.Size(1064, 701);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -845,6 +868,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ComboBox cboTileForm;
         private System.Windows.Forms.ToolStripButton toolLayerProperties;
+        private System.Windows.Forms.ToolStripDropDownButton mnuSelectFloor;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
 

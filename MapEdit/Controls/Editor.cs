@@ -93,6 +93,14 @@ namespace MapEdit.Controls
 		{
 			return mapfile.layers.Count;
 		}
+		public int getFloorCount()
+		{
+			return mapfile.layers.Count / Layer.LAYERS_PER_FLOOR;
+		}
+		public int getCurrentFloor()
+		{
+			return SelectedLayer / Layer.LAYERS_PER_FLOOR;
+		}
 
 		public Editor()
 		{

@@ -8,7 +8,8 @@ namespace MapEdit.Frontend
 {
     public partial class frmMain : Form
     {
-		List<ToolStripMenuItem> layerList;
+        List<ToolStripMenuItem> floorList;
+        List<ToolStripMenuItem> layerList;
         private Backend.ModSelection modsel;
         private string getModDir()
         {
@@ -46,10 +47,11 @@ namespace MapEdit.Frontend
             // no tile flags by default
             cboTileFlags.SelectedIndex = 0;
 
-			layerList = new List<ToolStripMenuItem>();
+			floorList = new List<ToolStripMenuItem>();
+            layerList = new List<ToolStripMenuItem>();
         }
 
-		void editor1_onTileChanged(int l, int x, int y, int tx, int ty, Backend.Tile tile)
+        void editor1_onTileChanged(int l, int x, int y, int tx, int ty, Backend.Tile tile)
 		{
 			sbarXY.Text = "Layer: " + (l + 1) + " XY: " + x + ", " + y;
 			sbarTXY.Text = "Tile: " + tx + ", " + ty;
@@ -219,21 +221,74 @@ namespace MapEdit.Frontend
 
         private string layer_caption(int layer)
         {
-            int fl = layer / Backend.Layer.LAYERS_PER_FLOOR;
-            int l  = layer % Backend.Layer.LAYERS_PER_FLOOR;
-            return "F" + fl + " Layer " + l;
+            int l = layer % Backend.Layer.LAYERS_PER_FLOOR;
+            string type;
+            switch (l)
+            {
+                case 0: // 1x
+                    type = "Background"; break;
+                case 1:
+                case 2:
+                case 3: // 3x
+                    type = "Ground"; break;
+                case 4:
+                case 5:
+                case 6:
+                case 7: // 4x
+                    type = "Objects"; break;
+                case 8:
+                case 9:
+                case 10:
+                case 11: // 4x
+                    type = "Effects"; break;
+                case 12:
+                case 13:
+                case 14:
+                case 15: // 4x
+                    type = "Above"; break;
+                default:
+                    type = "Unspecified"; break;
+            }
+            return "Layer " + l + " (" + type + ")";
+        }
+        private string floor_caption(int floor)
+        {
+            string type;
+            switch (floor)
+            {
+                case 0: type = "Ground"; break;
+                default: type = "Upper"; break;
+            }
+            return "Floor " + floor + " (" + type + ")";
         }
 
         private void resizeMenuLayers()
 		{
-			// remove old layers
-			mnuSelectLayer.DropDownItems.Clear();
-			layerList.Clear();
+			// remove old floors and layers
+			mnuSelectFloor.DropDownItems.Clear();
+            mnuSelectLayer.DropDownItems.Clear();
+            floorList.Clear();
+            layerList.Clear();
+
 			// exit when there are no layers
 			if (editor1.getLayerCount() == 0) return;
 
-			// create new layers
-			for (int i = 0; i < editor1.getLayerCount(); i++)
+            int floors = editor1.getFloorCount();
+            // create new floors
+            for (int i = 0; i < floors; i++)
+            {
+                ToolStripMenuItem floor = new ToolStripMenuItem(floor_caption(i), null, mnuFloor_Click);
+                if (i < 8)
+                {
+                    floor.ShortcutKeys = Keys.Control | Keys.Alt | (Keys.D1 + i);
+                }
+                floor.Tag = i;
+
+                floorList.Add(floor);
+                mnuSelectFloor.DropDownItems.Add(floor);
+            }
+            // create new layers
+            for (int i = 0; i < Backend.Layer.LAYERS_PER_FLOOR; i++)
 			{
                 ToolStripMenuItem layer = new ToolStripMenuItem(layer_caption(i), null, mnuLayer_Click);
                 if (i < 8) {
@@ -253,10 +308,13 @@ namespace MapEdit.Frontend
         public void setLayer(int layer)
         {
             // silently ignore invalid layer selection
-            if (layerList.Count <= layer || layer < 0) return;
+            if (layer >= editor1.getLayerCount() || layer < 0) return;
 
-            // unselect old layer
-            layerList[editor1.SelectedLayer].Checked = false;
+            // unselect old floor and layer
+            int old_floor = editor1.SelectedLayer / Backend.Layer.LAYERS_PER_FLOOR;
+            floorList[old_floor].Checked = false;
+            int old_layer = editor1.SelectedLayer % Backend.Layer.LAYERS_PER_FLOOR;
+            layerList[old_layer].Checked = false;
             // select new layer
             editor1.SelectedLayer = layer;
             // update GUI
@@ -264,17 +322,28 @@ namespace MapEdit.Frontend
             // redraw
             editor1.Invalidate();
         }
+        private void mnuFloor_Click(object sender, EventArgs e)
+        {
+            // select new floor (layer 0)
+            ToolStripMenuItem layer = (sender as ToolStripMenuItem);
+            this.setLayer((int)layer.Tag * Backend.Layer.LAYERS_PER_FLOOR);
+        }
         private void mnuLayer_Click(object sender, EventArgs e)
 		{
+            int floor = editor1.getCurrentFloor() * Backend.Layer.LAYERS_PER_FLOOR;
             // select new layer
             ToolStripMenuItem layer = (sender as ToolStripMenuItem);
-            this.setLayer( (int)layer.Tag );
+            this.setLayer( floor + (int)layer.Tag );
         }
         private void layerSetUpdate()
 		{
-			layerList[editor1.SelectedLayer].Checked = true;
-			mnuSelectLayer.Text = layer_caption(editor1.SelectedLayer);
-			toolShowMask.Checked = editor1.getShowMask(editor1.SelectedLayer);
+            int floor = editor1.getCurrentFloor();
+            floorList[floor].Checked = true;
+            mnuSelectFloor.Text = floor_caption(floor);
+            int layer = editor1.SelectedLayer % Backend.Layer.LAYERS_PER_FLOOR;
+            layerList[layer].Checked = true;
+			mnuSelectLayer.Text = layer_caption(layer);
+            toolShowMask.Checked = editor1.getShowMask(editor1.SelectedLayer);
 		}
 
 		private void toolLayerAbove_Click(object sender, EventArgs e)
