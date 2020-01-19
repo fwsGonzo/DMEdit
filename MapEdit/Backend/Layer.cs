@@ -40,6 +40,7 @@ namespace MapEdit.Backend
 
         public bool Enabled { get; set; }
         public byte Alpha { get; set; }
+        public byte Shader { get; set; }
 
         public Layer(int sizeX, int sizeY, int tilesize)
         {
@@ -56,6 +57,7 @@ namespace MapEdit.Backend
             // defaults
             Enabled = false;
             Alpha = 0xFF;
+            Shader = 0;
         }
 
         public void create()

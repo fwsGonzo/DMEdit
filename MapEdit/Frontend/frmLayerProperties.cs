@@ -13,6 +13,7 @@ namespace MapEdit.Frontend
             current_layer = layer;
             chkEnabled.Checked = layer.Enabled;
             scrAlpha.Value = layer.Alpha;
+            numericShader.Value = layer.Shader;
         }
 
         private void chkEnabled_CheckedChanged(object sender, EventArgs e)
@@ -25,6 +26,11 @@ namespace MapEdit.Frontend
             current_layer.Alpha = (byte) scrAlpha.Value;
             float p = current_layer.Alpha / 255.0f * 100.0f;
             lblLayerAlpha.Text = "Layer alpha: " + scrAlpha.Value + " (" + (int) p + "%)";
+        }
+
+        private void numericShader_ValueChanged(object sender, EventArgs e)
+        {
+            current_layer.Shader = (byte) numericShader.Value;
         }
     }
 }

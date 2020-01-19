@@ -26,6 +26,8 @@ namespace MapEdit.Backend
         {
             public bool enabled;
             public byte alpha;
+            public byte shader;
+            public byte extra1;
         };
 
 
@@ -113,7 +115,7 @@ namespace MapEdit.Backend
                         throw new System.InvalidOperationException("Missing signature in map file");
                     }
                     int version = sr.ReadInt32();
-                    if (version != 2)
+                    if (version != VERSION)
                     {
                         // do version specific things
                         throw new System.InvalidOperationException("Map version mismatch");
@@ -153,7 +155,9 @@ namespace MapEdit.Backend
                         layerdata_t ld = new layerdata_t
                         {
                             enabled = sr.ReadBoolean(),
-                            alpha = sr.ReadByte()
+                            alpha  = sr.ReadByte(),
+                            shader = sr.ReadByte(),
+                            extra1 = sr.ReadByte()
                         };
                         layerdata.Add(ld);
                     }
@@ -164,7 +168,8 @@ namespace MapEdit.Backend
                         {
                             // set layer properties
                             Alpha = layerdata[i].alpha,
-                            Enabled = layerdata[i].enabled
+                            Enabled = layerdata[i].enabled,
+                            Shader = layerdata[i].shader
                         };
 
                         // only load enabled layers
@@ -230,6 +235,8 @@ namespace MapEdit.Backend
                         }
                         sr.Write(L.Enabled);
                         sr.Write(L.Alpha);
+                        sr.Write(L.Shader);
+                        sr.Write((byte) 0);
                     }
                     // layer tile data
                     foreach (Layer L in layers)
