@@ -27,7 +27,7 @@ namespace MapEdit.Backend
             public bool enabled;
             public byte alpha;
             public byte shader;
-            public byte extra1;
+            public byte flags;
         };
 
 
@@ -157,7 +157,7 @@ namespace MapEdit.Backend
                             enabled = sr.ReadBoolean(),
                             alpha  = sr.ReadByte(),
                             shader = sr.ReadByte(),
-                            extra1 = sr.ReadByte()
+                            flags = sr.ReadByte()
                         };
                         layerdata.Add(ld);
                     }
@@ -169,7 +169,8 @@ namespace MapEdit.Backend
                             // set layer properties
                             Alpha = layerdata[i].alpha,
                             Enabled = layerdata[i].enabled,
-                            Shader = layerdata[i].shader
+                            Shader = layerdata[i].shader,
+                            Flags = layerdata[i].flags
                         };
 
                         // only load enabled layers
@@ -234,9 +235,9 @@ namespace MapEdit.Backend
                             L.Enabled = !L.determineIfEmpty();
                         }
                         sr.Write(L.Enabled);
-                        sr.Write(L.Alpha);
-                        sr.Write(L.Shader);
-                        sr.Write((byte) 0);
+                        sr.Write((byte) L.Alpha);
+                        sr.Write((byte) L.Shader);
+                        sr.Write((byte) L.Flags);
                     }
                     // layer tile data
                     foreach (Layer L in layers)

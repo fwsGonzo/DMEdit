@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -8,7 +9,10 @@ namespace MapEdit.Backend
     public class Layer
     {
         public const int LAYERS_PER_FLOOR = 16;
-
+        public enum Features
+        {
+            AUTO_CREATE_OBJECTS = 0x0,
+        };
         private int tile_size;
         List<Tile> tiles;
         Bitmap buffer;
@@ -26,6 +30,7 @@ namespace MapEdit.Backend
         static Brush activateBrush = new HatchBrush(HatchStyle.ZigZag, // looks watery
                                                     Color.FromArgb(160, Color.Brown),
                                                     Color.FromArgb(128, Color.Yellow));
+
         static Brush pushbackBrush = new HatchBrush(HatchStyle.DiagonalCross,
                                                     Color.FromArgb(120, Color.Black),
                                                     Color.FromArgb(80, Color.Red));
@@ -41,6 +46,7 @@ namespace MapEdit.Backend
         public bool Enabled { get; set; }
         public byte Alpha { get; set; }
         public byte Shader { get; set; }
+        public int Flags { get; set; }
 
         public Layer(int sizeX, int sizeY, int tilesize)
         {
@@ -58,6 +64,7 @@ namespace MapEdit.Backend
             Enabled = false;
             Alpha = 0xFF;
             Shader = 0;
+            Flags = 0x0;
         }
 
         public void create()
@@ -402,5 +409,21 @@ namespace MapEdit.Backend
         {
             return new Size(getTilesX() * tile_size, getTilesY() * tile_size);
         }
+
+        internal bool GetFeature(Features feature)
+        {
+            return (Flags & (1 << (int)feature)) != 0x0;
+        }
+        internal void SetFeature(Features feature, bool enabled)
+        {
+            if (enabled)
+            {
+                Flags |= 1 << (int)feature;
+            } else
+            {
+                Flags &= ~(1 << (int)feature);
+            }
+        }
+
     } // Layer
 }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MapEdit.Frontend
@@ -11,7 +7,7 @@ namespace MapEdit.Frontend
     public partial class frmSelectMod : Form
     {
         private Backend.ModSelection modsel;
-        private static string MOD_DIR_FB = "C:/Users/fwsgo/Dropbox/dm2/Debug/";
+        private static string MOD_DIR_FB = "C:/Users/fwsgo/OneDrive/dm2/Debug/";
 
         public frmSelectMod(Backend.ModSelection selector)
         {

@@ -40,6 +40,9 @@ namespace MapEdit.Backend
             AUTOJUMP  = 32,
             AUTOMOVE  = 33,
             MOVEFAST  = 34,
+
+            // scanner flags
+            CREATE_OBJECT = 40
         };
 
 		public Tile()

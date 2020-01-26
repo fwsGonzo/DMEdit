@@ -35,6 +35,8 @@
             this.cmdClose = new System.Windows.Forms.Button();
             this.numericShader = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkAutoCreateObjects = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericShader)).BeginInit();
             this.SuspendLayout();
             // 
@@ -109,11 +111,35 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Shader number:";
             // 
+            // chkAutoCreateObjects
+            // 
+            this.chkAutoCreateObjects.AutoSize = true;
+            this.chkAutoCreateObjects.Location = new System.Drawing.Point(18, 145);
+            this.chkAutoCreateObjects.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkAutoCreateObjects.Name = "chkAutoCreateObjects";
+            this.chkAutoCreateObjects.Size = new System.Drawing.Size(184, 24);
+            this.chkAutoCreateObjects.TabIndex = 7;
+            this.chkAutoCreateObjects.Text = "Object Auto-&Creation";
+            this.chkAutoCreateObjects.UseVisualStyleBackColor = true;
+            this.chkAutoCreateObjects.CheckedChanged += new System.EventHandler(this.chkAutoCreateObjects_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 120);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(327, 20);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Enable scanning this layer for these features:";
+            // 
             // frmLayerProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(921, 442);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.chkAutoCreateObjects);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.numericShader);
             this.Controls.Add(this.cmdClose);
@@ -142,5 +168,7 @@
         private System.Windows.Forms.Button cmdClose;
         private System.Windows.Forms.NumericUpDown numericShader;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkAutoCreateObjects;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -14,6 +14,7 @@ namespace MapEdit.Frontend
             chkEnabled.Checked = layer.Enabled;
             scrAlpha.Value = layer.Alpha;
             numericShader.Value = layer.Shader;
+            chkAutoCreateObjects.Checked = layer.GetFeature(Backend.Layer.Features.AUTO_CREATE_OBJECTS);
         }
 
         private void chkEnabled_CheckedChanged(object sender, EventArgs e)
@@ -31,6 +32,11 @@ namespace MapEdit.Frontend
         private void numericShader_ValueChanged(object sender, EventArgs e)
         {
             current_layer.Shader = (byte) numericShader.Value;
+        }
+
+        private void chkAutoCreateObjects_CheckedChanged(object sender, EventArgs e)
+        {
+            current_layer.SetFeature(Backend.Layer.Features.AUTO_CREATE_OBJECTS, chkAutoCreateObjects.Enabled);
         }
     }
 }
